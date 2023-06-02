@@ -1,0 +1,13 @@
+We created sentiment analysis using python library transformer specifically the model of bert-base-multilingual-uncased-sentiment. This library is the most well-trained model but it only work on maximum 
+as this model was trained on twitter data. We apply this sentiment analysis on comments made on magician. The full code is in the file sent_broken_comments_final.ipynb. As a first step each comment was 
+broken into multiple comments of 512 words. We organize all comments by EIPs so all comments made by each EIP is aggregated.
+
+The first part of the code runs a function called "preprocess" This function removes "stop words", lower cases, and removes punctuations. 
+
+First we apply a function called tokenize_comment which tokenizes comments that are greater than 512 words using nltk_sent_tokenizer. This is a specialized function that is designed to tokenize comment that
+have greater than 512 word length. Tokenizing comments creates list that contains multiple comments as separate items. If comments are greater than 512 words, the list breaks it into separate items in the list
+
+Finally we apply the BERT sentiment analysis using the sentiment_analysis function from BERT. This function produces two outputs. First it gives a sentiment score which is discrete score of either 1,2,3,4, or 5.
+The interpretation of these scores is that a score of 1 is considered most negative sentiment whereas the core of 5 is considered most positive.
+
+We save the magician sentiment score in the file magician_comments_separated_withresults.csv 
