@@ -423,7 +423,73 @@ g2 <- merge(g1,author_name[,c("mod_name","author_id","gh_matched_names","extra_i
 # save modified gh data
 fwrite(g2,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/modified_github_data.csv")
 
+## This part of the code added on 6-7-2023 is to add author id to the company data
+# Note that we begin by opening a modified twitter file that has been manually reconciled 
+# we will use the author id and twitter names of this file to apply the matching algorith with the 
+# company file
 
+tw1 <- fread("c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/modified_twitter_data_6-7-2023_postmanualreconciliation.csv")
+tw <- tw1 %>% dplyr::select(author_id,tw_matched_names)
+
+# bring author names with id file
+
+author_name <- fread("c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id.csv")
+
+# bring the file with company data
+
+co1 <- fread("c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/Old Data WIP/company.csv")
+
+# check duplicate names
+
+which(duplicated(co1$Name) == TRUE) # found 4 duplicates 
+
+# remove duplicate names
+
+co1 <- co1[!duplicated(co1$Name, fromLast = TRUE)]
+
+# save after removing duplicates
+
+fwrite(co1, "c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/Old Data WIP/company_duplicatesremoved.csv")
+
+co <- co1 %>% dplyr::select(Name)
+
+# treat Name with lowering cap, removing spaces and remove latin_characters
+
+co <- co %>% mutate(mod_name = stri_trans_general(Name,"Latin-ASCII")) # remove Latin Characters
+co <- co %>% mutate(mod_name =gsub(" ","",mod_name)) # remove spaces
+co <- co %>% mutate(mod_name = tolower(mod_name)) # lower caps
+co <- co %>% mutate(mod_name = iconv(mod_name, from = "UTF-8", to = "ASCII//TRANSLIT"))
+
+# match names using JW distance method
+
+# apply fuzzy logic to treated list of author names
+best_matches <- amatch(author_name$mod_name, co$mod_name, method = "jw")
+co_matched_names <- co$Name[best_matches]
+length(which(is.na(co_matched_names) == TRUE)) # 319 names could not be matched using fuzzy logic jw method after treatment
+
+# attach company list to unique names
+author_name$co_matched_names <- co_matched_names
+
+# to find names that are in company but not in the master list 
+
+co_extra <- subset(co,! co$mod_name %in% author_name$mod_name)
+
+# create extra_in_co record in the author_name file
+
+author_name$extra_in_co <- rep(NA,nrow(author_name))
+author_name$extra_in_co[1] <- co_extra$Name
+author_name <- relocate(author_name,gh_matched_names,.after = tw_matched_names)
+
+# save new author_name
+
+fwrite(author_name, "c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id.csv")
+
+# create a new co data that contains author_number 
+
+co2 <- merge(co,author_name[,c("mod_name","author_id","co_matched_names","extra_in_co")], by.x = "mod_name", by.y = "mod_name", all.x = TRUE)
+
+# save modified co data
+fwrite(co2,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/modified_company_data.csv")
 
 
 
