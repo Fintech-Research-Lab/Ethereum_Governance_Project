@@ -284,6 +284,88 @@ co2 <- merge(co1,author_name[,c("mod_name","author_id","co_matched_names","extra
 # save modified co data
 fwrite(co2,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/modified_company_data.csv")
 
+# Modified on 6-15-2023
+
+# The following part of the code modifies the unique_author_names_with_id.csv file. In this code we are doing the 
+# following steps:
+
+# 1. We add those matched_gh_names that have been manually matched 
+# 2. Add github user name as a separate column
+# 3. For all github names that do not have a corresponding match to the EIP data we assign a unique author id
+
+# bring the reconciled author name
+
+rec_gh <- fread("C:/Users/moazz/Downloads/6-14-23_Github_Names.csv")
+
+# current version of unique_author_names_with_id
+
+unique_id <- fread("c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id.csv")
+
+# merge the two files
+
+id2 <- merge(rec_gh,unique_id, by.x = "author_id", by.y = "author_id", all = TRUE)
+
+# find duplicates
+
+which(is.na(id2$author_id) == FALSE & duplicated(id2$author_id) == TRUE) # There are six non NA duplicates
+# manually checked that there are certain duplicates in the merge function but they should be removed
+
+# remove duplicates
+id3 <- id2 %>% filter(is.na(author_id) == FALSE) # create a subset of data with author ids
+id3 <- id3[!duplicated(id3$author_id, fromLast = TRUE)] # remove duplicates
+id4 <- id2 %>% filter(is.na(author_id) == TRUE) # create a subset of data withour author ids
+
+# check for duplicates in names of authors that don't have ids
+
+which(duplicated(id4$GitHub_Username) == TRUE) # no duplicates
+
+id5 <- rbind(id3,id4) # append the two subsets to get id2 without duplicates
+
+# remove double columns
+id5 <- id5 %>% dplyr::select(-mod_name.y,-gh_matched_names.y)
+
+# check manually different names
+id2 <- relocate(id2, gh_matched_names.x,.after = Full_Name)
+id2 <- relocate(id2, tw_matched_names,.after = Full_Name)
+id2 <- relocate(id2, co_matched_names,.after = Full_Name)
+
+
+# now that we have reconciled names manually, we will create only one column of Full_Name where we will have
+# All names that are missing in it from twitter, company, and github databases. I will then create a deprecated
+# version of the file that will do away with the need to store all matched names and other columns that
+# were necessary for our reconciliation process but not needed going forward
+
+id5$Full_Name <- ifelse(is.na(id5$Full_Name) == TRUE, id5$tw_matched_names,id5$Full_Name)
+which(is.na(id5$Full_Name) == TRUE)
+
+# All Full Names are now filled.
+
+# remame certain columns
+
+id5 <- rename(id5,c(mod_name = mod_name.x,
+                    gh_matched_names = gh_matched_names.x))
+
+# assign authorids to names that do not have authorids
+
+new_id <- seq(586,nrow(id5),1)
+
+id5 <- arrange(id5, author_id)
+id5[586:663,"author_id"] <- new_id
+
+# This file contains author id for all authors of eips, twitter, company, and github database
+
+# save this file
+
+fwrite(id5,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id_extensive.csv")
+
+# create a deprecated version which only contains Name, github username and author id because other information
+# was primarily used to reconcile
+
+id6 <- id5 %>% dplyr::select(author_id, Full_Name, GitHub_Username)
+
+# save this deprecated version as the key
+
+fwrite(id6,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id.csv" )
 
 
 # scratch work
