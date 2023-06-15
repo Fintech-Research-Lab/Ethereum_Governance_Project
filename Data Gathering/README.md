@@ -25,3 +25,5 @@ The same process is applied to a separate file that contains gitHub follower dat
 
 # Post Reconciliation Data Gathering
 After manual reconciliation, a unique author id was assigned to all twitter names where the R code could not match the names. After this assignment of authorId, the file was stored as modified_twitter_data_6-7-2023_postmanualreconciliation.csv  
+Same process as described above was also adopted to reconcile company data. Company data was also hand collected data on finding author's employer and jobs that they work on. This data started with the same names as twitter names. Nevetheless we applied the same
+code to treat names (lower case, remove spaces, remove special characters) on them and reconciled. All but one name remained reconciled which was manually checked and an author id was added to it. This file is stored as modified_company_data_afterreconciliation.csv 
