@@ -24,4 +24,4 @@ This process will be followed by manual matching and checks to ensure that twitt
 The same process is applied to a separate file that contains gitHub follower data which has 537 observations. This file has 139 "unmatched" names and 91 names that are in the gitHub follower file but not present in our file. This file will also be manually checked
 
 # Post Reconciliation Data Gathering
-After manual reconciliation, a unique author id was assigned to all twitter names where the R code could not match the names. After this assignment of authorId, the unique 
+After manual reconciliation, a unique author id was assigned to all twitter names where the R code could not match the names. After this assignment of authorId, the file was stored as modified_twitter_data_6-7-2023_postmanualreconciliation.csv  
