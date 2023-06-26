@@ -356,7 +356,7 @@ id5[586:663,"author_id"] <- new_id
 
 # save this file
 
-fwrite(id5,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/unique_author_names_with_id_extensive.csv")
+fwrite(id5,"c:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/GitHub_Follower_Data_afterreconciliation.csv")
 
 # create a deprecated version which only contains Name, github username and author id because other information
 # was primarily used to reconcile
