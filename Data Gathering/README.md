@@ -30,3 +30,11 @@ code to treat names (lower case, remove spaces, remove special characters) on th
 
 We conducted same analysis on Github data and found around 91 github author names that did not exist in our author data. These github authors were shown to be part of EIP authorship process. Two reasons were discovered, one that a github user may contribute to the EIP without being an official author. In that case, they would be a "github author" but not the author listed on EIP database in Ethereum. Second, we discovered that many EIPs were missed in our original process. Which we need to add. There is a strong possibility that adding these EIPs will add new authors in our author database. The R code "Author Name Matching.R" was modified to include file that consolidated all data after manual reconcliation and all authors that did not have unique author_id were assigned author_id. 
 
+
+# Data Merging
+
+We merge data using the stata code. We begin with the file "ALLEIPS_with_author_id_postmanualreconciliation.csv" which contains manually verified EIPs collected from GitHub, their status, that is, the status they are in, Author Names split from author1 to authoer11 (which is the maximum number of authors in an EIP). This file also contains author_id which has been verified. We then merge data using unique author id for each of the 11 authors. We add twitter following and twitter follower data. Same approach was used in additing github followers and data containing up to four current companies and job titles associated with them and upto past 10 companies and job titles associated with them. 
+
+
+
+
