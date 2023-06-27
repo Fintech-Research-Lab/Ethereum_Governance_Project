@@ -19,4 +19,4 @@ The R code first extract scores and labels from the disctionary, it then applies
 
 Once the 'filtered scores' are recorded, we calculate mode and mean sentiments. In mode sentiments we take mode of the sentiment labels and in mean we take mean of the sentiment. The idea behind using mode sentiment is that if most of the comments are positive or negative and fewer commets are nuetral then we assign the mode_sentiment score to the EIP that represented "majority" of the opinions expressed. We calculate mean sentiment also but use mode_sentiment in our further analysis, because nuetral sentiments are highly noisy and real signal only come when someone expresses a clear opinion about an EIP. 
 
-Both the results of mode_sentiments and textual data on magician comments is stored in file called "data_with_mode_sentiment.csv"
+Both the results of mode_sentiments and textual data on magician comments is stored in file called "sentiment_data.csv", a deprecated version of the data is stored in sentiment_data.dta which contains comment and mode and mean sentiment scores
