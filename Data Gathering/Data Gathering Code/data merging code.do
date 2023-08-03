@@ -11,6 +11,7 @@
 // DIARY OF CHANGES MADE TO THE CODE
 // 6-25-2023: This is the master file which contains ALL EIPs as of 6-25-2023
 // 7-20-2023: The file Ethereum_Data which was initially created on 6-25-2023 was modified to include twitter followers on new authors. In the initial file, we had twitter data limited until author_id 585, subsequently we manually collected twitter following information on remaining authors. The code is therefore modified to now include twitter followers data for those authors which were not covered initially.  
+// 8-3-2023, the data file was modified to add GitHub commit data by author_id
 
 import delimited "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\ALLEIPS_with_author_id_postmanualreconciliation.csv"
 
@@ -1275,6 +1276,50 @@ move tw_follower author11
 
 save "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum_Data.dta", replace
 
+// This part of the code adds commits data into the Ethereum Data. The nature of Commit data is that it is a panel data so we first prepare this data and then merge it to the current Ethereum_Data.dta
+// The commit data is organized by EIP_Number and Date of Commit, furthermore we also have author_id. Separately, we have a master author_id file which contains whether author_id is part of "client" or not
+// The code below imports timeseries commit data, then merge that data with author_id key to add whether the author is a client or not and then create a 0/1 flag on this
+
+// import excel file that contains time series of commit data
+
+import excel "C:\Users\moazz\Downloads\updated_commits.xlsx", sheet("Sheet 1") firstrow
+
+save "C:\Users\moazz\Downloads\commit.dta", replace
+
+// merge commit data with author data to create a client flag
+
+use "C:\Users\moazz\Downloads\commit.dta"
+
+rename Author_Id author_id
+
+merge m:1 author_id using "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\author.dta", keepusing(client)
+
+drop if _merge == 2 // remove 290 authors that did not do any commits 
+
+// create a flag to see if commitment author is a client
+
+gen cl_flag = 1 if client != ""
+replace cl_flag = 0 if cl_flag ==.
+
+// create a flag whether the commit author is an EIP author. If the commit author does not exist in our author list then we assume that commit author is not
+// an EIP author. This is expressed in _merge == 1
+
+gen eip_author_flag = 1 if _merge == 1
+replace eip_author_flag = 0 if eip_author_flag == .
+drop _merge
+// save this file as comit
+
+save "C:\Users\moazz\Downloads\commit.dta", replace
+
+// Merge the commit data with Ethereum_Data to create a panel representation of this data
+
+use "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum_Data.dta"
+
+merge 1:m EIP using "C:\Users\moazz\Downloads\commit.dta"
+
+// found EIP 6596 which has github commit but does not exist in the current Ethereum_Data
+
+save "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum_Data.dta", replace
 
 
 
