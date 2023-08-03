@@ -35,6 +35,8 @@ We conducted same analysis on Github data and found around 91 github author name
 
 We merge data using the stata code. We begin with the file "ALLEIPS_with_author_id_postmanualreconciliation.csv" which contains manually verified EIPs collected from GitHub, their status, that is, the status they are in, Author Names split from author1 to authoer11 (which is the maximum number of authors in an EIP). This file also contains author_id which has been verified. We then merge data using unique author id for each of the 11 authors. We add twitter following and twitter follower data. Same approach was used in additing github followers and data containing up to four current companies and job titles associated with them and upto past 10 companies and job titles associated with them. 
 
+# Commit Data
 
+We used web scraping to obtain GitHub commitments by author for each of the EIPs. We merge these commitments to our cross-sectional Ethereum_Data to make a panel data. This addition, now helps us conduct analysis on number of commitments by author in each EIP. 
 
 
