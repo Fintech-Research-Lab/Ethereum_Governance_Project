@@ -1,0 +1,4 @@
+This document replicates the Ethereum project data creation document. This data is designed to empirically test how Ethereum makes decision about finalizing Ethereum Improvement Proposals (EIPs). This project will collect data on EIPs, their status and their authors. This will be supplemented by information about the authors like their twitter and github following, their current and past work history, job titles, and their author's cross-collaboration. We will also identify whether authors belong to Ethereum Client or not. In addition to author information, we will also look at the information about the content of EIPs, we will look at the sentiments on different EIPs by Ethereum community on Magician and we will catagorize discussion topics of Ethereum's development calls where these EIPs are discussed. 
+
+Data Collection Process
+
