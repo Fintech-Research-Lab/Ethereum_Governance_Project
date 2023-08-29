@@ -121,4 +121,4 @@ move tw_follower author11
 move gh_follower author11 
 
 
-save "Etheruem_Data.dta", replace
+save "Ethereum_Data.dta", replace
