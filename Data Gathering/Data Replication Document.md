@@ -5,9 +5,9 @@ The data collection process begins with scraping of data from the website ethere
 * Modify data to split Authors in upto 11 authors if EIPs are co-authored and provided a unique author_id. The result is the file called *AllEIPs.csv* 
 ## Manual Collection
 We manually collect the following data
-* Twitter Data: We manually collected information on the authors' Twitter following and Twitter followers, if available.
-* GitHub Data : We collect author's github following, if available.
-* LinkedIn Data: We also manually collected data from LinkedIn, capturing details of up to four current companies where the authors are presently employed, along with their job titles. Additionally, we gathered information on up to the last 10 companies where they had previously worked, including their past job titles.
+* Twitter Data: We manually collected information on the authors' Twitter following and Twitter followers, if available. This data is in *Twitter_Data.csv*.
+* GitHub Data : We collect author's github following, if available. This data is *Github_Data.csv*.
+* LinkedIn Data: We also manually collected data from LinkedIn, capturing details of up to four current companies where the authors are presently employed, along with their job titles. Additionally, we gathered information on up to the last 10 companies where they had previously worked, including their past job titles. This is in *LinkedIn_Data.csv*
 * Past Job Titles: For the most recent four companies where the authors worked, we collected the past job titles as follows:
   - For the most recent past company, we obtained three previous job titles.
   - For the two companies before the most recent past company, we collected two previous job titles for each.
