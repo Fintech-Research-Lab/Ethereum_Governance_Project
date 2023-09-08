@@ -1,0 +1,700 @@
+author_id,Full_Name,GitHub_Username
+1,Vitalik Buterin,vbuterin
+2,Martin Holst Swende,holiman
+3,Joseph Chow,ethers
+4,Christian Reitwiessner,chriseth
+5,Hudson Jameson,
+6,Felix Lange,fjl
+7,Fabian Vogelsteller,frozeman
+8,Alex Van de Sande,alexvansande
+9,Ronan Sandford,wighawag
+10,Nick Johnson,Arachnid
+11,Alex Beregszaszi,axic
+12,Tjaden Hess,tjade273
+13,Gavin Wood,gavofyork
+14,Maurelian,Maurelian
+15,Christian Reitwiessner,
+16,Nick Mudge,mudgen
+17,Piper Merriam,pipermerriam
+18,Péter Szilágyi,karalabe
+19,Micah Zoltu,micahzoltu
+20,Greg Colvin,gcolvin
+21,Vlad Gluhovsky,
+22,Richard Moore,ricmoo
+23,Afri Schoedon,q9f
+24,Tobias Oberstein,
+25,Nagy,nagydani
+26,Yoichi Hirai,
+27,Isaac Ardis,whilei
+28,Cody Burns,
+29,Remco Bloemen,Recmo
+30,William Entriken,fulldecent
+31,Dan Finlay,DanFinlay
+32,Jack Peterson,
+33,Jacques Dafflon,
+34,Casey Detrio,cdetrio
+35,ligi,ligi
+36,Jordi Baylina,jbaylina
+37,Kashish Khullar,
+38,Carl Larson,
+39,Dan Phifer,
+40,Weiwu Zhang,
+41,Dave Sag,
+42,Jorge Izquierdo,izqui
+43,Dean Eigenmann,
+44,Brooklyn Zelenka,expede
+45,James Ray,jamesray1
+46,Jay Logelin,
+47,David Stanfill,
+48,Matt Lockyer,
+49,Anderson Wesley,andywesley
+50,Danny Ryan,djrtwo
+51,Nick Savers,nicksavers
+52,Tommy Nicholas,tomasienrbc
+53,Pelle Braendgaard,pelle
+54,Phyrex Tsai,
+55,Bradley Leatherwood,
+56,Mark Beylin,
+57,Paul Bouchon,
+58,Antonio Salazar Cardozo,shadowfiend
+59,g. nicholas d'andrea,
+60,Jan Turk,ThunderDeliverer
+61,nitika-goel,
+62,Alexey Akhunov,AlexeyAkhunov
+63,Alan Lu,cag
+64,Witek Radomski,
+65,Peter Murray,yarrumretep
+66,Jet Lim,Nitro888
+67,Albert Chon,
+68,Jim McDonald,mcdee
+69,Simon Jentzsch,
+70,Juliano Rizzo,juli
+71,Zainan Victor Zhou,xinbenlv
+72,Jeff Huang,
+73,Xiaoyu Wang,wxygeek
+74,SmeargleUsedFly,SmeargleUsedFly
+75,Chaitanya Potti,chaitanyapotti
+76,Francisco Giordano,frangio
+77,EOS Classic,eosclassicteam
+78,Wei Tang,sorpaas
+79,Ben Kaufman,
+80,Brian Venturo,atlanticcrypto
+81,Kevin Owocki,
+82,Richard Meissner,rmeissner
+83,Pawel Bylica,chfast
+84,Vittorio Minacori,vittominacori
+85,John Shiple,johnshiple
+86,Maxim Kupriianov,
+87,Gerhard Wagner,thec00n
+88,Anurag Angara,
+89,trustfarm,
+90,Iamnot Chris,cohabo
+91,Kaidong Wu,
+92,Christoph Mussenbrock,christoph2806
+93,Andrea Lanfranchi,AndreaLanfranchi
+94,Michele Balistreri,bitgamma
+95,Ikmyeong Na,naikmyeong
+96,Cyril Lapinte,
+97,Yoav Weiss,yoavw
+98,0age,0age
+99,Paul Berg,PaulRBerg
+100,Billy Rennekamp,okwme
+101,Felix J Lange,fjl
+102,Alex Forshtat,forshtat
+103,Bruno Barbieri,brunobar79
+104,Lucas Cullen,BitcoinBrisbane
+105,Vincent Eli,Bunjin
+106,Gabriel Barros,
+107,Danno Ferrin,shemnon
+108,Gregory Markou,GregTheGreek
+109,Alexandre Belling,
+110,Charles Cooper,charles-cooper
+111,Loredana Cirstea,loredanacirstea
+112,Shane Jonas,shanejonas
+113,Michael Connor,iAmMichaelConnor
+114,Johann Barbie,johannbarbie
+115,Alex Vlasov,shamatar
+116,Santiago Palladino,spalladino
+117,Lee Raj,lerajk
+118,Julio Faura,
+119,Daniel Lehrner,
+120,Pedro Gomes,pedrouid
+121,Fernando Paris,
+122,James Hancock,MadeofTin
+123,Adrian Sutton,ajsutton
+124,John Adler,adlerjohn
+125,Runchao Han,
+126,Sean Papanikolas,pizzarob
+127,Martin Lundfall,MrChico
+128,Dominic Letz,dominicletz
+129,Carl Beekhuizen,
+130,Eric Conner,econoar
+131,James Choncholas,james-choncholas
+132,Ricardo Guilherme Schmidt,3esmit
+133,Edson Ayllon,edsonayllon
+134,Kristijan Sedlak,xpepermint
+135,Christoph Burgdorf,cburgdorf
+136,Barry WhiteHat,barryWhiteHat
+137,Filip Štamcar,filips123
+138,Hadrien Croubois,amxx
+139,Kelly Olson,ineffectualproperty
+140,Joseph Stockermans,jstoxrocky
+141,Hua Zhang,dgczhh
+142,Guillaume Ballet,gballet
+143,Kohshi Shiba,
+144,Tom Brand,
+145,Matt Garnett,lightclient
+146,Aaron Kendall,jaerith
+147,Soham Zemse,zemse
+148,Joel Thorstensson,oed
+149,Giuseppe Bertone,Neurone
+150,Jonathan Underwood,junderw
+151,Tony Carson,
+152,Sina Mahmoodi,s1na
+153,William Morriss,wjmelements
+154,Nick Gheorghita,njgheorghita
+155,Gianluca Perletti,Perlets9
+156,Zach Burks,vexycats
+157,Sergio Demian Lerner,SergioDemianLerner
+158,Matt,defifuture
+159,Peter Jihoon Kim,petejkim
+160,Peter Grassberger,PeterTheOne
+161,Youssef El Housni,yelhousni
+162,Herman Junge,hermanjunge
+163,Abdelhamid Bakhta,abdelhamidbakhta
+164,Christopher Gorman,chgormanMH
+165,Sam Wilson,SamWilsn
+166,Michael Sproul,michaelsproul
+167,Erik Marks,rekmarks
+168,Zhenyu Sun,Ungigdu
+169,Ben Tinner,Terra854
+170,Alberto Cuesta Cañada,alcueca
+171,Weijia Zhang,weijia31415
+172,Victor Porton,vporton
+173,Justice Hudson,jchancehud
+174,Michael D. Carter,
+175,mineruniter969,mineruniter969
+176,Query0x,Query0x
+177,Philippe Castonguay,PhABC
+178,Calvin Koder,ashrowz
+179,HexZorro,hexzorro
+180,Nathan Ginnever,nginnever
+181,pinkiebell,pinkiebell
+182,Daniel Streit,danielstreit
+183,Yu Liu,yuliu-debond
+184,Alex Papageorgiou,alex-ppg
+185,Will Wang,will42w
+186,Sam Porter,SamPorter1984
+187,Gajinder Singh,g11in
+188,Dankrad Feist,dankrad
+189,Joachim Lebrun,Joachim-Lebrun
+190,Mikhail Kalinin,mkalinin
+191,Auryn Macmillan,auryn-macmillan
+192,Simon Tian,simontianx
+193,lightclient,lightclient
+194,Lukas Schor,lukasschor
+195,Anton Bukov,k06a
+196,Tim Beiko,timbeiko
+197,Rex Creed,aug2uag
+198,Wayne Chang,wyc
+199,Jules Lai,julesl23
+200,Ansgar Dietrichs,adietrichs
+201,Daniel Ivanov,Daniel-K-Ivanov
+202,George Kadianakis,asn-d6
+203,Simon Fremaux,dievardump
+204,Javier Arcenegui,Hardblock-IMSE-CNM
+205,Brayton Goodall,Spore-Druid-Bray
+206,Ross Campbell,z0r0z
+207,William Schwab,wschwab
+208,Aaron Chen,aaronisme
+209,Joey Santoro,joeysantoro
+210,Omar Aflak,omaraflak
+211,David Kim,powerstream3604
+212,Benjamin Chodroff,benjaminchodroff
+213,Peter Davies,petertdavies
+214,Andrei Maiboroda,gumb0
+215,Alex Stokes,ralexstokes
+216,David Buckman,davidbuckman
+217,qizhou,qizhou
+218,Joshua Tan,thelastjosh
+219,Pandapip1,Pandapip1
+220,Mark Mackey,ethDreamer
+221,Andrew B Coathup,abcoathup
+222,Omnus Sunmo,omnus
+223,Anders,0xanders
+224,Andreas Freund,Therecanbeonlyone1969
+225,John Peterson,John-peterson-coinbase
+226,Marius Van Der Wijden,MariusVanDerWijden
+227,Víctor Muñoz,victormunoz
+228,Ignacio Mazzara,nachomazzara
+229,Shu Dong,dongshu2013
+230,Tim Daubenschütz,TimDaub
+231,Daniel Tedesco,dtedesco1
+232,Devin Conley,devinaconley
+233,Harikrishnan Mulackal,hrkrshnn
+234,Lance,LanceSnow
+235,Green,greenlucid
+236,Jarno Marttila,yaruno
+237,Alexi,alexi
+238,Tyler,radiocaca
+239,Mudit Gupta,maxsam4
+240,Luc van Kampen,lucemans
+241,Julian Traversa,JTraversa
+242,Vu Nguyen,mrenoon
+243,Wilkins Chung,wwhchung
+244,Tomasz Kajetan Stanczak,tkstanczak
+245,Brendan Asselstine,asselstine
+246,James,JamesSmartCell
+247,Yale ReiSoleil,longnshort
+248,Christophe Le Bars,clbrge
+249,DerivStudio,DerivStudio
+250,Agustín Aguilar,agusx1211
+251,Iván Mañús,ivanmmurciaua
+252,James Grimmelmann,grimmelm
+253,Hyungsuk Kang,hskang9
+254,Lerner,SergioDemianLerner
+255,Yan,yan253319066
+256,Stanley Wu,fruit37
+257,Samuele Marro,samuelemarro
+258,Zainan Zhou,xinbenlv
+259,Buzz Cai,buzzcai
+260,IronMan_CH,coderfengyun
+261,Jeremy Z,wnft
+262,Jan Smrža,smrza
+263,liszechung,liszechung
+264,elie222,elie222
+265,Lucas Martín Grasso Ramos,LucasGrasso
+266,Saber Yu,OniReimu
+267,StartfundInc,StartfundInc
+268,Philipp Bolte,strumswell
+269,Roy Osherove,royosherove
+270,Isaac Patka,ipatka
+271,Paul Gauvreau,0xpaulio
+272,Olivier Fernandez,fernandezOli
+273,Toni Wahrstätter,nerolation
+274,Sean Darcy,darcys22
+275,Oliver Terbu,awoie
+276,Veega Labs,VeegaLabsOfficial
+277,Yan Zhu,diracdeltas
+278,Allen Zhou,
+279,Gaurang Torvekar,gaurangtorvekar
+280,Gavin Fu,gavfu
+281,Firn Protocol,firnprotocol
+282,HonorLabs,honorworldio
+283,Timi,0xTimi
+284,foobar,0xfoobar
+285,cygaar,cygaar
+286,Naim Ashhab,ashhanai
+287,Apeguru,Apegurus
+288,Austin Zhu,AustinZhu
+289,Cozy Finance,cozyfinance
+290,Kosala Hemachandra,kvhnuke
+291,Filipp Makarov,filmakarov
+292,Bruno Škvorc,Swader
+293,2pmflow,2pmflow
+294,Moody Salem,moodysalem
+295,zlace,zlace0x
+296,Paul Edge,genkifs
+297,Ernesto García,ernestognw
+298,Nikolai Mushegian,
+299,Matt Luongo,mhluongo
+300,Tim Coulter,tcoulter
+301,Leonid Logvinov,LogvinovLeon
+302,Dieter Shirley,
+303,Tyler Yasaka,tyleryasaka
+304,Esteban Mino,estebanmino
+305,James Levy,
+306,James Sangalli,
+307,Manuel Araoz,
+308,Tom Carchrae,carchrae
+309,Infernal_toast,
+310,Cheng Liang,ChihChengLiang
+311,Matt Russo,mateosu
+312,Joel Torstensson,
+313,Portal Network Team,
+314,Zachary Williamson,zac-williamson
+315,Andrew Cooke,
+316,Nate Welch,flygoing
+317,Christoph Jentzsch,
+318,Ryan Ghods,ryanio
+319,Evan,evbots
+320,Min Zu,
+321,Bicong Wang,Wangbicong
+322,Partha Bhattacharya,pb25193
+323,Matt Condon,shrugs
+324,Adam Levi,
+325,Christopher Gewecke,
+326,Andrew Redden,
+327,Bryant Eisenbach,fubuloubu
+328,Jean M. Cyr,
+329,Jacques Wagener,jacqueswww
+330,Jennifer Cooper,jenncoop
+331,Howard Marks,
+332,Julian Svirsky,
+333,Andy Chorlian,
+334,Chuqiao Ren,
+335,Laurent Aapro,
+336,Dror Tirosh,drortirosh
+337,Dan Long,
+338,Kai Yeung,CivicKai
+339,Raúl Kripalani,raulk
+340,Patrick Gallagher,
+341,Christian Tzurcanu,ctzurcanu
+342,Zachary Belford,belfordz
+343,Chaitanya Konda,
+344,Ben Bollen,
+345,Qin Jian,qinjian
+346,Eli Ben Sasson,Elistark
+347,Haoyu Lin,
+348,Eric Dvorsak,yenda
+349,Gary Rong,
+350,Marta Bellés,bellesmarta
+351,Sean Gulley,sean-sn
+352,Yuefei Tan,whtyfhas
+353,Louis Guthmann,
+354,Juan Blanco,juanfranblanco
+355,Liraz Siri,lirazsiri
+356,Uri Klarman,uriklarman
+357,Mehmet Sabir Kiraz,
+358,Martin Swende,holiman
+359,Tomasz Stanczak,tkstanczak
+360,Alan Scarpellini,alanscarpellini
+361,James Morgan,jamesmorgan
+362,Fabien Marino,bonustrack
+363,Kevin Britz,kbrizzle
+364,Leger,sachayves
+365,Fiona Kobayashi,fifikobayashi
+366,Peter Robinson,drinkcoffee
+367,Mojtaba Tefagh,mtefagh
+368,Varun Deshpande,dr-chain
+369,Mike Meng,
+370,Xinqi Yang,xinqiyang
+371,Dmitry Khovratovich,khovratovich
+372,Tony Malghem,TonyMalghem
+373,Hugo De la cruz,hugo-dc
+374,Mikhail Melnik,ZumZoom
+375,Dane Scarborough,
+376,Gregory Rocco,obstropolos
+377,George Spasov,Perseverance
+378,Rosario Arjona,RosarioArjona
+379,Mihir Faujdar,uink45
+380,Sora Lee,soralit
+381,t11s,transmissions11
+382,Pol-Malo Le Bris,
+383,Isaac Buckman,isaacbuckman
+384,Chao Pi,pichaoqkc
+385,Alex,gojazdev
+386,Roberto Bayardo,roberto-bayardo
+387,Josep Lluis de la Rosa,peplluis7
+388,Raphael Roullet,
+389,Kei Kreutler,keikreutler
+390,Martin Moravek,mmartinmo
+391,Jakob Helgesson,svemat01
+392,Robert Robbins,robrobbins
+393,Long Vuong,UncleGrandpa925
+394,Jalil Wahdatehagh,jwahdatehagh
+395,Eric Marti Haynes,ericmartihaynes
+396,Pierrick Turelier,PierrickGT
+397,Weiwu,weiwu-zhang
+398,dRadiant,dRadiant
+399,Edward Amor,skellet0r
+400,Juan Carlos Cantó,EscuelaCryptoES
+401,Yan Ji,iseriohn
+402,Viktor Pernjek,smuxx
+403,Mücahit Büyükyılmaz,anndro
+404,Luca Donno,lucadonnoh
+405,David Rábel,rabeles11
+406,Matias Arazi,MatiArazi
+407,Qin Wang,
+408,Lauritz Leifermann,lleifermann
+409,COALA Licensing Taskforce,
+410,Frédéric Le Coidic,FredLC29
+411,Jacob Ward,cobward
+412,Sean NG,ngveega
+413,Bondy,bbondy
+414,Alex Qin,
+415,Khemraj Adhawade,akhemraj
+416,Fried L. Trout,
+417,0xTriple7,ysqi
+418,Paul Dworzanski,poemm
+419,Marco De Vries,
+420,Terry Chen,
+421,Matt Stam,mattstam
+422,Tony Sheng,tonysheng
+423,Brett Kolodny,
+424,Cicada,CicadaNCR
+425,locationtba,locationtba
+426,zhongfu,zhongfu
+427,Piotr Dyraga,pdyraga
+428,Denis Erfurt,mhhf
+429,Fan Torchz,tcz001
+430,Jacob Evans,dekz
+431,Thomas Shababi,
+432,Reuben Youngblom,
+433,Gleb Naumenko,naumenkogs
+434,Michael Seiler,
+435,Jordan Schalm,
+436,John Zettler,JohnZettler
+437,Michael Carter,bitsbetrippin
+438,Joe Messerman,JAMesserman
+439,Victor Maia,MaiaVictor
+440,Yin Xu,yingogobot
+441,Scott Burke,
+442,David Zhang,
+443,Shane Hampton,
+444,Ruthia He,
+445,Rick Dudley,AFDudley
+446,Leo Arias,elopio
+447,Kiryl Yermakou,
+448,Anna Crowley,
+449,James Therien,
+450,Kris Shinn,kshinn
+451,Lane Rettig,
+452,Duncan Westland,
+453,Jiangshan Yu,
+454,Simon Peffers,simonatsn
+455,Derek Zhou,zhous
+457,andrea,gnidan
+458,Roberto Gorini,robertogorini
+459,Blaine Malone,blmalone
+460,David Knott,DavidLKnott
+461,Aurore Guillevic,
+462,fubuloubu,fubuloubu
+463,Cedric Ngakam,drikssy
+464,Yi Cai,YeeTsai
+465,Kevin Thizy,Nakasar
+466,Kristof Gazso,kristofgazso
+467,Thomas Jay Rush,tjayrush
+468,Brantly Millegan,brantlymillegan
+469,Roberto RomÃ¡n,
+470,Jet Jadeja,JetJadeja
+471,Marvin Martin,MarvinMartin24
+472,Ido Gershtein,
+473,Diederik Loerakker,protolambda
+474,Damian Martinelli,damianmarti
+475,Shrug,
+476,David Núñez,cygnusv
+477,Fakdi,Bluezfish
+478,Easy Innova,easyinnova
+479,John,sfumato00
+480,Konrad Feldmeier,
+481,Joshua Hendrix,thejoshuahendrix
+482,Anton Buenavista,ayobuenavista
+483,Cry,crydoteth
+484,Josh Klopfenstein,joshklop
+485,D Wang,
+486,Tyler Kell,relyt29
+487,Muhammed Emin Aydın,muhammedea
+489,Shange Fu,
+490,Dennis von der Bey,DennisVonDerBey
+491,Julien Béranger,julienbrg
+492,Charles Lehner,clehner
+493,Tiger,tiger0x
+494,Andrea Brancaleoni,thypon
+495,Nikhil Asrani,nikhilasrani
+496,o,ryley-o
+497,Jared Wasinger,jwasinger
+498,Mario,
+499,Matt Solomon,mds1
+500,Steven Pineda,steven2308
+501,Cameron Robertson,ccamrobertson
+502,edison0xyz,edison0xyz
+503,Avihu Levy,avihu28
+504,RJ Catalano,VoR0220
+505,Nastassia Sachs,
+506,Brandon Grill,
+507,IfDefElse,
+508,Marc Garreau,marcgarreau
+509,Amir Bandeali,abandeali1
+510,Kevin Seagraves,
+511,Noah Zinsmeister,
+512,Yun Ma,
+513,Matthew Slipper,mslipper
+514,Alejo Salles,fiiiu
+515,Nate van der Ende,
+516,Caroline Marshall,
+517,Eric Binet,
+518,John Max Skaller,
+519,Justin Drake,justindrake
+520,Ran Xing,lemontreeran
+521,Will Villanueva,villanuevawill
+522,Benjamin Hauser,iamdefinitelyahuman
+523,Manuel Olivi,manvel79
+524,James Seibel,seibelj
+525,Austin Williams,onewayfunction
+526,Dhruv Malik,dhruvmalik007
+527,Ryan Chow,
+528,Luc Falempin,lfalempin
+529,Namra Patel,namrapatel
+530,Iluminada Baturone,lumi2018
+531,Dan Miller,danjm
+532,Eyal Eithcowich,
+533,blockdev,0xbok
+534,Nathan,
+535,Sillytuna,sillytuna
+536,Abhimanyu Nag,AbhiMan1601
+537,PhD,
+538,Jan Bureš,JohnyX89
+539,Shiping Chen,
+540,Sam Gbafa,skgbafa
+541,Fred,apan
+542,Kyle Den Hartog,kdenhartog
+543,Jake Rockland,jakerockland
+544,DeFiFoFum,DeFiFoFum
+545,David Laprade,davidlaprade
+546,Stevan Bogosavljevic,stevyhacker
+547,David Levit Gurevich,DavidLevitGurevich
+548,Iuri Matias,iurimatias
+549,Luka Kacil,
+550,Xuanzhe Liu,
+551,Ian Norden,i-norden
+552,Stephane Gosselin,thegostep
+553,Katrina Donaghy,
+554,Ben Hauser,iamdefinitelyahuman
+555,Samuel Gwlanold Edoumou,Edoumou
+556,Zhongxin Wu,Nerverwind
+557,Adam Boudjemaa,Aboudjem
+558,AndreasGassmann,andreasgassmann
+559,Señor Doggo,fubuloubu
+560,Michael Zargham,mzargham
+561,Austin Griffith,austintgriffith
+562,Cyberpnk,CyberpnkWin
+563,DOBBYLABS,DOBBYLABS
+564,Sherry Xu,
+565,Fov Cao,fovcao
+566,andy8052,andy8052
+567,Payom Dousti,payomdousti
+568,Bertrand Masius,catageek
+570,Toufic Batrice,toufic0710
+571,AlvisDu,AlvisDu
+572,Shahaf Nacson,shahafn
+573,xardass,xardass
+574,Sam Furter,nivida
+575,Mofi Taiwo,Inphi
+576,Chad Fleming,chad-js
+577,Piotr Kosiński,kosecki123
+578,Sachin Tomar,tomarsachin2271
+579,Lixin Liu,BitcoinLixin
+580,Franz Chen,Dendrimer
+581,ankit raj,
+582,Patrick McCorry,stonecoldpat
+583,John Griffin,
+584,Nicolas Venturo,nventuro
+585,Nathan Creswell,
+586,BerlinP,BerlinP
+587,Zergity,Zergity
+588,Zahary Karadjov,zah
+589,Yuki Aoki,yuki-js
+590,Yonathan Randyanto,Randyanto
+591,Victor Dusart,vdusart
+592,Thomas Bergmueller,tbergmueller
+593,Sujith Somraaj,sujithsomraaj
+594,Simon Brown,orbmis
+595,Silvere Heraudeau,lambdalf-dev
+596,Shawn Zheng,xiyu1984
+597,RoiV,DeVaz1
+598,Renan Rodrigues de Souza,RenanSouza2
+599,Raymond Huynh,huynhr
+600,Qiang Zhu,qzhodl
+601,Pooja Ranjan,poojaranjan
+602,Pierre Bertet,bpierre
+603,Peter Chen,pette1999
+604,Paul Sullivan,sullivph
+605,Pascal Caversaccio,pcaversaccio
+606,Otniel Nicola,OT-kthd
+607,Nick Zeman,NickZCZ
+608,Ngo Quang Anh,anhnq82
+609,Narcis Cotaie,NarcisCRO
+610,Mihai Onila,MihaiORO
+611,Martin McConnell,offgridgecko
+612,Lukas Meyer,ibex-technology
+613,Leeren,leeren
+614,Landgraf,pekola
+615,Khanh Pham,blackskin18
+616,Kevin Riedl,wsdt
+617,KEMP Elia,eliakemp
+618,Keegan Lee,keeganlee
+619,Kay Lin,kay404
+620,Kai Yu,chihkaiyu
+621,Junyi Zhong,Jooeys
+622,Josh Weintraub,jhweintraub
+623,Jayden Windle,jaydenwindle
+624,Jason Cheng,Jason0729
+625,Jake Moxey,jxom
+626,Jack Boyuan Xu,boyuanx
+627,Ivo Georgiev,Ivshti
+628,Glitch,glitch-txs
+629,George Huang,virgil2019
+630,George,JXRow
+631,Francesco Sullo,sullof
+632,Fangting Liu,trinity-0111
+633,eth,5660-eth
+634,Etan Kissling,etan-status
+635,Erhard Dinhobl,mrqc
+636,EL MERSHATI Laith,lth-elm
+637,Druzy Downs,druzydowns
+638,Dexaran,Dexaran
+639,David Leung,dhl
+640,David Huber,cxkoda
+641,Darryl Yeo,darrylyeo
+642,Cristian Espinoza,crisgarner
+643,Christian Fries,cfries
+644,Chiro,chiro-hiro
+645,Boyu Chu,chuboyu
+646,Boxi Li,boxi79
+647,Bogdan Popa,BogdanKTHD
+648,BOCA Jeabby,bjeabby1507
+649,Ben Fusek,bfusek
+650,Ben DiFrancesco,apbendi
+651,Base Labs,Base-Labs
+652,Baptiste Vauthey,thabaptiser
+653,Artem Chystiakov,arvolear
+654,Archie Chang,ArchieR7
+655,Arran Schlosberg,aschlosberg
+656,Alexandros Korpis,kourouta
+657,Adam Egyed,adamegyed
+658,Abderrahmen Hanafi,a6-dou
+659,Zihao Chen,zihaoccc
+660,Weiji Guo,weijiguo
+661,Gavin John,Pandapip1
+662,Chris Whinfrey,cwhinfrey
+663,Charles Cunningham,chunningham
+664,Martin Becze,
+665,5560-eth,
+666,Abu,
+667,Wizard Wang,
+668,msfew,
+669,Kartin,
+670,Re: DREAMER Lab,
+671,Daniel Fallon-Cyr,dfalloncyr
+672,Jessica Chang,JessicaChg
+673,Agustin Aguilar,Agusx1211
+674,Eduard López i Fina,eduardfina
+675,Peter Kohl-Landgraf,pekola
+676,Aubay,
+677,Tal Be'ery,talbeerysec
+678,Benny Giang,bennygiang
+679,Steve Jang,
+680,Alanah Lam,
+681,Jun,SniperUsopp
+682,Saitama,saitama2009
+683,Combo,
+684,Luigi,
+685,Qi Zhou,qizhou
+686,qdqd,qd-qd
+687,Joshua Trujillo,jtriley
+688,Mohamad Hammoud,mohamadhammoud
+689,Nawar Hisso,nawar-hisso
+690,Khawla Hassan,khawlahssn
+691,Mohammad Zakeri Rad,zakrad
+692,Ashish Sood,
+693,Yaroslav Sergievsky,everdimension
+694,Zak Cole,zscole
+695,Kartik Patel,Slokh
+696,Alexe Spataru,urataps
+697,Cathie So,socathie
+698,Xiaohang Yu,xhyumiracle
+699,Huaizhe Xu,HuaizheXu
+700,Carlos Flores,strollinghome
+701,Bofu Chen,bafu
+702,Tammy Yang,tammyyang
