@@ -5,7 +5,7 @@
 cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data"
 
  import excel "updated_commits.xlsx", sheet("Sheet 1") firstrow
- rename EIP EIP_Number
+ rename EIP eip_number
  save "ethereum_commit.dta", replace
  
  // import unique author ids with client information file
@@ -31,7 +31,7 @@ drop _merge
 
 // create a variable that identifies the total number of commits for each EIPs
 
-bysort EIP_Number : gen total_commit = _N 
+bysort eip_number : gen total_commit = _N 
 
 
 save "ethereum_commit.dta", replace
