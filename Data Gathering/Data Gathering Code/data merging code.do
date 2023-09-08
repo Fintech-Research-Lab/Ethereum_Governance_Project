@@ -116,9 +116,18 @@ forvalues i = 2/11{
 replace n_authors = n_authors + 1 if author`i' != ""	
 }
 
-// add number of total commits by EIP
+save "Ethereum_Cross-sectional_Data.dta", replace
 
-merge 1:m eip_number using "ethereum_commit.dta", keepusing(total_commit)
+// add number of total commits by EIP
+clear 
+use "ethereum_commit.dta"
+collapse (mean) total_commit, by (eip_number)
+save "total_commit.dta"
+
+// merge
+use "Ethereum_Cross-sectional_Data.dta", clear
+
+merge 1:1 eip_number using "total_commit.dta"
 drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
 
 // move variables
@@ -129,6 +138,6 @@ move tw_follower author11
 move gh_follower author11 
 move total_commit author11
 
-
 save "Ethereum_Cross-sectional_Data.dta", replace
+
 
