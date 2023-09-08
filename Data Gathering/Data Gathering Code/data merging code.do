@@ -15,7 +15,7 @@ import delimited "AllEIPS.csv"
 
 // save this imported file as a stata file
 
-save "Ethereum_Crosssectional_Data.dta", replace
+save "Ethereum_Cross-sectional_Data.dta", replace
 
 // import twitter data and create a stata file
 
@@ -25,7 +25,7 @@ save "twitter_data.dta", replace
 // Merge the data by author_id one author at a time
 
 clear
-use "Ethereum_Crossectional_Data.dta"
+use "Ethereum_Cross-sectional_Data.dta"
 
 forvalues id = 1/11{
 rename author`id'_id author_id
@@ -41,7 +41,7 @@ rename following author`id'_following
 
 egen tw_follower = rowmax(author1_follower author2_follower author3_follower author4_follower author5_follower author6_follower author7_follower author8_follower author9_follower author10_follower author11_follower)
 
-save "Ethereum_Crosssectional_Data.dta", replace
+save "Ethereum_Cross-sectional_Data.dta", replace
 
 // merge github 
 
@@ -51,7 +51,7 @@ save "Github_data.dta", replace
 
 // merge with ethereum data
 clear
-use "Ethereum_Crossectional_Data.dta"
+use "Ethereum_Cross-sectional_Data.dta"
 
 forvalues id = 1/11{
 rename author`id'_id author_id
@@ -65,7 +65,7 @@ rename github_follower author`id'_gh_follower
 // create a maximum github following variable
 egen gh_follower = rowmax(author1_gh_follower author2_gh_follower author3_gh_follower author4_gh_follower author5_gh_follower author6_gh_follower author7_gh_follower author8_gh_follower author9_gh_follower author10_gh_follower author11_gh_follower)
 
-save "Ethereum_Crossectional_Data.dta", replace
+save "Ethereum_Cross-sectional_Data.dta", replace
 
 
 // merge LinkedIn Data
@@ -76,7 +76,7 @@ save "linkedin_data.dta",replace
 
 // merge linkedin data
 clear
-use "Ethereum_Crossectional_Data.dta"
+use "Ethereum_Cross-sectional_Data.dta"
 
 forvalues id = 1/11{
 rename author`id'_id author_id
@@ -115,10 +115,20 @@ gen n_authors = 1 if author1 != ""
 forvalues i = 2/11{
 replace n_authors = n_authors + 1 if author`i' != ""	
 }
-move EIP author11
+
+// add number of total commits by EIP
+
+merge 1:m eip_number using "ethereum_commit.dta", keepusing(total_commit)
+drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
+
+// move variables
+move eip_number author11
+move status author11
 move n_authors author11
 move tw_follower author11
 move gh_follower author11 
+move total_commit author11
 
 
 save "Ethereum_Crossectional_Data.dta", replace
+
