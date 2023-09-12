@@ -23,3 +23,5 @@ Apart from the cross-sectional data which is organized by *eip_number* we have a
   - First import the file *updated_commit.xlsx*  This file is a time series file as it contains dates of commitments. We store it as a stata file *ethereum_commit.dta*.It is a panel data which is organized by EIPs and date.
   - We count the total number of commits for each EIP and merge this information with *Ethereum_Cross-sectional_data.dta*
   - The data is saved as *ethereum_commit.dta*
+## Create Betweenness Centrality Measure
+we use python code *??????.py* to create a betweenness centrality measure amongs all co-authors of EIPs. The code takes file *allEIPs.csv* and create a betweenness centrality measure for each EIP. We merge the betweenness_centrality measure in the Ethereum_Cross-sectional_Date.dta using eip_number.
