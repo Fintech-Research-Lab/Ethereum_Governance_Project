@@ -8,7 +8,7 @@
 
 // Import EIP data
 
-cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
 clear
 import delimited "AllEIPS.csv"
 
@@ -80,7 +80,7 @@ use "Ethereum_Cross-sectional_Data.dta"
 
 forvalues id = 1/11{
 rename author`id'_id author_id
-merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle2_company2 jobtitle1_company3 jobtitle2_company3 jobtitle1_company4)
+merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle1_company3 jobtitle1_company4 jobtitle1_pastcompany1 jobtitle1_pastcompany2 jobtitle1_pastcompany3 jobtitle1_pastcompany4 jobtitle1_pastcompany5 jobtitle1_pastcompany6 jobtitle1_pastcompany7 jobtitle1_pastcompany8 jobtitle1_pastcompany9 jobtitle1_pastcompany10)
 drop if _merge == 2
 drop _merge
 rename author_id author`id'_id
@@ -102,10 +102,18 @@ rename jobtitle1_company1 author`id'_jobtitle1_company1
 rename jobtitle2_company1 author`id'_jobtitle2_company1
 rename jobtitle3_company1 author`id'_jobtitle3_company1
 rename jobtitle1_company2 author`id'_jobtitle1_company2
-rename jobtitle2_company2 author`id'_jobtitle2_company2
 rename jobtitle1_company3 author`id'_jobtitle1_company3
-rename jobtitle2_company3 author`id'_jobtitle2_company3
 rename jobtitle1_company4 author`id'_jobtitle1_company4
+rename jobtitle1_pastcompany1 author`id'_jobtitle1_pastcompany1
+rename jobtitle1_pastcompany2 author`id'_jobtitle1_pastcompany2
+rename jobtitle1_pastcompany3 author`id'_jobtitle1_pastcompany3
+rename jobtitle1_pastcompany4 author`id'_jobtitle1_pastcompany4
+rename jobtitle1_pastcompany5 author`id'_jobtitle1_pastcompany5
+rename jobtitle1_pastcompany6 author`id'_jobtitle1_pastcompany6
+rename jobtitle1_pastcompany7 author`id'_jobtitle1_pastcompany7
+rename jobtitle1_pastcompany8 author`id'_jobtitle1_pastcompany8
+rename jobtitle1_pastcompany9 author`id'_jobtitle1_pastcompany9
+rename jobtitle1_pastcompany10 author`id'_jobtitle1_pastcompany10
 }
 
 // create number of authors
@@ -122,13 +130,14 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 clear 
 use "ethereum_commit.dta"
 collapse (mean) total_commit, by (eip_number)
-save "total_commit.dta"
+save "total_commit.dta", replace
 
 // merge
 use "Ethereum_Cross-sectional_Data.dta", clear
 
 merge 1:1 eip_number using "total_commit.dta"
 drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
+drop _merge
 
 // move variables
 move eip_number author11
@@ -137,6 +146,18 @@ move n_authors author11
 move tw_follower author11
 move gh_follower author11 
 move total_commit author11
+
+save "Ethereum_Cross-sectional_Data.dta", replace
+
+// Add betweenness_centrality measure for each EIPs
+
+clear
+import delimited "betweenness.csv"
+save "betweenness.dta", replace
+
+use "Ethereum_Cross-sectional_Data.dta"
+merge 1:1 eip_number using "betweenness.dta", keepusing(betweenness_centrality)
+move betweenness_centrality author11
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
