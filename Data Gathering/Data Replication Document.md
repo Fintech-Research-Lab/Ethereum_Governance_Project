@@ -23,8 +23,15 @@ Apart from the cross-sectional data which is organized by *eip_number* we have a
     - We use a stata code *eip commit data  creation code.do* which takes this data and merge it with *author.dta* to flag whether the github username that contributes to EIP is part of the author list or not. If it is a part of the author list we create a flag *eip_author = 1/0* indicating whether commitor is an eip author or not.
     - We aggregate the total number of commits to each EIP and merge it with the cross-sectional data in the *data merging code.do* and call it *total_commits*
     - We also aggregate the unique number of participants that are commiting to the eip github for each eip. We call this variable *contributors* and merge this with the cross-sectional data in the *data merging code.do*
-* **Client Commit** are commitments to the *Client Repositories* These commitments may be for anything even things unrelated to EIPs. Later we match the github usernames of contributors of this data to our author list and add this data as an entry in the cross-sectional data.
-The steps involve gathering all commit data from github. As a first step, we gather information from the github *EIP Respoistory* then we collect data from github's client repositories. We use top 4 clients *geth*,*nethermind*,*besu*, and *erigon*.  The following steps were taken to collect this data:
+* **Client Commit** are commitments to the *Client Repositories* These commitments may be for anything even things unrelated to EIPs.
+* - We begin with python code *???????.py* which creates four stata files *commitsbesu.dta*,*commitserigon.dta*,*commitsgeth.dta*
+  - We then aggregate all commits by each github username
+  - We match github usernames with authors to see how many commits are done by eip authors
+  - We then merge this to the cross-sectional data for each author 1 to 11
+  - We create a maximum of all authors for eip. This process is repeated for 4 clients so we get *geth_commits*, *besu_commits*, *erigon_commits*, and *nethermind_commits* as four variables in the cross-sectional data
+The steps involve gathering all commit data from github. As a first step, we gather information from the github *EIP Respoistory* then we collect data from github's client repositories. We use top 4 clients *geth*,*nethermind*,*besu*, and *erigon*.
+
+The following steps were taken to collect this data:
 * Use code *?????????* to web scrape data from github's EIP repository to find commits by date, author (github username), commit hash code, and commit title. This data is available in file called *updated_commit.xlsx*.
 * Matched this commit data to a list of author_ids that contains github_usernames so that we can identify whether the commit contributor was an EIP Author. This code is produced in *commit data creation code.do*.
   - First import the file *updated_commit.xlsx*  This file is a time series file as it contains dates of commitments. We store it as a stata file *ethereum_commit.dta*.It is a panel data which is organized by EIPs and date.
