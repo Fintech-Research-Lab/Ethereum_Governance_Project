@@ -18,12 +18,12 @@ clear
   use "ethereum_commit.dta", clear
   rename Author_Id author_id
 merge m:1 author_id using "author.dta", keepusing(github_username)
-drop if _merge == 2 // remove 290 authors that did not do any commits 
+drop if _merge == 2 // remove authors that did not add any 
 
 // create a flag whether the commit author is an EIP author. If the commit author does not exist in our author list then we assume that commit author is not
 // an EIP author. This is expressed in _merge == 1
 
-gen eip_author_flag = 1 if _merge == 1
+gen eip_author_flag = 1 if _merge == 3
 replace eip_author_flag = 0 if eip_author_flag == .
 drop _merge
 // save this file as comit
@@ -32,6 +32,7 @@ drop _merge
 // create a variable that identifies the total number of commits for each EIPs
 
 bysort eip_number : gen total_commit = _N 
+egen author_commit = total(eip_author_flag), by(eip_number)
 
 save "ethereum_commit.dta", replace
 
@@ -54,4 +55,3 @@ clear
 import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\ethereum_commit.xlsx", sheet("Sheet1") firstrow clear
 
 save "ethereum_commit.dta", replace
-
