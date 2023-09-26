@@ -3,7 +3,7 @@ This document replicates the Ethereum project data creation document. This data 
 The data collection process begins with scraping of data from the website ethereum.org. This website contains information of all EIPs, their status and their authors. This data is collected using a web-scrapping code as of **06/15/2023**. The following steps were taken:
 * Use code *?????????* to create a file which contains 639 EIPs. This file contains EIP Number, Authors, Status, and Title.
 * Modify data to split Authors in upto 11 authors if EIPs are co-authored and provided a unique author_id. The result is the file called *AllEIPs.csv* This process is not replicable as some of it was done via code but later modified. However, once the file *allEIPS.csv* was created, we verified the author names and ids to ensure that from now on, author_ids are used. As a reference, we have stored that information in a file called *author.dta*
-* We collect Github Data using a code *??????.py* which is stored in *Github_Data.csv*.
+* We collect Github Data using a code *Github Follower Extract.py* which is stored in *Github_Data.csv*.
 ## Manual Collection
 We manually collect the following data
 * Twitter Data: We manually collected information on the authors' Twitter following and Twitter followers, if available. This data is in *Twitter_Data.csv*.
