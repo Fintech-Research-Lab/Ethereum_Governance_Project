@@ -18,9 +18,9 @@ We use a stata code called *data merging code.do* to create the cross-sectional 
 * Twitter, github, and LinkedIn data is merged to this stata file based on unique author_ids. This create the cross-sectional ethereum data based on EIPs. This data is stored in *Ethereum_Cross-sectional_Data.dta*. 
 ## Generating Commit Data
 Apart from the cross-sectional data which is organized by *eip_number* we have also gathered time series data of github commitments from github. There are two sets of commit data
-*  **EIP Commit** are commitments to github for each EIP. This data is organized by date and EIP.
+*  **EIP Commit** are commitments to github's EIP repository. This data is organized by date and EIP.
     - We collect all commitments made by any contributor to the EIP, whether they are an author or a contributor who may not be an author. This collection is done through a python code *???????.py* the output of this code is a file *updated_commits.xlsx*
-    - We use a stata code *eip commit data  creation code.do* which takes this data and merge it with *author.dta* to flag whether the github username that contributes to EIP is part of the author list or not. If it is a part of the author list we create a flag *eip_author = 1/0* indicating whether commitor is an eip author or not.
+    - We use a stata code *eip commit data creation code.do* which takes this data and merge it with *author.dta*. If the merged value matches author.dta we flag the github_username *eip_author = 0/1*. If the github_usernames does not exists in the author.dta (_merge == 1) then we consider it as whether the github username that contributes to EIP is part of the author list or not. If it is a part of the author list we create a flag *eip_author = 1/0* indicating whether commitor is an eip author or not.
     - We aggregate the total number of commits to each EIP and merge it with the cross-sectional data in the *data merging code.do* and call it *total_commits*
     - We also aggregate the unique number of participants that are commiting to the eip github for each eip. We call this variable *contributors* and merge this with the cross-sectional data in the *data merging code.do*
 * **Client Commit** are commitments to the *Client Repositories* These commitments may be for anything even things unrelated to EIPs.
