@@ -150,10 +150,26 @@ save "betweenness.dta", replace
 
 use "Ethereum_Cross-sectional_Data.dta"
 merge 1:1 eip_number using "betweenness.dta", keepusing(betweenness_centrality)
+save "Ethereum_Cross-sectional_Data.dta", replace
+
+// add start and end dates of all EIPs that have been finalized
+clear
+import delimited "allEIPswithdates.csv"
+rename number eip_number
+save "alleipswithdates.dta", replace
+
+use "Ethereum_Cross-sectional_Data" , clear
+drop _merge
+merge 1:1 eip_number using "alleipswithdates.dta", keepusing(start end)
+drop if _merge == 2
+drop _merge
+
 
 // move variables
 move eip_number author11
 move status author11
+move start author11
+move end author11
 move n_authors author11
 move tw_follower author11
 move gh_follower author11 
@@ -191,7 +207,7 @@ foreach file of local files {
 }
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
 use "Ethereum_Cross-sectional_Data.dta", clear
-drop _merge
+
 local files = "besu erigon geth nethermind"
 foreach file in `files' {
   forvalues id = 1/11{
