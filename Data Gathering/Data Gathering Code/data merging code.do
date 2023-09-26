@@ -126,10 +126,10 @@ replace n_authors = n_authors + 1 if author`i' != ""
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
-// add number of total commits by EIP
+// add number of total commits and eip_contributors 
 clear 
 use "ethereum_commit.dta"
-collapse (mean) total_commit, by (eip_number)
+collapse (mean) total_commit eip_contributors author_commit, by (eip_number)
 save "total_commit.dta", replace
 
 // merge
@@ -139,15 +139,8 @@ merge 1:1 eip_number using "total_commit.dta"
 drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
 drop _merge
 
-// move variables
-move eip_number author11
-move status author11
-move n_authors author11
-move tw_follower author11
-move gh_follower author11 
-move total_commit author11
-
 save "Ethereum_Cross-sectional_Data.dta", replace
+
 
 // Add betweenness_centrality measure for each EIPs
 
@@ -157,7 +150,61 @@ save "betweenness.dta", replace
 
 use "Ethereum_Cross-sectional_Data.dta"
 merge 1:1 eip_number using "betweenness.dta", keepusing(betweenness_centrality)
+
+// move variables
+move eip_number author11
+move status author11
+move n_authors author11
+move tw_follower author11
+move gh_follower author11 
+move total_commit author11
+move author_commit author11
+move eip_contributors author11
 move betweenness_centrality author11
+
+
+save "Ethereum_Cross-sectional_Data.dta", replace
+
+// prepare files collapsing client commits and matching them with eip authors
+
+
+// add client repository commits by author 
+local path "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\client_commit\"
+cd "`path'"
+local files : dir "`path'" files "*.dta" // Get the list of .dta files in the directory
+di `files'
+foreach file of local files {
+    use "`file'", clear
+	local newvar = substr("`file'", 8, strlen("`file'")-11)
+	di "`newvar'"
+    collapse (count) date, by(login)
+	rename date `newvar'_commits
+    rename login github_username
+    drop if github_username == "" 
+    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+    merge 1:m github_username using "author", keepusing(author_id)
+    keep if _merge == 3
+    drop _merge
+    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+    save "`file'_author_commits.dta", replace
+	cd "`path'"
+}
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+use "Ethereum_Cross-sectional_Data.dta", clear
+drop _merge
+local files = "besu erigon geth nethermind"
+foreach file in `files' {
+  forvalues id = 1/11{
+    rename author`id'_id author_id
+    merge m:1 author_id using "commits`file'.dta_author_commits.dta",keepusing(`file'_commits)
+    drop if _merge == 2
+    drop _merge
+    rename author_id author`id'_id
+    rename `file'_commits author`id'_`file'_commits
+  }
+  egen `file'_commits = rowmax(author1_`file'_commits author2_`file'_commits author3_`file'_commits author4_`file'_commits author5_`file'_commits author6_`file'_commits author7_`file'_commits author8_`file'_commits author9_`file'_commits author10_`file'_commits author11_`file'_commits)
+  move `file'_commits author11
+}
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
