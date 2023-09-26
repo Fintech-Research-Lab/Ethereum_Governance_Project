@@ -29,7 +29,6 @@ Apart from the cross-sectional data which is organized by *eip_number* we have a
   - We then aggregate all commits by each github username
   - We match github usernames with authors to see how many commits are done by eip authors
   - We then merge this to the cross-sectional data for each author 1 to 11
-  - We create a maximum of all authors for eip. This process is repeated for 4 clients so we get *geth_commits*, *besu_commits*, *erigon_commits*, and *nethermind_commits* as four variables in the cross-sectional data
-The steps involve gathering all commit data from github. As a first step, we gather information from the github *EIP Respoistory* then we collect data from github's client repositories. We use top 4 clients *geth*,*nethermind*,*besu*, and *erigon*.
+  - We create a maximum of all authors for eip. This process is repeated for 4 clients so we get *geth_commits*, *besu_commits*, *erigon_commits*, and *nethermind_commits* as four variables in the cross-sectional data. The process is included in the *data merging code.do*
 ## Create Betweenness Centrality Measure
 we use python code *??????.py* to create a betweenness centrality measure amongs all co-authors of EIPs. The code takes file *allEIPs.csv* and create a betweenness centrality measure for each EIP. We merge the betweenness_centrality measure in the Ethereum_Cross-sectional_Date.dta using eip_number.
