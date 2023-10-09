@@ -1,16 +1,11 @@
-// This is the code to merge disparate data on Ethereum Governance Project.
-// There are several independently collected data sources. We have manually collected twitter following and twitter follower data for EIP authors
-// We begin with a file that contains all EIPs on Github with author names. We assigned a unique author id for each authors
-// In addition, there is a separate data manually collected on companies where they worked and author's job titles 
-// Also there is a manual collection of github followers
-// Once these data were collected, we matched author names using a fuzzy logic. We added author_ids for matched names and for those that did not match we manually added author_ids
-// The following code is a way to merger twitter, github, company, and jobs data into the beginning file with EIP numbers, author names, and author_ids
 
 // Import EIP data
 
+// This data is generated after running "pythoncode to prepare data merging.py" The output of that data is "Ethereum_Cross-Sectional_Data.csv"
+
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
 clear
-import delimited "AllEIPS.csv"
+import delimited "Ethereum_Cross-Sectional_Data.csv"
 
 
 // save this imported file as a stata file
@@ -27,7 +22,7 @@ save "twitter_data.dta", replace
 clear
 use "Ethereum_Cross-sectional_Data.dta"
 
-forvalues id = 1/11{
+forvalues id = 1/15{
 rename author`id'_id author_id
 merge m:1 author_id using "twitter_data.dta",keepusing(follower following)
 drop if _merge == 2
@@ -39,7 +34,7 @@ rename following author`id'_following
 
 // create max twitter follower variable
 
-egen tw_follower = rowmax(author1_follower author2_follower author3_follower author4_follower author5_follower author6_follower author7_follower author8_follower author9_follower author10_follower author11_follower)
+egen tw_follower = rowmax(author1_follower author2_follower author3_follower author4_follower author5_follower author6_follower author7_follower author8_follower author9_follower author10_follower author11_follower author12_follower author13_follower author14_follower author15_follower)
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
@@ -53,7 +48,7 @@ save "Github_data.dta", replace
 clear
 use "Ethereum_Cross-sectional_Data.dta"
 
-forvalues id = 1/11{
+forvalues id = 1/15{
 rename author`id'_id author_id
 merge m:1 author_id using "Github_data.dta",keepusing(github_followers)
 drop if _merge == 2
@@ -63,7 +58,7 @@ rename github_follower author`id'_gh_follower
 }
 
 // create a maximum github following variable
-egen gh_follower = rowmax(author1_gh_follower author2_gh_follower author3_gh_follower author4_gh_follower author5_gh_follower author6_gh_follower author7_gh_follower author8_gh_follower author9_gh_follower author10_gh_follower author11_gh_follower)
+egen gh_follower = rowmax(author1_gh_follower author2_gh_follower author3_gh_follower author4_gh_follower author5_gh_follower author6_gh_follower author7_gh_follower author8_gh_follower author9_gh_follower author10_gh_follower author11_gh_follower author12_gh_follower author13_gh_follower author14_gh_follower author15_gh_follower)
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
@@ -78,7 +73,7 @@ save "linkedin_data.dta",replace
 clear
 use "Ethereum_Cross-sectional_Data.dta"
 
-forvalues id = 1/11{
+forvalues id = 1/15{
 rename author`id'_id author_id
 merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle1_company3 jobtitle1_company4 jobtitle1_pastcompany1 jobtitle1_pastcompany2 jobtitle1_pastcompany3 jobtitle1_pastcompany4 jobtitle1_pastcompany5 jobtitle1_pastcompany6 jobtitle1_pastcompany7 jobtitle1_pastcompany8 jobtitle1_pastcompany9 jobtitle1_pastcompany10)
 drop if _merge == 2
@@ -120,7 +115,7 @@ rename jobtitle1_pastcompany10 author`id'_jobtitle1_pastcompany10
 
 gen n_authors = 1 if author1 != ""
 
-forvalues i = 2/11{
+forvalues i = 2/15{
 replace n_authors = n_authors + 1 if author`i' != ""	
 }
 
@@ -166,17 +161,13 @@ drop _merge
 
 
 // move variables
-move eip_number author11
-move status author11
-move start author11
-move end author11
-move n_authors author11
-move tw_follower author11
-move gh_follower author11 
-move total_commit author11
-move author_commit author11
-move eip_contributors author11
-move betweenness_centrality author11
+move n_authors author1
+move tw_follower author1
+move gh_follower author1 
+move total_commit author1
+move author_commit author1
+move eip_contributors author1
+move betweenness_centrality author1
 
 
 save "Ethereum_Cross-sectional_Data.dta", replace
@@ -210,7 +201,7 @@ use "Ethereum_Cross-sectional_Data.dta", clear
 
 local files = "besu erigon geth nethermind"
 foreach file in `files' {
-  forvalues id = 1/11{
+  forvalues id = 1/15{
     rename author`id'_id author_id
     merge m:1 author_id using "commits`file'.dta_author_commits.dta",keepusing(`file'_commits)
     drop if _merge == 2
@@ -219,7 +210,7 @@ foreach file in `files' {
     rename `file'_commits author`id'_`file'_commits
   }
   egen `file'_commits = rowmax(author1_`file'_commits author2_`file'_commits author3_`file'_commits author4_`file'_commits author5_`file'_commits author6_`file'_commits author7_`file'_commits author8_`file'_commits author9_`file'_commits author10_`file'_commits author11_`file'_commits)
-  move `file'_commits author11
+  move `file'_commits author1
 }
 
 save "Ethereum_Cross-sectional_Data.dta", replace
