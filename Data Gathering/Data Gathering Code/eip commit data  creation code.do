@@ -55,3 +55,69 @@ clear
 import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\ethereum_commit.xlsx", sheet("Sheet1") firstrow clear
 
 save "ethereum_commit.dta", replace
+
+// add meeting dates as event in the commit data
+
+python:
+import pandas as pd
+import os as os
+
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data")
+data = pd.read_csv("Calls_Updated_standardized.csv")
+data =data[data['EIP_Mention'] == True] # remove false from the data
+commit = pd.read_stata("ethereum_commit.dta")
+
+EIP_list = data['EIP'].str.split(',')
+eip_df = EIP_list.explode()
+eip_df = eip_df.str.replace("EIP-","")
+eip_df = eip_df.dropna()
+eip_df = eip_df.astype(int)
+
+# merge
+
+data2 = pd.merge(data,eip_df, left_index = True, right_index = True, how = 'outer', indicator = True)
+data2 = data2.rename(columns = {'EIP_x' : "EIP_list",'EIP_y' : "eip_number"})
+data2 = data2[data2['EIP_list'].notna()]
+data2.index.name = 'old_index'
+data2.reset_index(inplace = True)
+
+# select first meeting dates
+
+data2['Date'] = pd.to_datetime(data2['Date'])
+data2 = data2.sort_values('eip_number')
+data3 = data2.drop_duplicates(subset= ['Meeting','eip_number'])
+data4 = data2.loc[:,['Date','Meeting','eip_number']]
+data4 = data4.rename(columns = {'Date' : 'MeetingDate'})
+data5 = data4.groupby('eip_number').head(1)
+
+# merge data to commit data
+
+commit2 = pd.merge(commit,data5, on = 'eip_number', how = 'outer', indicator = True)
+commit2 = commit2.sort_values(['eip_number','CommitDate','MeetingDate', 'Meeting'])
+new_order = ['A', 'File', 'eip_number','CommitDate', 'MeetingDate','CommitSHA', 'CommitMessage', 
+       'Author', 'author_id', 'github_username', 'eip_author_flag',
+       'total_commit', 'author_commit', 'eip_contributors', 
+        '_merge']
+commit2 = commit2[new_order]
+
+commit2.to_excel("eip_commit.xlsx")
+end
+clear
+import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\eip_commit.xlsx", sheet("Sheet1") firstrow
+
+ // create distance to first meeting
+ 
+ gen distance = (CommitDate - MeetingDate) /86400000 /7
+ move distance CommitSHA
+ 
+ // create measure of commits by distance to first meeting
+ 
+ bysort eip_number : egen tm10_commits = count(CommitDate) if distance <= 0 & distance > -10
+ bysort eip_number : egen tp10_commits = count(CommitDate) if distance >= 0 & distance < 10 
+
+  
+ foreach var of var(tm10_commits-tp10_commits){
+ 	move `var' CommitSHA
+ }
+ 
+save "ethereum_commit.dta", replace
