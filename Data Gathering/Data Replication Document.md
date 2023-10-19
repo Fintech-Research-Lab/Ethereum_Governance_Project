@@ -54,3 +54,8 @@ Final step is to prepare the cross-sectional data for regression. This is done u
 * Finding top 10 companies represented by authors in the Cross-sectional data. We count just the company1 where authors work and find the frequency of authors by each company. We then sort it and create dummy variables for top 10 companies. In addition to using company dummies, the preparation code also create a success variable that uses 0 and 1 for eips in progress and finalized.
 * create success variable which takes a value of 1 if eip is finalized and a value of 0 if it is withdrawn or stagnant and a value of NA(.) if it is Living, Last Call or Review
 * create a variable called "Implementation" which takes the value of 1 if eip has been implemented in a Fork and the value of 0 for all eips that have either a 1 or 0 in the "Implentable" column. These are eips that are deemed implementable through a client code. 
+## Replication Steps
+* Make sure you have all the files in the correct directory
+* Assign proper directory to the *data merging code.do*
+* Run *data merging code.do*
+* Run *Preparing Regression Data.do*
