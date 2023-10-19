@@ -1,7 +1,12 @@
+// This is the code to merge disparate data on Ethereum Governance Project.
+// There are several independently collected data sources. We have manually collected twitter following and twitter follower data for EIP authors
+// We begin with a file that contains all EIPs on Github with author names. We assigned a unique author id for each authors
+// In addition, there is a separate data manually collected on companies where they worked and author's job titles 
+// Also there is a manual collection of github followers
+// Once these data were collected, we matched author names using a fuzzy logic. We added author_ids for matched names and for those that did not match we manually added author_ids
+// The following code is a way to merger twitter, github, company, and jobs data into the beginning file with EIP numbers, author names, and author_ids
 
 // Import EIP data
-
-// This data is generated after running "pythoncode to prepare data merging.py" The output of that data is "Ethereum_Cross-Sectional_Data.csv"
 
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
 clear
@@ -147,20 +152,54 @@ use "Ethereum_Cross-sectional_Data.dta"
 merge 1:1 eip_number using "betweenness.dta", keepusing(betweenness_centrality)
 save "Ethereum_Cross-sectional_Data.dta", replace
 
-// add start and end dates of all EIPs that have been finalized
+// add end dates of all EIPs that have been finalized
 clear
-import delimited "allEIPswithdates.csv"
+import delimited "finaleip_enddates.csv"
 rename number eip_number
-save "alleipswithdates.dta", replace
+gen edate = date(end, "MDY")
+format edate %td
+save "finaleip_enddates.dta", replace
 
 use "Ethereum_Cross-sectional_Data" , clear
 drop _merge
-merge 1:1 eip_number using "alleipswithdates.dta", keepusing(start end)
+merge 1:1 eip_number using "finaleip_enddates.dta", keepusing(edate)
 drop if _merge == 2
 drop _merge
+save "Ethereum_Cross-sectional_Data.dta", replace
+
+// add start dates for all eips
+
+import delimited "eip_startdates.csv", clear
+gen sdate = date(date, "MDY")
+format sdate %td
+rename eipnumber eip_number
+save "eip_startdates.dta", replace
+
+use "Ethereum_Cross-sectional_Data" , clear
+merge 1:1 eip_number using "eip_startdates.dta", keepusing(sdate)
+drop if _merge == 2
+drop _merge
+save "Ethereum_Cross-sectional_Data.dta", replace
+
+
+// add implementation column in the data
+
+import excel "eip_implementation.xlsx", sheet("EIP Summary") firstrow clear
+save "eip_implementation.dta", replace
+
+use "Ethereum_Cross-sectional_Data" , clear
+merge 1:1 eip_number using "eip_implementation.dta"
+drop if _merge == 2
+drop _merge
+save "Ethereum_Cross-sectional_Data.dta", replace 
 
 
 // move variables
+move sdate author1
+move edate author1
+move Category author1
+move Implementable author1
+move inFork author1
 move n_authors author1
 move tw_follower author1
 move gh_follower author1 
@@ -214,5 +253,7 @@ foreach file in `files' {
 }
 
 save "Ethereum_Cross-sectional_Data.dta", replace
+
+
 
 
