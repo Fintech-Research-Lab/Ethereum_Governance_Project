@@ -2,7 +2,8 @@ This document describes how to replicate the data and the results of the paper "
 
 # Data Collection Process
 The data collection process begins with scraping the list of EIPs and related authors from the [Ethereum EIP page](https://eips.ethereum.org/all). This website contains information of all EIPs, their status and their authors. This data is collected using a web-scrapping code as of **06/21/2023**. The following steps were taken:
-**EIP DATA**
+
+    **EIP DATA**
 1. *EIP List*: The code *EIP list generating code.py* scrapes EIP Number, Authors, Status, and Title, and stores it into the file allEIPsandAuthorsv2.csv. (Note that the code was run on 6/21/2023. Rerunnign the code now would produce a different set of EIPs, as new EIPS have been added since then). 
 2. *EIP Author ID*: The same EIP author name is sometime spelled differently in the EIP list. We thus take the EIP author list, and manually assign a unique author identidier (*Author id*) to each author and the related github handle. The file *unique_author_names_with_id.csv* includes the list of authors and id.   
 3. *EIP List and Standardized Authors*: The python code *pythoncode to prepare data merging* takes the EIP list, and adds the author id to each author, saving the file as *Ethereum_Cross-sectional_Data.csv*.
@@ -11,12 +12,12 @@ The data collection process begins with scraping the list of EIPs and related au
 6. *EIP End Date*: end date of all EIPs that have reached final stage stored in file *finaleip_enddates.csv*
 7. *EIP Authorship betweenness**. we use python code *??????.py* to create a betweenness centrality measure amongs all co-authors of EIPs. The code takes file *Ethereum_Cross-Sectional_Data.csv* and create a betweenness centrality measure for each EIP based on author_ids. We merge the betweenness_centrality measure in the Ethereum_Cross-sectional_Date.dta using eip_number.
 
-**SOCIAL DATA**
+    **SOCIAL DATA**
 7. *Github Followers*: *Github Follower Extract.py* scrapes the github followers for each EIP authors with a github handle. The code generates an interim file which is stored in *author_github_following_raw.csv*. We apply python code *github data reconciliation* to reconcile an older version of this data and match it with author_ids in this code to create a final github data stored in *GitHub_Data.csv*  
 8. *Twitter Data*: We manually collected information on the authors' Twitter following and Twitter followers, if available. This data is in *Twitter_Data.csv*.
 9. *LinkedIn Data:* We also manually collected data from LinkedIn, capturing details of up to four current companies where the authors are presently employed, along with their job titles. Additionally, we gathered information on up to the last 10 companies where they had previously worked, including their past job titles. This is in *LinkedIn_Data.csv*
 
-**COMMIT DATA**
+    **COMMIT DATA**
 10. *EIP Commit*. Each EIP has a github repository. We collect all commitments made by any contributor to the EIP, whether they are an author or a contributor who may not be an author. This collection is done through a python code *???????.py* the output of this code is a file *updated_commits.xlsx*
     - We use a stata code *eip commit data creation code.do* which takes this data and merge it with *author.dta*. If the merged value matches author.dta we flag the github_username *eip_author = 0/1*. If the github_usernames does not exists in the author.dta (_merge == 1) then we consider it as whether the github username that contributes to EIP is part of the author list or not. If it is a part of the author list we create a flag *eip_author = 1/0* indicating whether commitor is an eip author or not. We then aggregate this data to create cross-sectional equivalent based on eip_number to get the following three values:
     - Total number of commits to each EIP and merge it with the cross-sectional data in the *data merging code.do* and call it *total_commits*
