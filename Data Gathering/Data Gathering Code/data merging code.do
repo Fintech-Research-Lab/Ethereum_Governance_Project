@@ -1,10 +1,4 @@
-// This is the code to merge disparate data on Ethereum Governance Project.
-// There are several independently collected data sources. We have manually collected twitter following and twitter follower data for EIP authors
-// We begin with a file that contains all EIPs on Github with author names. We assigned a unique author id for each authors
-// In addition, there is a separate data manually collected on companies where they worked and author's job titles 
-// Also there is a manual collection of github followers
-// Once these data were collected, we matched author names using a fuzzy logic. We added author_ids for matched names and for those that did not match we manually added author_ids
-// The following code is a way to merger twitter, github, company, and jobs data into the beginning file with EIP numbers, author names, and author_ids
+// This is the code to merge disparate data on Ethereum Governance Project. Please read the replication document
 
 // Import EIP data
 
@@ -252,7 +246,15 @@ foreach file in `files' {
   move `file'_commits author1
 }
 
+// create 0 for missing client commits`file
+
+foreach var of varlist(besu_commits-nethermind_commits){
+	replace `var' = 0 if `var' == .
+}
+
 save "Ethereum_Cross-sectional_Data.dta", replace
+
+
 
 
 
