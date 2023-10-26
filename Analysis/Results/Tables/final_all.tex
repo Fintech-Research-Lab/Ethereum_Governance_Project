@@ -1,0 +1,43 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                                   &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+\hline
+GitHub Followers (log)             &    0.0231\sym{**} &                   &                   &                   \\
+                                   &    (2.38)         &                   &                   &                   \\
+[1em]
+Twitter Followers (log)            &    0.0260\sym{***}&                   &                   &                   \\
+                                   &    (3.90)         &                   &                   &                   \\
+[1em]
+Betweenness Centrality             &    4.0578         &                   &                   &                   \\
+                                   &    (1.40)         &                   &                   &                   \\
+[1em]
+Number of EIP Authors              &                   &    0.0746\sym{***}&                   &                   \\
+                                   &                   &    (4.26)         &                   &                   \\
+[1em]
+EIP Contributors                   &                   &    0.0324\sym{**} &                   &                   \\
+                                   &                   &    (2.25)         &                   &                   \\
+[1em]
+EIP Authors Client Commits (log)   &                   &                   &    0.0277\sym{***}&                   \\
+                                   &                   &                   &    (3.03)         &                   \\
+[1em]
+EIP Author Commits                 &                   &                   &    0.0367\sym{***}&                   \\
+                                   &                   &                   &    (8.24)         &                   \\
+[1em]
+Social Influence Index (PCA)       &                   &                   &                   &    0.0539\sym{***}\\
+                                   &                   &                   &                   &    (3.30)         \\
+[1em]
+Engagement Index (PCA)             &                   &                   &                   &    0.0622\sym{***}\\
+                                   &                   &                   &                   &    (2.59)         \\
+[1em]
+Skill Index (PCA)                  &                   &                   &                   &    0.0951\sym{***}\\
+                                   &                   &                   &                   &    (2.81)         \\
+[1em]
+Category FE                        &       Yes         &       Yes         &       Yes         &       Yes         \\
+\hline
+Observations                       &       455         &       455         &       455         &       455         \\
+Adjusted \(R^{2}\)                 &      0.16         &      0.10         &      0.25         &      0.24         \\
+\hline\hline
+\end{tabular}
+}
