@@ -8,10 +8,15 @@ cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project
 *Moazzam
 *cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\"
 
-use "Regressions\Ethereum_Cross-sectional_Data.dta", clear
 
 
-// create labels
+graph set window fontface "Times New Roman"
+
+
+
+
+use "Analysis\Ethereum_Cross-sectional_Data.dta", clear
+
 
 // Create labels
 label var log_tw "Twitter Followers (log)"
@@ -28,35 +33,35 @@ label var besu_commits "Besu Commits"
 label var erigon_commits "Erigon Commits"
 label var geth_commits "Geth Commits"
 label var nethermind_commits "Nethermind Commits"
-label var dummy_spearbit_labs "Spearbit"
-label var dummy_ethereum_name_service "Ethereum Name Service"
-label var dummy_consensys "ConsenSys"
-label var dummy_stoneshot "Stoneshot"
-label var dummy_cube_code "Cube Code"
-label var dummy_google "Google"
-label var dummy_serv_eth_support "Eth Support"
-label var dummy_dyno_security_ab "Dyno Security Lab"
-label var dummy_chainsafe_systems "Chain Safe Systems"
+label var ConsenSys_dummy "ConsenSys"
+label var StarkWare_dummy "StarkWare"
+label var EthereumNameService_dummy "Ethereum Name Service"
+label var Nethermind_dummy "Nethermind"
+label var Coinbase_dummy "Coinbase"
+label var BraveSoftware_dummy "Brave Software"
+label var SpruceSystemsInc_dummy "Spruce Systems"
+label var ChainSafeSystems_dummy "Chain Safe Systems"
+label var Polytrade_dummy "Polytrade"
+label var Google_dummy "Google"
 label var success "Finalized EIP"
 label var implementation "Implemented EIP"
-
-foreach var in besu erigon geth nethermind {
-	replace `var' = 0 if `var' ==.
-	}
+label var time_to_final "Time from EIP Start to Finalization"
 	
 gen client_commits = besu_commits + erigon_commits + geth_commits + nethermind_commits
 label var client_commits "EIP Authors Client Commits"
 gen client_commits_log = log(1+client_commits)
 label var client_commits_log "EIP Authors Client Commits (log)" 
-gen client_commits_dummy = (client_commits>0)
-label var client_commits_dummy "EIP Author also Client Dev"
+gen client_commits_dum = (client_commits>0)
+label var client_commits_dum "EIP Author also Client Dev"
 
 encode Category , gen(category_encoded)
 
 
+replace eip_contributors = 0 if eip_contributors ==.
+
 * Principal Component Analysis
 
-pca log_gh log_tw between
+pca log_gh log_tw 
 predict pca_social, score 
 label var pca_social "Social Influence Index (PCA)"
 
@@ -64,7 +69,7 @@ pca n_author eip_contributors total_commit
 predict pca_author, score 
 label var pca_author "Engagement Index (PCA)"
 
-pca client_commits_log author_commit  
+pca client_commits_dum author_commit between 
 predict pca_skill, score 
 label var pca_skill "Skill Index (PCA)"
 
@@ -74,7 +79,13 @@ replace implemented = . if (status =="Draft" |  status =="Final"  |  status =="L
 
 gen time_start_today = date("june 21, 2023", "MDY") - dofc(sdate)
 
+gen year = year(dofc(sdate))
 
+
+gen success2 = "Finalized" if status =="Final"
+replace success2 = "In Progress" if status =="Draft" | status =="Review" |  status =="Last Call" 
+replace success2 = "Failed" if status =="Withdrawn" | status =="Stagnant"  
+encode success2 , gen (success2_enc)
 
 
 
@@ -84,7 +95,7 @@ local summary_list = "success implemented time_to_final n_author tf_scale gh_fol
 
 eststo clear	
 eststo: estpost summarize `summary_list', detail	
-esttab using "Regressions\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.3fc)) sd(fmt(%13.3fc)) min(fmt(%12.3gc))  p25(fmt(%12.3gc)) p50(fmt(%12.3gc)) p75(fmt(%12.3gc)) max(fmt(%12.3gc))") ///
+esttab using "analysis\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.3fc)) sd(fmt(%13.3fc)) min(fmt(%12.3gc))  p25(fmt(%12.3gc)) p50(fmt(%12.3gc)) p75(fmt(%12.3gc)) max(fmt(%12.3gc))") ///
 	collabels("N." " Mean" "St. Dev." "Min"  "p25" "p50" "p75" "Max" ) ///
 	tex replace label nonumbers alignment(rrrrrrrr) noobs
 
@@ -95,153 +106,125 @@ esttab using "Regressions\Results\Tables\summstat.tex" , cells("count mean(fmt(%
 
 * Finalization
 
+
 *success
 eststo clear
-eststo : quietly reg success log_gh log_tw between i.category_encoded, robust
-eststo : quietly reg success n_author eip_contributors  i.category_encoded, robust
-eststo : quietly reg success client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg success pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\final_all.tex ,  varwidth(35) modelwidth(10) ///
+eststo : mlogit success2_enc log_gh log_tw  i.category_encoded *_dummy , robust
+eststo : mlogit success2_enc n_author eip_contributors  i.category_encoded *_dummy , robust
+eststo : mlogit success2_enc between client_commits_dum author_commit  i.category_encoded *_dummy , robust
+eststo : mlogit success2_enc pca_social pca_author pca_skill i.category_encoded *_dummy, robust
+esttab using analysis\Results\Tables\final_all.tex , unstack varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
 
+	
 *Time to success
 eststo clear
-eststo : quietly reg time_to_final log_gh log_tw between i.category_encoded, robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded, robust
-eststo : quietly reg time_to_final client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\final_all_time.tex ,  varwidth(35) modelwidth(10) ///
+eststo : quietly reg time_to_final log_gh log_tw i.category_encoded *_dummy, robust
+eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded *_dummy, robust
+eststo : quietly reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy, robust
+eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy, robust
+esttab using analysis\Results\Tables\final_all_time.tex ,  varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
 
 	
+
 	
+* EIP SUCCESS NO IMPL
 	
-	
-	
+
 *success
 eststo clear
-eststo : quietly reg success log_gh log_tw between i.category_encoded, robust
-eststo : quietly reg success n_author eip_contributors  i.category_encoded, robust
-eststo : quietly reg success client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg success pca_social pca_author pca_skill i.category_encoded, robust
-eststo : quietly reg time_to_final log_gh log_tw between i.category_encoded, robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded, robust
-eststo : quietly reg time_to_final client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\final_allall.tex ,  varwidth(35) modelwidth(10) ///
+eststo : mlogit success2_enc log_gh log_tw  i.category_encoded *_dummy  if implementation ==., robust
+eststo : mlogit success2_enc n_author eip_contributors  i.category_encoded *_dummy  if implementation ==., robust
+eststo : mlogit success2_enc between client_commits_dum author_commit  i.category_encoded *_dummy  if implementation ==., robust
+eststo : mlogit success2_enc pca_social pca_author pca_skill i.category_encoded *_dummy if implementation ==., robust
+esttab using analysis\Results\Tables\final_noimpl.tex , unstack varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
-
-*Time to success
-eststo clear
-eststo : quietly reg time_to_final log_gh log_tw between i.category_encoded, robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded, robust
-eststo : quietly reg time_to_final client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\final_all_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
 
 	
-* Finalization of not-implementable EIP
-
-
-eststo clear
-eststo : quietly reg success log_gh log_tw between i.category_encoded if implementation ==., robust
-eststo : quietly reg success n_author eip_contributors  i.category_encoded if implementation ==., robust
-eststo : quietly reg success client_commits_log author_commit  i.category_encoded if implementation ==., robust
-eststo : quietly reg success pca_social pca_author pca_skill i.category_encoded if implementation ==., robust
-esttab using Regressions\Results\Tables\final_noimpl.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
-
+	
 	
 *Time to success
 eststo clear
-eststo : quietly reg time_to_final log_gh log_tw between i.category_encoded if implementation ==., robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded if implementation ==., robust
-eststo : quietly reg time_to_final client_commits_log author_commit  i.category_encoded if implementation ==., robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded if implementation ==., robust
-esttab using Regressions\Results\Tables\final_noimpl_time.tex ,  varwidth(35) modelwidth(10) ///
+eststo : quietly reg time_to_final log_gh log_tw  i.category_encoded *_dummy if implementation ==., robust
+eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded *_dummy if implementation ==., robust
+eststo : quietly reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy if implementation ==., robust
+eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy if implementation ==., robust
+esttab using analysis\Results\Tables\final_noimpl_time.tex ,  varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
 
 	
 * implemented EIP
 
 eststo clear
-eststo : quietly reg implemented log_gh log_tw between i.category_encoded , robust
-eststo : quietly reg implemented  n_author eip_contributors  i.category_encoded , robust
-eststo : quietly reg implemented  client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg implemented  pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(10) ///
+eststo : quietly reg implemented log_gh log_tw i.category_encoded *_dummy , robust
+eststo : quietly reg implemented  n_author eip_contributors  i.category_encoded *_dummy , robust
+eststo : quietly reg implemented between  client_commits_dum author_commit  i.category_encoded *_dummy, robust
+eststo : quietly reg implemented  pca_social pca_author pca_skill i.category_encoded *_dummy, robust
+esttab using analysis\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
 
 	
-* implemented EIP
-
 eststo clear
-eststo : quietly reg time_to_final log_gh log_tw between i.category_encoded , robust
-eststo : quietly reg time_to_final  n_author eip_contributors  i.category_encoded , robust
-eststo : quietly reg time_to_final  client_commits_log author_commit  i.category_encoded, robust
-eststo : quietly reg time_to_final  pca_social pca_author pca_skill i.category_encoded, robust
-esttab using Regressions\Results\Tables\implemented_time.tex ,  varwidth(35) modelwidth(10) ///
+eststo : quietly reg time_to_final log_gh log_tw i.category_encoded *_dummy , robust
+eststo : quietly reg time_to_final  n_author eip_contributors  i.category_encoded *_dummy , robust
+eststo : quietly reg time_to_final   between client_commits_dum author_commit  i.category_encoded *_dummy, robust
+eststo : quietly reg time_to_final  pca_social pca_author pca_skill i.category_encoded *_dummy, robust
+esttab using analysis\Results\Tables\implemented_time.tex ,  varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded") 
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
+
+
+	
+* Figures: 
+
+*Company
+
+preserve 
+
+keep eip_number *_dummy
+
+foreach x of var *_dummy { 
+	rename `x' c_`x' 
+	} 
+
+reshape long c_, i(eip_number) j(dum) string
+rename c_ num
+
+replace dum = subinstr(dum,"_dummy","",.)
+label var num "N. EIPs"
+graph hbar (sum) num, over(dum, sort((sum) num) descending) ytitle("N. EIPs") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white)) 
+graph export "analysis\results\Figures\company_neip.png", as(png) replace
+
+restore
+
+* EIP Over time
+
+graph bar (count) eip_number,  over(Category) over(year) stack asyvars ytitle("N. EIPs") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white)) 
+graph export "analysis\results\Figures\neip_by_year.png", as(png) replace
+
+
+* EIP STATUS OVER TIME
+
+graph bar (count) eip_number ,  over(status) over(year) stack asyvars ytitle("% of EIPs") ///
+	percent plotregion(fcolor(white)) graphregion(fcolor(white)) 
+graph export "analysis\results\Figures\neip_by_yearstatus.png", as(png) replace
+
 
 
 	
 	
-
-// company 
-
-
-
-label var dummy_spearbit_labs "Spearbit"
-label var dummy_ethereum_name_service "Ethereum Name Service"
-label var dummy_consensys "ConsenSys"
-label var dummy_stoneshot "Stoneshot"
-label var dummy_cube_code "Cube Code"
-label var dummy_google "Google"
-label var dummy_serv_eth_support "Eth Support"
-label var dummy_dyno_security_ab "Dyno Security Lab"
-label var dummy_chainsafe_systems "Chain Safe Systems"
-
-eststo clear
-eststo : quietly reg success dummy_spearbit_labs
-eststo : quietly reg success dummy_ethereum_name_service
-eststo : quietly reg success dummy_consensys
-eststo : quietly reg success dummy_stoneshot
-eststo : quietly reg success dummy_cube_code
-eststo : quietly reg success dummy_google
-eststo : quietly reg success dummy_serv_eth_support
-eststo : quietly reg success dummy_dyno_security_ab
-eststo : quietly reg success dummy_chainsafe_systems
-eststo : quietly reg success dummy_spearbit_labs dummy_ethereum_name_service dummy_consensys dummy_stoneshot dummy_cube_code dummy_serv_eth_support dummy_google dummy_dyno_security_ab dummy_chainsafe_systems
-esttab ,  varwidth(20) modelwidth(8) b(4) nobaselevels noomitted interaction(" X ") depvars label ar2 r2(2) title("Author's Employer Associated with success of EIP to Reach Final Stage") star (* .1 ** .05 *** .01) replace
-
-eststo clear
-eststo : quietly reg implementation dummy_spearbit_labs
-eststo : quietly reg implementation dummy_ethereum_name_service
-eststo : quietly reg implementation dummy_consensys
-eststo : quietly reg implementation dummy_stoneshot
-eststo : quietly reg implementation dummy_cube_code
-eststo : quietly reg implementation dummy_google
-eststo : quietly reg implementation dummy_serv_eth_support
-eststo : quietly reg implementation dummy_dyno_security_ab
-eststo : quietly reg implementation dummy_chainsafe_systems
-eststo : quietly reg implementation dummy_spearbit_labs dummy_ethereum_name_service dummy_consensys dummy_stoneshot dummy_cube_code dummy_serv_eth_support dummy_google dummy_dyno_security_ab dummy_chainsafe_systems
-esttab ,  varwidth(20) modelwidth(8) b(4) nobaselevels noomitted interaction(" X ") depvars label ar2 r2(2) title("Author's Employer Associated with implementation of EIP") star (* .1 ** .05 *** .01) replace
-
-
+	
