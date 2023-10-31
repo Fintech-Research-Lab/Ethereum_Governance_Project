@@ -1,6 +1,6 @@
 This document describes how to replicate the data and the results of the paper "Ethereum Governance". 
 
-# Data Collection Process
+# Data Collection Process.
 
 ## EIP DATA
 1. *EIP List*: The data collection process begins with scraping the list of EIPs and related authors from the [Ethereum EIP page](https://eips.ethereum.org/all). This website contains information of all EIPs, their status and their authors. This data is collected using a web-scrapping code as of **06/21/2023**. The code *EIP list generating code.py* scrapes EIP Number, Authors, Status, and Title, and stores it into the file allEIPsandAuthorsv2.csv. (Note that the code was run on 6/21/2023. Rerunnign the code now would produce a different set of EIPs, as new EIPS have been added since then). 
