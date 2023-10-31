@@ -1,0 +1,25 @@
+,stats,Value
+0,Number of Total EIPs,639.0
+1,Number of Unique Authors,703.0
+2,Average Number of Authors per EIP,2.0892018779342725
+3,Percent of EIPs by Top 10 Authors,0.35837245696400627
+4,Percent of  Finalized EIPs by Top 10 Authors,0.5849056603773585
+5,HHI of Authorship,0.005447426211931517
+6,HHI of Authors for Finalized EIPs,0.012496640687987101
+7,Number of Unique Contributors to EIP Repository,2065.0
+8,Average Unique Contributor per EIP,3.2316118935837244
+9,Percent of  Commits by Top 10 contributors,0.48170469220835127
+10,HHI of EIP Github Contributors,0.034068345351071075
+11,Number of Final EIPs,159.0
+12,Number of Failed EIPs,403.0
+13,Number of In-Progress EIPs,75.0
+14,Number Authors for which we have Company Data,384.0
+15,No Company Boasts more than this authors,7.0
+16,Followed by this many authors,4.0
+17,HHI of Companies,0.003892686631944445
+18,HHI of All Clients Contributors,0.1977734600173156
+19,Average Clients Commits per Day,1.3784941597065985
+20,Top 10 Client Contributors as a Percent of Total,0.6161912001430871
+21,HHI of Client Contributors,0.06208329775723249
+22,Percent of EIP Authors that are clients,0.16226415094339622
+23,Percent of EIP Contributors that are clients,0.16226415094339622
