@@ -2,7 +2,7 @@
 
 // Import EIP data
 
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
 clear
 import delimited "Ethereum_Cross-Sectional_Data.csv"
 
@@ -122,8 +122,9 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 
 // add number of total commits and eip_contributors 
 clear 
-use "ethereum_commit.dta"
+use "eip_commit.dta"
 collapse (mean) total_commit eip_contributors author_commit, by (eip_number)
+replace eip_contributors = 0 if eip_contributors ==.
 save "total_commit.dta", replace
 
 // merge
@@ -209,7 +210,7 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 
 
 // add client repository commits by author 
-local path "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\client_commit\"
+local path "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\client_commit\"
 cd "`path'"
 local files : dir "`path'" files "*.dta" // Get the list of .dta files in the directory
 di `files'
@@ -221,17 +222,15 @@ foreach file of local files {
 	rename date `newvar'_commits
     rename login github_username
     drop if github_username == "" 
-    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
     merge 1:m github_username using "author", keepusing(author_id)
     keep if _merge == 3
     drop _merge
-    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
-    save "`file'_author_commits.dta", replace
+     save "`file'_author_commits.dta", replace
 	cd "`path'"
 }
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
 use "Ethereum_Cross-sectional_Data.dta", clear
-
 local files = "besu erigon geth nethermind"
 foreach file in `files' {
   forvalues id = 1/15{
@@ -247,11 +246,9 @@ foreach file in `files' {
 }
 
 // create 0 for missing client commits`file
-
 foreach var of varlist(besu_commits-nethermind_commits){
 	replace `var' = 0 if `var' == .
 }
-
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 
