@@ -1,14 +1,14 @@
 // This code finds the 10 top most companies in our cross-sectional data and create dummy variables of that data
 
 //I will use python code to create this code
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\"
+cd "C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/"
 use "Ethereum_Cross-sectional_Data.dta", clear
 
 python:
 import os
 import pandas as pd
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
 linkedin = pd.read_stata("linkedin_Data.dta")
 top_10_companies = linkedin[linkedin['company1'] != ""].groupby('company1').size().sort_values(ascending=False).head(10).reset_index()
