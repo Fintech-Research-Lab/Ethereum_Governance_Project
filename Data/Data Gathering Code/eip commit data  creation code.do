@@ -1,29 +1,25 @@
-// This code created on 8-29-2023 create commit data which is a panel data containing datewise github commitment 
-
 // first we import updated commit file which contains the raw data of commitment and convert it into an stata file
 
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data"
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
 clear
  import excel "updated_commits.xlsx", sheet("Sheet 1") firstrow
  rename EIP eip_number
- save "ethereum_commit.dta", replace
+ save "eip_commit_wip.dta", replace
  
- // import unique author ids with client information file
- 
+ // import unique author ids with client information file 
   import delimited "unique_author_names_with_id", clear
   save "author.dta", replace
   
   // merge commit data with authors using author_id
-  
-  use "ethereum_commit.dta", clear
+  use "eip_commit_wip.dta", clear
   rename Author_Id author_id
-merge m:1 author_id using "author.dta", keepusing(github_username)
+merge m:1 author_id using "author.dta"
 drop if _merge == 2 // remove authors that did not add any 
 
 // create a flag whether the commit author is an EIP author. If the commit author does not exist in our author list then we assume that commit author is not
 // an EIP author. This is expressed in _merge == 1
 
-gen eip_author_flag = 1 if _merge == 3
+gen eip_author_flag = 1 if author_id != .
 replace eip_author_flag = 0 if eip_author_flag == .
 drop _merge
 // save this file as comit
@@ -34,27 +30,25 @@ drop _merge
 bysort eip_number : gen total_commit = _N 
 egen author_commit = total(eip_author_flag), by(eip_number)
 
-save "ethereum_commit.dta", replace
+save "eip_commit_wip.dta", replace
 
-// create unique contributors on eip_commt 
 
 python :
 import os
 import pandas as pd
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data")
-stata = pd.read_stata("ethereum_commit.dta")
-contributors = stata.groupby('eip_number')['github_username'].nunique()
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip Commit Data/")
+stata = pd.read_stata("eip_commit_wip.dta")
+contributors = stata[(stata['eip_author_flag'] == 0) & (stata['Author'] != "eth-bot")].groupby('eip_number')['Author'].nunique()
 contributors = pd.DataFrame(contributors)
-contributors.rename(columns={'github_username': 'eip_contributors'}, inplace=True)
+contributors.rename(columns={'Author': 'eip_contributors'}, inplace=True)
 stata = pd.merge(stata,contributors, on = 'eip_number', how = 'left')
-stata.to_excel("ethereum_commit.xlsx")
-
+stata.to_excel("eip_commit.xlsx")
 end
 
 clear
-import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\ethereum_commit.xlsx", sheet("Sheet1") firstrow clear
+import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\eip_commit.xlsx", sheet("Sheet1") firstrow clear
 
-save "ethereum_commit.dta", replace
+save "eip_commit_wip.dta", replace
 
 // add meeting dates as event in the commit data
 
@@ -62,10 +56,10 @@ python:
 import pandas as pd
 import os as os
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip Commit Data/")
 data = pd.read_csv("Calls_Updated_standardized.csv")
 data =data[data['EIP_Mention'] == True] # remove false from the data
-commit = pd.read_stata("ethereum_commit.dta")
+commit = pd.read_stata("eip_commit_wip.dta")
 
 EIP_list = data['EIP'].str.split(',')
 eip_df = EIP_list.explode()
@@ -92,7 +86,7 @@ data5 = data4.groupby('eip_number').head(1)
 
 # merge data to commit data
 
-commit2 = pd.merge(commit,data5, on = 'eip_number', how = 'outer', indicator = True)
+commit2 = pd.merge(commit,data5, on = 'eip_number', how = 'left', indicator = True)
 commit2 = commit2.sort_values(['eip_number','CommitDate','MeetingDate', 'Meeting'])
 new_order = ['A', 'File', 'eip_number','CommitDate', 'MeetingDate','CommitSHA', 'CommitMessage', 
        'Author', 'author_id', 'github_username', 'eip_author_flag',
@@ -103,21 +97,10 @@ commit2 = commit2[new_order]
 commit2.to_excel("eip_commit.xlsx")
 end
 clear
-import excel "C:\Users\khojama\Box\Fintech Research Lab\Ethereum Governance Project\Ethereum Project Data\eip_commit.xlsx", sheet("Sheet1") firstrow
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
 
- // create distance to first meeting
- 
- gen distance = (CommitDate - MeetingDate) /86400000 /7
- move distance CommitSHA
- 
- // create measure of commits by distance to first meeting
- 
- bysort eip_number : egen tm10_commits = count(CommitDate) if distance <= 0 & distance > -10
- bysort eip_number : egen tp10_commits = count(CommitDate) if distance >= 0 & distance < 10 
+import excel "eip_commit.xlsx", sheet("Sheet1") firstrow
 
-  
- foreach var of var(tm10_commits-tp10_commits){
- 	move `var' CommitSHA
- }
- 
-save "ethereum_commit.dta", replace
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
+
+ save "eip_commit.dta", replace
