@@ -92,7 +92,7 @@ name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
 os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-names_to_change2.to_csv("names_to_change.csv")
+names_to_change2.to_csv("names_to_change2.csv")
 
 
 attendee_unique2 = pd.DataFrame(pd.Series(names2).unique(), columns = ['full_name'])
