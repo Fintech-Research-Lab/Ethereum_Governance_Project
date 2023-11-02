@@ -1,0 +1,343 @@
+,Names_to_Keep,Names_to_Change,Similarity_Score
+0,Alex Beregszaszi,Alex axic,56
+1,Brent Allsop,Ben Adams,57
+2,Brett Robertson,Roberto B,58
+3,Casey Detrio,Casey Gardiner,62
+4,Daniel Ellison,Daniel Nagy,56
+5,Daniel Ellison,Daniel Heyman,59
+6,Daniel Ellison,Daniel Celeda,59
+7,Daniel Ellison,Daniel Lehrner,57
+8,Guillaume,Guillaume Ballet,72
+9,Hudson Jameson,Hudson,60
+10,James Hancock,James Ray,64
+11,James Hancock,James He,67
+12,James Hancock,Jamie Lokier,56
+13,James Prestwich,James He,61
+14,Jim,Tim,67
+15,Jordi Baylina,Igor Barinov,56
+16,Joseph Chow,Joseph Lubin,61
+17,Joseph Chow,Joseph Delong,67
+18,Joseph Chow,Jose's iPhone,58
+19,Joseph Chow,Jon Choi,63
+20,Matt Garnett,Matthew Halpern,59
+21,Matt Garnett,Dan Burnett,61
+22,Matt Luongo,Matt Nelson,64
+23,Michael LaCroix,Michael Carter,69
+24,Pawel Bylica,Pamel B.,60
+25,Pawel Bylica,Pawel,59
+26,Tenton Van Epps,Antonio Sanso,57
+27,Wei Tang,Felix Lange,63
+28,Wei Tang,Jake Lang,59
+29,Wei Tang,Hsiao-Wei Wang,64
+30,Wei Tang,Vie Yang,62
+31,Alex,Alexey A.,62
+32,Alex,Alex B.,73
+33,Alex,Alexandey,62
+34,Alex,Alex axic,62
+35,Alex Vlasov,Alexey Akhunov,56
+36,Alex Vlasov,Alex G,59
+37,Alex Vlasov,Alex B.,56
+38,Alex Vlasov,Alex axic,60
+39,Alex Vlasov,Alexey Osipov,67
+40,Alexey Akhunov,Alexey A.,70
+41,Alexey Akhunov,Alexey Osipov,67
+42,Edson Ayllon,Edson,59
+43,Greg Colvin,Gcolvin,67
+44,Martin Hoist Swende,Martin Becze,58
+45,Martin Hoist Swende,Martin Ortner,56
+46,Martin Hoist Swende,Martin Koppelmann,56
+47,Matt,Matthias,67
+48,Matt,Martin,60
+49,Peter Szilagyi,Peter Salanki,74
+50,Rai,Rai Sur,60
+51,Rai,Pari,57
+52,Rai,pari,57
+53,Rai,Gabi,57
+54,Vitalik Buterin,Vitalik,64
+55,Boris Mann,Louis Guthmann,58
+56,Boris Mann,Adrian Manning,58
+57,Boris Mann,Brian,67
+58,Dankrad Feist,Danno Ferrin,56
+59,Dankrad Feist,Danno Ferris,64
+60,Dankrad Feist,Danno Fertin,56
+61,Dankrad Feist,Dankrad,70
+62,Danno Ferrin,Dan Finlay,64
+63,Danno Ferrin,Danno,59
+64,Danny Ryan,Johnny Rhea,57
+65,Dimitry Khoklov,Dimitry Khokhlov (EF: cpp-ethereum,61
+66,Dimitry Khoklov,Dmitry Ryajov,64
+67,Eric Kellstrand,Enrico Del Fante,58
+68,Eric Kellstrand,Uri Klarman,62
+69,Felix Lange,Felipe Faraggi,56
+70,Felix Lange,Jake Lang,60
+71,Felix Lange,Felix,62
+72,Frederik Harrysson,Fredrik,56
+73,Jacek Sieka,Jan Xie,56
+74,Jacek Sieka,Jacek Glen,67
+75,Jacek Sieka,Jacek,62
+76,Jacek Sieka,Jacek Sieka (Status/Nim,65
+77,Jason Carver,Daniel Weaver,56
+78,Matthew Halpern,Matthew English,60
+79,Matthew Halpern,Matthew Rodriguez,56
+80,Matthew Halpern,Matthew Di Ferrante,65
+81,Matthew English,Matthias,61
+82,Matthew English,Matthew Rodriguez,56
+83,Matthew English,Matthew Slipper,67
+84,Lane Rettig,Lane R,71
+85,Alex Van de Sande,Alexandey,62
+86,Andrei Maiboroda,Andrew Forman,62
+87,Andrei Maiboroda,Andrew Gross,57
+88,Danno Ferris,Danno,59
+89,Zachary Belford,Zachary Williamson,61
+90,Zachary Belford,Zahary,57
+91,Karalabe,Karim Taam,56
+92,Karalabe,Carlbeek,62
+93,Karalabe,Barnabe,67
+94,Matthias,Martin,57
+95,Matthias,Metachris,59
+96,Matthias,Pat Stiles,56
+97,Matthias,Nathan,57
+98,Matthias,Marius,57
+99,Dan Finlay,Daniel Nagy,57
+100,Dan Finlay,Danno Fertin,64
+101,Dan Finlay,Jan Winklemann,58
+102,Gavin Wood,Gajinder,56
+103,Martin Becze,Martin,67
+104,Martin Becze,Marcin Sobczak,62
+105,Martin Becze,Martin Ortner,64
+106,Charles St. Louis,Charles C,62
+107,Ben Burns,Dan Burnett,60
+108,Ben Burns,Ben Adams,56
+109,Ben Burns,Ben DiFrancesco,58
+110,David Murdoch,David Mechler,69
+111,David Murdoch,David,56
+112,David Murdoch,David Knott,58
+113,Evan Sultanik,Dusan Stanivukovic,58
+114,Hubert,Zuer,60
+115,Daniel Nagy,Daniel Heyman,67
+116,Daniel Nagy,Daniel Weaver,67
+117,Daniel Nagy,Daniel Celeda,67
+118,Daniel Nagy,Daniel Lehrner,56
+119,Daniel Nagy,Daniel Lehmar,67
+120,Thibaut Sardan,Raul Jordan,56
+121,Mikhail Kalanin,Mikhail,64
+122,Alex Gluchowski,Alex G,57
+123,Adrian Sutton,Andrian,60
+124,Adrian Sutton,Adrian Manning,59
+125,Georgios K,Georgios Konstantopoulos,59
+126,Hudson,Edson,73
+127,Hudson,Hugo,60
+128,David Mechler,David,56
+129,David Mechler,David Palm,61
+130,David Mechler,Daniel Lehrner,59
+131,Axic,Alex axic,62
+132,Alita Moore,Liam Horne,57
+133,Alita Moore,William Morris,56
+134,Ian Norden,Raul Jordan,57
+135,Karim Taam,Karim Agha,70
+136,Mariano Conti,Mario,56
+137,Chami Rachid,Adam Schmideg,56
+138,Jan Xie,Alan Li,57
+139,Jan Xie,Jan Winklemann,57
+140,Adam Schmideg,Gary Schuite,56
+141,Lane R,Lance,73
+142,James Ray,James He,71
+143,James Ray,Jake Lang,56
+144,Bryant Eisenbach,Baptise Marchand,56
+145,James He,Jamie Lokier,60
+146,James He,Liam Horne,56
+147,James He,Jacek Glen,56
+148,Kelly,Kasey,60
+149,Micah Zoltou,Micah,59
+150,Rai Sur,Rai Ratan Sur,70
+151,Sam Wilson,Zachary Williamson,57
+152,Sam Wilson,Matt Nelson,57
+153,Dan Burnett,Daniel Lehrner,56
+154,David,David Palm,67
+155,David,Dave,67
+156,David,Dade,67
+157,David,David Knott,62
+158,Paul Dworzanski,Marek Moraczynski,56
+159,Paul Dworzanski,Marek Moroczynski,56
+160,Paul Dworzanski,Raul Jordan,62
+161,Andreas Freund,Andrew Forman,67
+162,Andreas Freund,Andrian,57
+163,Daniel Heyman,Daniel Weaver,69
+164,Daniel Heyman,Daniel Celeda,69
+165,Daniel Heyman,Daniel Lehrner,67
+166,Jake Lang,Jared Wasinger,61
+167,Jake Lang,Vie Yang,59
+168,Joseph Lubin,Joseph Delong,64
+169,Dino Mark,Ino Murko,67
+170,Dino Mark,Daejun Park,60
+171,Will Meister,William Morris,62
+172,Ino Murko,Anton Bukov,60
+173,Daniel Weaver,Daniel Celeda,69
+174,Daniel Weaver,Daniel Lehrner,74
+175,Robert Drost,Holger Drewes,56
+176,Robert Drost,Roberto B,67
+177,Robert Drost,Roberto Bayardo,67
+178,Sean,Dan,57
+179,Sean,Sam,57
+180,Alex Stokes,Alex G,59
+181,Alex Stokes,Alex B.,56
+182,Alex Stokes,Stokes,71
+183,Bradley Miller,Jake Gillberg,59
+184,Zak Cole,Yuga Choler,63
+185,Zak Cole,Jacek Glen,56
+186,John,John Adler,57
+187,Louis,Leo Arias,57
+188,Louis,Potus,60
+189,Martin,Pari,60
+190,Martin,Danno Fertin,56
+191,Martin,Mrabino1,57
+192,Martin,Martin Lundfall,57
+193,Martin,Marius,67
+194,Martin,pari,60
+195,Martin,Martin Ortner,63
+196,Martin,Mario,73
+197,Alexey A.,Alex G,67
+198,Alexey A.,Alex B.,75
+199,Alexey A.,Alexandey,67
+200,Alexey A.,Alex axic,56
+201,Alexey A.,Alexey Osipov,64
+202,Ahmad Bitar,Abdelhamid Bakhta,57
+203,Andrew,Hdrewes,62
+204,Andrew,Andrew Forman,63
+205,Andrew,Andrian,62
+206,Andrew,Andrew Gross,67
+207,Andrew Ashikhmin,Andrew Forman,62
+208,Andrew Ashikhmin,Andrew Gross,57
+209,Barnabas,Bhargava,62
+210,Barnabas Busa,Barnabe,60
+211,Caspar Schwarz-Schilling,Caspar Schwarz,74
+212,Carlbeek,Charles C,59
+213,Carlbeek,Charlie,67
+214,Danno,Dan,75
+215,Danno,Danno Fertin,59
+216,Danno,Dusan,60
+217,Daniel Celeda,Daniel Lehrner,67
+218,Daniel Celeda,Daniel Lehmar,69
+219,Ethan,Nathan,73
+220,Fabio Di,Fabio Di Fabio,73
+221,Fabio Di,Fabio de Fabio,64
+222,Gary Schuite,GhaS Shee,57
+223,Holger Drewes,Hdrewes,60
+224,Jared Wasinger,Jared Doro,58
+225,Joshua Rudolf,Joshua Douglas,67
+226,Neville Grech,Helen George,56
+227,Neville Grech,Neville,70
+228,Adria Massanet,Andrian,57
+229,Adria Massanet,Adrian Manning,64
+230,Eugene Danilenko,Eugene D.,64
+231,Marek Moraczynski,Marek M,58
+232,Marek Moraczynski,Marek Kotewicz,58
+233,Lukasz Rozmej,Lucasz R.,64
+234,Lukasz Rozmej,Lukasz,63
+235,Fredrik,Fred,73
+236,Pari,Kar,57
+237,Pari,Marius,60
+238,Pari,pari,75
+239,Pari,Mario,67
+240,Andrew Forman,Andrian,60
+241,Andrew Forman,Andrew Gross,64
+242,Mikhail Kalinin,Mikhail,64
+243,Saulius Grigaitis,Saulius,58
+244,Mario Vega,Mario Havel,67
+245,Mario Vega,Karim Agha,60
+246,Mario Vega,Mario,67
+247,Ken Ng,Kenway Wang,59
+248,Roberto B,Roberto Bayardo,75
+249,Justin Traglia,Justin Florentine,58
+250,Justin Traglia,Justin Drake,69
+251,Mario Havel,Mario,62
+252,Dan,Dusan,75
+253,Dan,Dankrad,60
+254,Dan,Dave,57
+255,Dan,Damien,67
+256,Dan,Dade,57
+257,Charles C,Charlie,75
+258,William Schwab,William Morris,57
+259,Phil Ngo,Phil,67
+260,Terence,Trent,67
+261,Terence,Spencer,57
+262,Alex G,Alex axic,67
+263,GhaS Shee,Gary Schulte,57
+264,Sunce86,Spencer,57
+265,Lucasz R.,Lukasz,67
+266,Jochen,Jose,60
+267,Pamel B.,Pawel,62
+268,David Palm,David Knott,57
+269,Andrian,Adrian Manning,57
+270,Andrian,Brian,67
+271,Andrian,Hind Kurhan,56
+272,Oxcasey,Kasey,67
+273,Leo Arias,Ben Adams,56
+274,Zuerlein,Zuer,67
+275,Alex B.,Alex axic,62
+276,John Adler,Johnny Rhea,57
+277,Jamie Lokier,Daniel Lehmar,56
+278,Jamie Lokier,Jake Gillberg,56
+279,Jamie Lokier,Jamie Pitts,61
+280,Justin Florentine,Justin Drake,62
+281,Marcelo Ruiz,Marcelo Ruiz de Olano,73
+282,Mrabino1,Mario,62
+283,Ameziane Hamlat,Amexiane,61
+284,Brayton,Brian,67
+285,Mikhail,Mikhail Melnik,67
+286,Tim,Tom,67
+287,Metachris,Marius,67
+288,Metachris,Mario,57
+289,Caspar,pari,60
+290,Caspar,Caspar Schwarz,60
+291,Marek M,Marek Moroczynski,58
+292,Marek M,Marek Kotewicz,57
+293,Diederik Loerakker,Diederik Loerakker protolambda,75
+294,Jeff Coleman,Ameen Soleimani,59
+295,Ameen Soleimani,Peter Salanki,57
+296,Ashraf,Ash,67
+297,Trent,TurboTrent,67
+298,Justin Drake,Dustin Brody,58
+299,Viktor Shepelin,Viktor,57
+300,Matthew Rodriguez,Matthew Di Ferrante,56
+301,Matthew Rodriguez,Matthew Slipper,56
+302,Marek Moroczynski,Marek Kotewicz,58
+303,Matthew Di Ferrante,Matthew Slipper,65
+304,Jacek Glen,Jacek,67
+305,Jacek Glen,Jake Gillberg,61
+306,Rodia,Ronan,60
+307,Adrian Manning,Sridarian Sharingan,61
+308,Amexiane,Alexandey,71
+309,Amexiane,Ayman,62
+310,Martin Lundfall,Martin Ortner,57
+311,Kar,Kam,67
+312,Kar,Kay,67
+313,Kar,pari,57
+314,George Kadianakis,George Avsetsin,56
+315,Dave,Damien,60
+316,Dave,Dade,75
+317,Zsfelfoldi,Zsolt FelfÃÂ¶ldi,59
+318,Nathan,Nishant,62
+319,Damien,Dade,60
+320,Ramon Pitter,Jamie Pitts,61
+321,Chris Hager,Charlie,56
+322,Sam CM,Sam,67
+323,Sam,Kam,67
+324,Sam,Stag,57
+325,H,HP,67
+326,Alexandey,Alenque,62
+327,Alexandey,Alex axic,56
+328,Kasey,Kasey Kirkham,56
+329,Kasey,Kay,75
+330,George Hervey,George Avsetsin,57
+331,Eleazar Galano,E.G. Galano,64
+332,Johnny Rhea,Johannes Zweng,56
+333,Kam,Kay,67
+334,Anton Bukov,Antoine Toulme,56
+335,Selvis,Saulius,62
+336,Jacek,Lance,60
+337,Marius,pari,60
+338,Marius,Saulius,62
+339,Marius,Mario,73
+340,pari,Mario,67
+341,Jutta Steiner,Liz Steininger,59
