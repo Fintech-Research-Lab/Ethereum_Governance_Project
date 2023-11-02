@@ -16,9 +16,8 @@
 ,Alex Guchowski,AlexLG,
 179,Alex Stokes,Alex St,
 16,Alex Vlasov,Alex Viasov,
-2,Alexey,Alex,
 3,Alexey,Alexandey,
-4,Alexey,Alexey A.,
+4,Alexey Akhunov,Alexey A.,
 105,Andrea Lanfranchi,Andrea Lafranchi,
 219,Ansgar Deitrichs,Ansgar Dietrich,
 218,Ansgar Deitrichs,Ansgar Dietrichs,
@@ -31,7 +30,8 @@
 288,Artem Vorotnikov,Artem,
 118,Artem Vorotnikov,Artem Vorotnikob,
 ,Baptiste Marchand,Baptise Marchand,
-278,Barnabas,Barnabe,
+,Barnabas Busa,Barnabas,
+278,Barnabas Busa,Barnabe,
 198,Bhargava,Bhargavasomu,
 29,Boris Mann,Borris Mann,
 98,Brett Allsop,Brent Allsop,
@@ -119,7 +119,8 @@
 182,Karim Taam,Karim T,FALSE
 187,Ken Ng,Ken NG,FALSE
 119,Kobi Gurkan,Kobi Gurkian,FALSE
-80,Lane R,Lane,FALSE
+,Lane Rettig,Lane R,
+80,Lane Rettig,Lane,FALSE
 ,Lightclient,Lightcilent,FALSE
 208,Lightclient,LightClient,FALSE
 209,Lightclient,lightclient,FALSE
