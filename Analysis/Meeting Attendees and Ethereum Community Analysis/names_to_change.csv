@@ -1,810 +1,296 @@
 ,0,0
-0,Seananderson,Iannorden
-1,Jules,James
-2,Roberto B,Brett Robertson
-3,Roberto B,Robert Drost
-4,Roberto B,Roberto Bayardo
-5,Alexey,Alexey Akhunov
-6,Alexey,Alex Stokes
-7,Alexey,Alenque
-8,Alexey,Amexiane
-9,Alexey,Alex B.
-10,Alexey,AlexLG
-11,Alexey,Alex G
-12,Alexey,Alex Beregsz
-13,Alexey,Alexey Osipov
-14,Alexey,Alex St
-15,Dimitry Khokhlov (EF: cpp-ethereum,Dimitry Khokhlov
-16,Dimitry Khokhlov (EF: cpp-ethereum,Dimitry Khoklov
-17,Phil Lucsok,Phil No
-18,Phil Lucsok,Phil Ngo
-19,Gottfried Herold,George Hervey
-20,Jim Bennett,Tim Be
-21,Jim Bennett,Dan Burnett
-22,Tomasz Stancxak,Tomasz S
-23,Tomasz Stancxak,Tomasz
-24,Tomasz Stancxak,Tomasz Drwiega
-25,Tomasz Stancxak,Thomasz S.
-26,Andrian,Adria Massanet
-27,Andrian,Andrew Forman
-28,Andrian,Hind Kurhan
-29,Andrian,Adrian Manning
-30,Andrian,Andrew
-31,Andrian,Afri
-32,Andrian,Adrian Sutton
-33,Andrian,Andreas Freund
-34,Andrian,Brian
-35,Danny Ferrin,Dan Finlay
-36,Danny Ferrin,DanKrad Feist
-37,Danny Ferrin,Danny
-38,Danny Ferrin,Danny.
-39,Danny Ferrin,Dankrad Feist
-40,Danny Ferrin,Danny Ryan
-41,Daniel Lehrner,Daniel Ellison
-42,Daniel Lehrner,Daniel Nagy
-43,Daniel Lehrner,Daniel Weaver
-44,Daniel Lehrner,Daniel Heyman
-45,Daniel Lehrner,Daniel Celeda
-46,Daniel Lehrner,Dan Burnett
-47,Alex Vlasov,Alexey Akhunov
-48,Alex Vlasov,Alex axic
-49,Alex Vlasov,Alex Stokes
-50,Alex Vlasov,Alex B.
-51,Alex Vlasov,Alex G
-52,Alex Vlasov,Alexey Osipov
-53,Alex Vlasov,Alex St
-54,Josh R,JosephC
-55,Josh R,Joshua Rudolf
-56,Josh R,Joseph Lubin
-57,Josh R,Joseph Chow
-58,Josh R,Johnny Rhea
-59,Josh R,Jose
-60,Josh R,John
-61,Josh R,Joshua Rudolph
-62,Matthew Slipper,Matt Halpern
-63,Matthew Slipper,Matthew English
-64,Matthew Slipper,Matthew Di Ferrante
-65,Matthew Slipper,Matthew Rodriguez
-66,Stefen George,Helengeorge
-67,TurboTrent,Trent
-68,Jan Xie,Jan Winklemann
-69,Jan Xie,Lane
-70,Jan Xie,Jacek Sieka
-71,Jan Xie,Alan Li
-72,Jan Xie,Jami Lokier
-73,Paul Dworzanski,Raul Jordan
-74,Paul Dworzanski,Marek Moraczyynski
-75,Paul Dworzanski,Marek Moraczynski
-76,Paul Dworzanski,Paul D.
-77,Paul Dworzanski,Paul D
-78,Paul Dworzanski,Marek Moroczynski
-79,Jingwei,Ligi
-80,Jan Winklemann,Dan Finlay
-81,Jamie Pitts,James
-82,Jamie Pitts,Ramon Pitter
-83,Jamie Pitts,Jamie Lokier
-84,Martin Becze,Marcin Sobczak
-85,Martin Becze,Martin Holste Swende
-86,Martin Becze,Martin Hoist Swende
-87,Martin Becze,Martin Hol
-88,Martin Becze,Mario Vega
-89,Martin Becze,Martin Holst
-90,Martin Becze,Martin Holst Swende
-91,Martin Becze,Martin Van Swende
-92,Martin Becze,Martin Swende
-93,Martin Becze,Marcin
-94,Martin Becze,Martin
-95,Martin Becze,Martin Ortner
-96,Martin Becze,Martin Koppelmann
-97,Martin Becze,Marcin Sobcz
-98,James HE,James Hancock
-99,James HE,James Ray
-100,Uri Klarman,Eric Kellstrand
-101,Uri Klarman,Hind Kurhan
-102,Uri Klarman,Martin Koppelmann
-103,Alexey Akhunov,Alex Viasov
-104,Alexey Akhunov,Alexey A.
-105,Alexey Akhunov,Alexey Osipov
-106,PÃÂ©ter Szil,PÃÂ©
-107,PÃÂ©ter Szil,Peter S.
-108,PÃÂ©ter Szil,Peter Szilagy
-109,PÃÂ©ter Szil,PÃÂ©ter SzilÃÂ¡gyi (
-110,PÃÂ©ter Szil,Peter Szilagyi
-111,Ben DiFrancesco,Ben Burns
-112,Damien,David
-113,Damien,Danny
-114,Damien,Danno
-115,Damien,James
-116,Damien,Dusan
-117,Damien,Dade
-118,Damien,Dan
-119,Damien,Dave
-120,Yoav,Yoav Weiss
-121,Boris Mann,Adrian Manning
-122,Boris Mann,Boris Petrov
-123,Boris Mann,Louis Guthmann
-124,Boris Mann,Brian
-125,Kelly,Kasey
-126,Kam,Karim T.
-127,Kam,Kay
-128,Kam,Karim
-129,Kam,Karim T
-130,Kam,Kar
-131,Kam,Sam
-132,Marcin Sobczak,Martin Hol
-133,Marcin Sobczak,Marcin
-134,Adria Massanet,Adrian Manning
-135,Dan Finlay,Danny
-136,Dan Finlay,Danny.
-137,Dan Finlay,Danno Ferris
-138,Dan Finlay,Daniel Nagy
-139,Dan Finlay,Danno Ferrin
-140,Dan Finlay,Danno Fertin
-141,Selvis,Saulius
-142,Selvis,Felix
-143,Eleazar Galano,E.G. Galano
-144,Fred,Fredrik
-145,Yuga Choler,Tim Coulter
-146,Yuga Choler,Zak Cole
-147,Marius VanDerWijden,Martin Van Swende
-148,Helengeorge,Stefan George
-149,JosephC,Joseph Lubin
-150,JosephC,Joseph Delong
-151,JosephC,Jose
-152,JosephC,John
-153,JosephC,Josh
-154,Karim T.,Karim Agha
-155,Karim T.,Kar
-156,Martin Holste Swende,Martin Hol
-157,Martin Holste Swende,Martin Holst
-158,Martin Holste Swende,Martin Ortner
-159,Andrew Forman,Andrew Gross
-160,Andrew Forman,Andrei Maiboroda
-161,Andrew Forman,Andrea Lafranchi
-162,Andrew Forman,Andrew Ashikhmin
-163,Andrew Forman,Andrew
-164,Andrew Forman,Andreas Freund
-165,MariusVanDerWijden,Martin Van Swende
-166,Oxcasey,Kasey
-167,Fabio de Fabio,Fabio Di
-168,Spencer,Sunce86
-169,Spencer,Sean
-170,Spencer,Terence
-171,Spencer,terence
-172,Lance,Lane R
-173,Lance,Jacek
-174,Saulius,Marius
-175,Saulius,Saulius Grigaitis
-176,Etan,Nathan
-177,Etan,Dan
-178,Dusan Stanivukovic,Evan Sultanik
-179,Ratan  Sur,Rai Sur
-180,DanKrad Feist,Danno Ferris
-181,DanKrad Feist,Konrad Feldmeier
-182,DanKrad Feist,Dankrad
-183,DanKrad Feist,Danno Ferrin
-184,DanKrad Feist,Danno Fertin
-185,Eugene Danilenko,Eugene D.
-186,Ognyan,Ronan
-187,Ognyan,Ayman
-188,Axic,Alex axic
-189,Iannorden,Danno
-190,Iannorden,Sean Anderson
-191,Iannorden,Danno Ferrin
-192,Iannorden,Danno Fertin
-193,James Hancock,Jake Lang
-194,James Hancock,James He
-195,James Hancock,James
-196,James Hancock,James Ray
-197,James Hancock,James H.
-198,James Hancock,Jamie Lokier
-199,Ben Edgington,Alex Leverington
-200,Hudson Jameson,Hudson
-201,Vitalik Buterin,Vitalik
-202,Vadim Arasev,Karim Agha
-203,Marek Moraczyn,Marek M
-204,Marek Moraczyn,Mateusz Morusiewicz
-205,Marek Moraczyn,Marek Kotewicz
-206,Lane,Leo
-207,Lane,Liam Horne
-208,Lane,Dan
-209,Lane,Barnabe
-210,Martin Hoist Swende,Martin Hol
-211,Martin Hoist Swende,Martin Holst
-212,Martin Hoist Swende,Martin Holst Swende (EF/geth/
-213,Martin Hoist Swende,Martin Ortner
-214,Martin Hoist Swende,Martin Koppelmann
-215,Dominator008,Dmitry
-216,Joshua Rudolf,Joshua Douglas
-217,Andrew Gross,Andrei Maiboroda
-218,Andrew Gross,Andrew Ashikhmin
-219,Andrew Gross,Andrew
-220,Diederik Loerakker,Diederik Loerakker protolambda
-221,Joseph Lubin,Joseph Delong
-222,Joseph Lubin,Joseph Chow
-223,Joseph Lubin,Joesph Delong
-224,Martin Hol,Matt Halpern
-225,Martin Hol,Mrabino1
-226,Martin Hol,Mario
-227,Martin Hol,Mario Havel
-228,Martin Hol,Martin Holst Swende
-229,Martin Hol,Martin Swende
-230,Martin Hol,Marcin
-231,Martin Hol,Martin
-232,Martin Hol,Martin Lundfall
-233,Martin Hol,Martin Ortner
-234,Martin Hol,Martin Koppelmann
-235,Martin Hol,Martin Holst Swende (EF/
-236,Martin Hol,Marcin Sobcz
-237,Mario Vega,Karim Agha
-238,Mario Vega,Mario
-239,Mario Vega,Mario Havel
-240,Mario Vega,MariusVanDer
-241,Alex Viasov,Alex axic
-242,Alex Viasov,Alex Stokes
-243,Alex Viasov,Alex B.
-244,Alex Viasov,Alex G
-245,Alex Viasov,Alexey Osipov
-246,Alex Viasov,Alex St
-247,Joseph Delong,Joseph Chow
-248,Charlie,pari
-249,Charlie,Pari
-250,Charlie,Carlbeek
-251,Charlie,Charles C
-252,Antoine Toulme,Anton Bukov
-253,David,David Knott
-254,David,David Murdoch
-255,David,Dade
-256,David,David Palm
-257,David,Dave
-258,David,David Mechler
-259,David,David Mechier
-260,William Morris,William Schwab
-261,William Morris,Alita Moore
-262,William Morris,Zac Williamson
-263,William Morris,Will Meister
-264,TimeBeiko,Tim Be
-265,Kay,Kasey
-266,Kay,Kar
-267,Daniel Ellison,Daniel Nagy
-268,Daniel Ellison,Zac Williamson
-269,Daniel Ellison,Daniel Heyman
-270,Daniel Ellison,Daniel Celeda
-271,Daniel Ellison,Daniel Lerhner
-272,Joseph Chow,Jose's iPhone
-273,Joseph Chow,Joesph Delong
-274,Joseph Chow,Jon Choi
-275,Zsfelfoldi,Zsolt FelfÃÂ¶ldi
-276,Neville,Neville Grech
-277,Ronan,Rodia
-278,Tomasz S,Thomasz Stancsak
-279,Tomasz S,Tomasz StaÃÂczak
-280,Tomasz S,Tomasz K. Stanczak
-281,Tomasz S,Tomasz Drwiega
-282,Tomasz S,Tomasz Stancsak
-283,Tomasz S,Tomasz Stanczak
-284,Tomasz S,Tom
-285,Brett Allsop,Brett Robertson
-286,Trenton Vanepps,Antonio Sanso
-287,Hale Drewes,Hdrewes
-288,Hale Drewes,Hal Press
-289,Ash,Ashraf
-290,Ash,Josh
-291,Phil Lucsak,Phil No
-292,Martin Holst,Mario
-293,Martin Holst,Martin Holst Swende (EF/geth/
-294,Martin Holst,Mario Havel
-295,Martin Holst,Marius
-296,Martin Holst,Martin Swende
-297,Martin Holst,Marcin
-298,Martin Holst,Martin
-299,Martin Holst,Martin Lundfall
-300,Martin Holst,Martin Ortner
-301,Martin Holst,Martin Koppelmann
-302,Martin Holst,Martin Holst Swende (EF/
-303,Martin Holst,Marcin Sobcz
-304,Vitalik Buteri,Vitalik
-305,Daejun Park,Dino Mark
-306,Greg Calvin,Greg Colvin (Fell
-307,Greg Calvin,Greg Markou
-308,Greg Calvin,Gcolvin
-309,Raul Jordan,Paul Dworzanski (
-310,Raul Jordan,Thibaut Sardan
-311,Raul Jordan,Ian Norden
-312,Charles St. Louis,Charles C
-313,Edson Ayllon,Edson
-314,Viktor Shepelin,Viktor
-315,Eric Kellstrand,Enrico Del Fante
-316,stokes,Alex Stokes
-317,Artem Vorotnikov,Artem V.
-318,Kobi Gurkan,Louis Guthmann
-319,Jacek Sieka (Status/Nim,Jacek Sieka
-320,Zuerlein,Zuer
-321,Michael LaCroix,Michael Carter
-322,David Knott,David Murdoch
-323,David Knott,David Palm
-324,David Knott,Dan Burnett
-325,Karim Agha,Karim Taam
-326,Karim Agha,Karim
-327,Karim Agha,Karim T
-328,Caspar,pari
-329,Caspar,Caspar Schwarz
-330,Adrian Manning,Sridarian Sharingan
-331,Adrian Manning,Borris Mann
-332,Adrian Manning,Adrian Sutton
-333,Paul Hauner,Paul D.
-334,Paul Hauner,Paul D
-335,Johnny Rhea,John Adler
-336,Johnny Rhea,Johannes Zweng
-337,Johnny Rhea,Danny Ryan
-338,Tomasz,Thomasz Stancsak
-339,Tomasz,Tomasz Drwiega
-340,Tomasz,Tomasz Stancsak
-341,Tomasz,Tomasz Stanczak
-342,Tomasz,Tom
-343,Tomasz,Thomasz S.
-344,George Hervey,George Avsetsin
-345,Zahary,Zachary Belford
-346,John Adler,John
-347,John Adler,Jason Carver
-348,Greg Colvin (Fell,Gerg Colvin
-349,Phil No,Phil
-350,Matt Garnett,Matt Halpern
-351,Matt Garnett,Matthew Halpern
-352,Matt Garnett,Dan Burnett
-353,Trenton Van Epps,Antonio Sanso
-354,Lucasz R.,Lukasz Rozmej
-355,Lucasz R.,Lukusz Rozmej
-356,Lucasz R.,Lukasz
-357,Lucasz R.,Tukasz Rozmej
-358,Thomasz Stancsak,Thomasz S.
-359,Alex Guchowski,Alex Stokes
-360,Alex Guchowski,Alex G
-361,Gary Schuite,Arif Schoe
-362,Gary Schuite,Afr Schoe
-363,Gary Schuite,Adam Schmideg
-364,Gary Schuite,Afri Schoe
-365,Gary Schuite,GhaS Shee
-366,Lukasz Rozmej,Lukasz
-367,Bradley Miller,Jake Gillberg
-368,Mariano Conti,Mario
-369,Matt Halpern,Matt Nelson
-370,Felix,Felix Lange
-371,David Murdoch,David Mechler
-372,David Murdoch,David Mechier
-373,Thea,Tyevlag
-374,Tenton Van Epps,Antonio Sanso
-375,Sam Wilson,Matt Nelson
-376,Sam Wilson,Zachary Williamson
-377,Sam Wilson,Zac Williamson
-378,Danny,Dusan
-379,Danny,Danny Ryan
-380,Danny,Dan
-381,Jochen,Jose
-382,Jochen,Jacek
-383,Jochen,Josh
-384,Rai Ratan Sur,Rai Sur
-385,jochen,John
-386,Brayton,Brian
-387,Jutta Steiner,Liz Steininger
-388,Alex axic,Alex B.
-389,Alex axic,Alex G
-390,Alex axic,Alex
-391,Alex axic,Alexandey
-392,Alex axic,Alexey A.
-393,Alex axic,Alex Beregszazi
-394,Alex axic,Alexey Osipov
-395,Alex axic,Alex Beregszaszi
-396,Alex axic,Alex St
-397,Marcelo Ruiz,Marcelo Ruiz de Olano
-398,Marcelo Ruiz,Marcin
-399,Matt,Matthias
-400,Matt,Martin
-401,Dragan Rakta,Danny Ryan
-402,Gabi,Fabio
-403,Gabi,Rai
-404,Potus,Louis
-405,Qi Zhou,Micah Zoltu
-406,Marius van der Wijden,MariusVanDer
-407,Jake Lang,Felix Lange
-408,Jake Lang,James Ray
-409,Jake Lang,Vie Yang
-410,Jake Lang,Jared Wasinger
-411,Jake Lang,Jake Gillberg
-412,Jake Lang,Wei Tang
-413,Enrico,Mario
-414,Enrico,Enrico Del Fante
-415,Felix Lange,Felipe Faraggi
-416,Felix Lange,Wei Tang
-417,James He,Johannes Zweng
-418,James He,Jacek Glen
-419,James He,James Ray
-420,James He,Liam Horne
-421,James He,Jamie Lokier
-422,James He,James Prestwich
-423,Danno,Danny.
-424,Danno,Danno Ferris
-425,Danno,danny
-426,Danno,Dusan
-427,Danno,Dan
-428,Danno,Danno Ferrin
-429,Danno,Danno Fertin
-430,Mikhail Kalinin,Mikhail
-431,Pooja Ranjan.,Pooja ECH
-432,Pooja Ranjan.,Pooja
-433,Gary Schlte,Arif Schoe
-434,Gary Schlte,Afr Schoe
-435,Gary Schlte,Afri Schoe
-436,Gary Schlte,GhaS Shee
-437,pari,Rai
-438,pari,Karim
-439,pari,Pari
-440,pari,Mario
-441,pari,Marius
-442,pari,Marcin
-443,pari,Karim T
-444,pari,Kar
-445,pari,Martin
-446,Ino Murko,Anton Bukov
-447,Ino Murko,Dino Mark
-448,Marek Moraczyynski,Marek M
-449,Marek Moraczyynski,Marek Kotewicz
-450,Siri,Dmitrii
-451,Marek M,Marek Kotewicz
-452,Marek M,Marek Moraczynski
-453,Marek M,Marek Moroczynski
-454,Matt Nelson,Matt Luongo
-455,Fabio,Fabio Di Fab
-456,Fabio,Mrabino1
-457,Fabio,Mario
-458,Mikhail,Phil
-459,Mikhail,Mikhail Kalanin
-460,Mikhail,Mikhail Khalinin
-461,Mikhail,Mikhail Melnik
-462,Mikhail,Mikhial Kalinin
-463,Kenway Wang,Ken Ng
-464,Andrea Lafranchi,Andreas Freund
-465,James,Jay Welsh
-466,James,Jacek
-467,James,James Ray
-468,Anton Nashatyrev,Antonio Sanso
-469,Phil,Phil Ngo
-470,Danny.,danny
-471,Danny.,Dusan
-472,Danny.,Danny Ryan
-473,Danny.,Dan
-474,Danno Ferris,Dankrad Feist
-475,William Schwab,William Morriss
-476,Yuga Cohler,Tim Coulter
-477,Yuga Cohler,Zak Cole
-478,Brent Allsop,Ben Adams
-479,Gary Schute,Arif Schoe
-480,Gary Schute,Afr Schoe
-481,Gary Schute,Afri Schoe
-482,Gary Schute,GhaS Shee
-483,Alex Stokes,Stokes
-484,Alex Stokes,Alex B.
-485,Alex Stokes,Alex G
-486,Alex Stokes,Alex Beregsz
-487,pyethereum),Jan Xie (ruby-ethereum
-488,Artem Vorotnikob,Artem V.
-489,Dimitry,Dimitry Khokhlov
-490,Dimitry,Dmitrii
-491,Dimitry,Dmitry Ryajov
-492,Dimitry,Dimitry Khoklov
-493,Gunnim,Guillame
-494,Gunnim,Guilaume
-495,Jose,Josh
-496,Shahan Khatchadourian,Shashank Yalamanchi
-497,Karim Taam,Karim
-498,Karim Taam,Karalabe
-499,Pat Stiles,Matthias
-500,Rai,Pari
-501,Rai,Rai Sur
-502,Daniel Lehmar,Daniel Nagy
-503,Daniel Lehmar,Daniel Celeda
-504,Daniel Lehmar,Jamie Lokier
-505,Pooja Kanjan,Pooja R.
-506,Pooja Kanjan,Pooja ECH
-507,Pooja Kanjan,Pooja
-508,Alex Van de Sande,Alexandey
-509,Pooja | ECH,Pooja R.
-510,Pooja | ECH,Pooja
-511,Anton Bukov,Antonio Sanso
-512,Karim,Pari
-513,Karim,Mario
-514,Karim,Marius
-515,Karim,Marcin
-516,Karim,Kar
-517,Karim,Martin
-518,Sean,Dan
-519,Sean,Sam
-520,Baptise Marchand,Bryant Eisenbach
-521,RicMoo,Moody
-522,Ben Adams,Sean Anderson
-523,Ben Adams,Leo Arias
-524,Ben Adams,Ben Burns
-525,Pari,Mario
-526,Pari,Marius
-527,Pari,Marcin
-528,Pari,Karim T
-529,Pari,Kar
-530,Pari,Martin
-531,Lukasz,Louis
-532,Lukasz,Lasso
-533,Pooja R.,Pooja ECH
-534,Pooja R.,ECH-Pooja
-535,Pooja R.,Pooja Ranjan
-536,Fabio Di,Fabio Di Fabio
-537,Lane R,Lane Rettig
-538,Louis Guthmann,Borris Mann
-539,Stefan George,Helen George
-540,Stefan George,Stefan Bratanov
-541,Arif Schoe,Gary Schulte
-542,Matthias,Nathan
-543,Matthias,Marius
-544,Matthias,Matthew English
-545,Matthias,Martin
-546,Matthias,Metachris
-547,Bhargava,Barnabas
-548,Christian Reitwi,Chris Reitwiessner
-549,HP,H
-550,Daniel Nagy,Daniel Weaver
-551,Daniel Nagy,Daniel Heyman
-552,Daniel Nagy,Daniel Celeda
-553,Daniel Nagy,Daniel Lerhner
-554,Mrabino1,Mario
-555,Mrabino1,Marcin
-556,Mrabino1,Martin
-557,Marius Van der Wijden,Martin Van Swende
-558,Marius Van der Wijden,MariusVanDer
-559,Micah Zoltou,Micah
-560,Dankrad Feist,Konrad Feldmeier
-561,Dankrad Feist,Dankrad
-562,Dankrad Feist,Danno Ferrin
-563,Dankrad Feist,Danno Fertin
-564,Dimitry Khokhlov,Dmitry
-565,Dimitry Khokhlov,Dmitry Ryajov
-566,Alita Moore,Liam Horne
-567,Mario,Mario Havel
-568,Mario,Marius
-569,Mario,Marek
-570,Mario,Marcin
-571,Mario,Martin
-572,Mario,Marcin Sobcz
-573,Mario,Metachris
-574,Peter,Peter Szilagy
-575,Peter,Lefter
-576,Peter,Peter Salanki
-577,Gerg Colvin,George Avsetsin
-578,Gerg Colvin,Gcolvin
-579,Jacek Sieka,Jacek Glen
-580,Jacek Sieka,Jacek
-581,Tomasz StaÃÂczak,Thomasz S.
-582,Martin Holst Swende (EF/geth/,Martin Van Swende
-583,Martin Holst Swende (EF/geth/,Martin Swende
-584,George Kadianakis,George Avsetsin
-585,Andrew Ashikhmin,Andrew
-586,Jared Doro,Jared Wasinger
-587,Nathan,Nishant
-588,Nathan,Ethan
-589,William Morriss,Zac Williamson
-590,William Morriss,Will Meister
-591,Afr Schoe,Adam Schmideg
-592,Afr Schoe,Gary Schulte
-593,Tomasz K. Stanczak,Thomasz S.
-594,Zachary Williamson,Zachary Belford
-595,Caspar Schwarz,Caspar Schwarz-Schilling
-596,Zac Williamson,o_O Sam Wilson
-597,Zac Williamson,Daneil Ellison
-598,Andrew,Hdrewes
-599,Andrew,Artem
-600,Johannes Zweng,Joesph Delong
-601,Mikhail Khalinin,Mikhail Melnik
-602,Dmitry,Dmitry Ryajov
-603,Dmitry,Dimitry Khoklov
-604,Abdelhamid Bakhta,Ahmad Bitar
-605,Daniel Weaver,Jason Carver
-606,Daniel Weaver,Daniel Heyman
-607,Daniel Weaver,Daniel Celeda
-608,Daniel Weaver,Daniel Lerhner
-609,Alenque,Alex
-610,Alenque,Alexandey
-611,Greg Colvin,Greg Markou
-612,Greg Colvin,Gcolvin
-613,Fredrik,Frederik Harrysson
-614,Fredrik,Fredrik Harrysson
-615,Fredrik,Fredrik Harryson
-616,Fredrik,Frederik Harryson
-617,Tomasz Drwiega,Tomasz Stancsak
-618,Tomasz Drwiega,Tomasz Stanczak
-619,Tomasz Drwiega,Thomasz S.
-620,Afri,Afri Schoe
-621,John,Josh
-622,Carlbeek,Marek
-623,Carlbeek,Karalabe
-624,Carlbeek,Charles C
-625,Chris Hager,Mario Havel
-626,Chris Hager,Chris Reitwiessner
-627,Casey Gardiner,Casey Detrio
-628,Casey Gardiner,Gajinder
-629,Jason Carver,Zane Starr
-630,Dino Mark,Marek
-631,Marius,Marek
-632,Marius,Marcin
-633,Marius,Martin
-634,Marius,MariusVanDer
-635,Marius,Metachris
-636,Marek,Jacek
-637,Marek,Marcin
-638,Marek,Martin
-639,Barnabas Busa,Bhargavasomu
-640,Barnabas Busa,Barnabe
-641,Barnabas Busa,Ben Burns
-642,Jacek Glen,Jacek
-643,Jacek Glen,Zak Cole
-644,Jacek Glen,Jake Gillberg
-645,Jacek Glen,Jeff Coleman
-646,Martin Holst Swende,Martin Ortner
-647,Martin Holst Swende,Martin Koppelmann
-648,Justin Florentine,Justin Drake
-649,Justin Florentine,Justin Traglia
-650,Tim Coulter,Tim Be
-651,Zuer,Hubert
-652,Guillame,Guillaume Ballet
-653,Tomasz Stancsak,Thomasz S.
-654,Charles St Louis,Charles C
-655,Martin Van Swende,Marius Van Der Wijden
-656,Martin Van Swende,Martin Lundfall
-657,Martin Van Swende,Martin Ortner
-658,Martin Van Swende,Martin Koppelmann
-659,Martin Van Swende,Martin Holst Swende (EF/
-660,Martin Van Swende,MariusVanDer
-661,Martin Van Swende,Marius VanderWidjen
-662,Justin Drake,Justin Traglia
-663,Justin Drake,Dustin Brody
-664,Amexiane,Ameziane Hamlat
-665,Amexiane,Alexandey
-666,Amexiane,Ayman
-667,Kasey,Kasey Kirkham
-668,Mikhail Melnik,Mikhial Kalinin
-669,Daniel Heyman,Daniel Celeda
-670,Daniel Heyman,Daniel Lerhner
-671,Daniel Heyman,Danny Ryan
-672,James Ray,James H.
-673,Pawel,Paul D
-674,Pawel,Pawel Bylica
-675,Pawel,Pamel B.
-676,Pawel,Pawel Byilca
-677,Joshua Rudolph,Joshua Douglas
-678,Matthew Halpern,Matthew English
-679,Matthew Halpern,Matthew Di Ferrante
-680,Matthew Halpern,Matthew Rodriguez
-681,Alex B.,AlexLG
-682,Alex B.,Alex Beregsz
-683,Alex B.,Alex
-684,Alex B.,Alexey A.
-685,Alex B.,Alex Beregszazi
-686,Alex B.,Alex St
-687,Adam Schmideg,Chami Rachid
-688,Brett Robertson,Roberto
-689,Martin Swende,Martin
-690,Martin Swende,Martin Lundfall
-691,Martin Swende,Martin Ortner
-692,Martin Swende,Martin Koppelmann
-693,Martin Swende,Martin Holst Swende (EF/
-694,Martin Swende,Marcin Sobcz
-695,Daniel Celeda,Daniel Lerhner
-696,AlexLG,Alex St
-697,Ruben,Hubert
-698,Terence,Trent
-699,Marek Kotewicz,Marek Moraczynski
-700,Marek Kotewicz,Marek Moroczynski
-701,Marcin,MariusVanDer
-702,Marcin,Marcin Sobcz
-703,Vitalik Buter,Vitalik
-704,Hudson,Dusan
-705,Hudson,Edson
-706,Hudson,Hugo
-707,Matthew English,Matthew Rodriguez
-708,Marius Van Der Wijden,MariusVanDer
-709,Dusan,Dan
-710,Karim T,Kar
-711,Somu Bhargava,Bhargavasomu
-712,Alex G,Alex Beregsz
-713,Alex G,Alex Gluchowski
-714,Alex G,Alexey A.
-715,Georgios Konstantop,Georgios K
-716,Alex Beregsz,Alex Leverington
-717,Pooja ECH,Pooja
-718,Pooja ECH,ECH-Pooja
-719,Pooja ECH,Pooja Ranjan
-720,Sam CM,Sam
-721,Alex,Alexandey
-722,Alex,Alexey A.
-723,Alex,Alex St
-724,Borris Mann,Brian
-725,James H.,Pamel B.
-726,Peter S.,Peter Szilagy
-727,Peter S.,Lefter
-728,Peter S.,Peter Szilagyi
-729,Peter S.,Peter Salanki
-730,Dankrad,Dade
-731,Dankrad,Dan
-732,Tomasz Stanczak,Thomasz S.
-733,Dmitry Ryajov,Dimitry Khoklov
-734,Karalabe,Kar
-735,Karalabe,Barnabe
-736,Robert Drost,Holger Drewes
-737,Robert Drost,Roberto
-738,Robert Drost,Holder Drewes
-739,Robert Drost,Roberto Bayardo
-740,Paul D.,Pamel B.
-741,Afri Schoe,Gary Schulte
-742,Jim,Tim
-743,Tentonvanepps,Tren Van Epps
-744,Tentonvanepps,Trent Van Epps
-745,Holger Drewes,Hdrewes
-746,Holger Drewes,Hal Press
-747,Dade,Dan
-748,Dade,Dave
-749,David Palm,David Mechler
-750,Jamie Lokier,Jake Gillberg
-751,Micah ZOltu,Micah
-752,Daniel Lerhner,Dan Burnett
-753,Vie Yang,Hsiao-Wei Wang
-754,Vie Yang,Wei Tang
-755,Alexandey,Alexey A.
-756,Alexandey,Alexey Osipov
-757,Igor Barinov,Jordi Baylina
-758,Ratan Sur,Rai Sur
-759,Roberto,Hubert
-760,Roberto,Roberto Bayardo
-761,Tim,Tim Be
-762,Tim,Tom
-763,Holder Drewes,Hdrewes
-764,Holder Drewes,Hal Press
-765,Micah,Micah Zoltu
-766,Martin,Martin Lundfall
-767,Martin,Martin Ortner
-768,Martin,MariusVanDer
-769,Martin,Marcin Sobcz
-770,Martin,Danno Fertin
-771,Bhargavasomu,Barnabas
-772,Paul D,Pamel B.
-773,Pawel Bylica,Pamel B.
-774,Danny Ryan,Danno Ferrin
-775,Danny Ryan,Danno Fertin
-776,Martin Lundfall,Martin Ortner
-777,Leo Arias,Louis
-778,Martin Ortner,MariusVanDer
-779,Vitalik Buterin (,Vitalik
-780,Peter Szilagy,PÃÂ©ter SzilÃÂ¡gyi (
-781,Peter Szilagy,PÃÂ©ter SzilÃÂ¡gyi
-782,Peter Szilagy,Peter Salanki
-783,PaweÃÂ Bylica,Pawel Byilca
-784,Gary Schulte,GhaS Shee
-785,PÃÂ©ter SzilÃÂ¡gyi (,Peter Szilagyi
-786,Antonio Sanso,Trenton van Epps
-787,Dan,Dave
-788,Ameen Soleimani,Jeff Coleman
-789,Ameen Soleimani,Peter Salanki
-790,Pooja,ECH-Pooja
-791,Pooja,Pooja Ranjan
-792,Alexey A.,Alexey Osipov
-793,Alexey A.,Alex St
-794,Georgios Konstantopoulos,Georgios K
-795,Stag,Sam
-796,PÃÂ©ter SzilÃÂ¡gyi,Peter Szilagyi
-797,Will Meister,David Mechier
-798,Peter Szilagyi,Peter Salanki
-799,Guillaume,Guillaume Ballet
-800,Guilaume,Guillaume Ballet
-801,Dan Burnett,Ben Burns
-802,Dan Burnett,Lane Rettig
-803,Gajinder,Gavin Wood
-804,Matthew Di Ferrante,Matthew Rodriguez
-805,Pamel B.,Pawel Byilca
-806,Hsiao-Wei Wang,Wei Tang
-807,MariusVanDer,Marius VanderWidjen
-808,MariusVanDer,MaruisVanDerWijden
+0,Seananderson,Sean Anderson
+1,Roberto B,Roberto
+2,Alexey,Alex
+3,Alexey,Alexandey
+4,Alexey,Alexey A.
+5,Phil Lucsok,Phil Lucsak
+6,Tomasz Stancxak,Thomasz Stancsak
+7,Tomasz Stancxak,Tomasz StaÃÂczak
+8,Tomasz Stancxak,Tomasz K. Stanczak
+9,Tomasz Stancxak,Tomasz Stancsak
+10,Tomasz Stancxak,Tomasz Stanczak
+11,Danny Ferrin,Danno Ferris
+12,Danny Ferrin,Danno Ferrin
+13,Danny Ferrin,Danno Fertin
+14,Daniel Lehrner,Daniel Lehmar
+15,Daniel Lehrner,Daniel Lerhner
+16,Alex Vlasov,Alex Viasov
+17,Josh R,Josh
+18,Matthew Slipper,Matthew Halpern
+19,Stefen George,Stefan George
+20,Stefen George,Helen George
+21,Protolambda,protolambda
+22,Paul Dworzanski,Paul Dworzanski (
+23,James HE,James He
+24,James HE,James
+25,James HE,James H.
+26,Dragan Rakita,Dragan Rakta
+27,PÃÂ©ter Szil,PÃÂ©ter SzilÃÂ¡gyi
+28,Yoav,Yoavw
+29,Boris Mann,Borris Mann
+30,Marcin Sobczak,Marcin Sobcz
+31,Yuga Choler,Yuga Cohler
+32,Marius VanDerWijden,MariusVanDerWijden
+33,Marius VanDerWijden,Marius van der Wijden
+34,Marius VanDerWijden,Marius Van der Wijden
+35,Marius VanDerWijden,Marius Van Der Wijden
+36,Marius VanDerWijden,MariusVanDer
+37,Marius VanDerWijden,Marius VanderWidjen
+38,Marius VanDerWijden,MaruisVanDerWijden
+39,Helengeorge,Helen George
+40,JosephC,Joseph Chow
+41,Karim T.,Karim Taam
+42,Karim T.,Karim
+43,Karim T.,Karim T
+44,Martin Holste Swende,Martin Hoist Swende
+45,Martin Holste Swende,Martin Holst Swende (EF/geth/
+46,Martin Holste Swende,Martin Holst Swende
+47,Martin Holste Swende,Martin Swende
+48,Martin Holste Swende,Martin Holst Swende (EF/
+49,Crypdough,Crypdough.eth
+50,MariusVanDerWijden,Marius van der Wijden
+51,MariusVanDerWijden,Marius Van der Wijden
+52,MariusVanDerWijden,Marius Van Der Wijden
+53,MariusVanDerWijden,MariusVanDer
+54,MariusVanDerWijden,Marius VanderWidjen
+55,MariusVanDerWijden,MaruisVanDerWijden
+56,Fred Harryson,Frederik Harrysson
+57,Fred Harryson,Fredrik Harrysson
+58,Fred Harryson,Fredrik Harryson
+59,Fred Harryson,Frederik Harryson
+60,Fabio de Fabio,Fabio Di Fab
+61,Fabio de Fabio,Fabio Di Fabio
+62,Lance,Lane
+63,Marek MoraczyÃÂski,Marek Moraczyynski
+64,Marek MoraczyÃÂski,Marek Moraczynski
+65,Marek MoraczyÃÂski,Marek Moroczynski
+66,Etan,Ethan
+67,Tim Beiko,TimeBeiko
+68,Tim Beiko,Tim Beico
+69,Tim Beiko,Tim Be
+70,Ratan  Sur,Rai Ratan Sur
+71,Ratan  Sur,Ratan Sur
+72,DanKrad Feist,Dankrad Feist
+73,Iannorden,Ian Norden
+74,Vitalik Buterin,Vitalik Buteri
+75,Vitalik Buterin,Vitalik Buter
+76,Vitalik Buterin,Vitalik Buterin (
+77,Marek Moraczyn,Marek Moraczyynski
+78,Marek Moraczyn,Marek Moraczynski
+79,Marek Moraczyn,Marek Moroczynski
+80,Lane,Lane R
+81,Martin Hoist Swende,Martin Holst Swende
+82,Martin Hoist Swende,Martin Van Swende
+83,Martin Hoist Swende,Martin Swende
+84,Martin Hoist Swende,Martin Holst Swende (EF/
+85,Christian Reitweissner,Christian Reitwi
+86,Christian Reitweissner,Christian Reitwiessener
+87,Christian Reitweissner,Chris Reitwiessner
+88,Christian Reitweissner,Christian Reitwiessner
+89,Joshua Rudolf,Joshua Rudolph
+90,Martin Hol,Martin Holst
+91,Joseph Delong,Joesph Delong
+92,William Morris,William Morriss
+93,TimeBeiko,Tim Beico
+94,Daniel Ellison,Daneil Ellison
+95,Zsfelfoldi,zsfelfoldi
+96,Tomasz S,Tomasz
+97,Tomasz S,Thomasz S.
+98,Brett Allsop,Brent Allsop
+99,Trenton Vanepps,Trenton Van Epps
+100,Trenton Vanepps,Tenton Van Epps
+101,Trenton Vanepps,Tentonvanepps
+102,Trenton Vanepps,Tren Van Epps
+103,Trenton Vanepps,Trenton van Epps
+104,Trenton Vanepps,Trent Van Epps
+105,Andrea Lanfranchi,Andrea Lafranchi
+106,Hale Drewes,Holger Drewes
+107,Hale Drewes,Holder Drewes
+108,Martin Holst,Martin Holst Swende
+109,Vitalik Buteri,Vitalik Buter
+110,Vitalik Buteri,Vitalik Buterin (
+111,Oleg Jakushkin,Olegjakushkin
+112,Greg Calvin,Gerg Colvin
+113,Greg Calvin,Greg Colvin
+114,Tim Beico,Tim Be
+115,Charles St. Louis,Charles St Louis
+116,Edson Ayllon,Edson Ayllon .
+117,stokes,Stokes
+118,Artem Vorotnikov,Artem Vorotnikob
+119,Kobi Gurkan,Kobi Gurkian
+120,Greg Colvin (Fell,Greg Colvin
+121,Phil No,Phil Ngo
+122,Trenton Van Epps,Tenton Van Epps
+123,Trenton Van Epps,Tren Van Epps
+124,Trenton Van Epps,Trenton van Epps
+125,Trenton Van Epps,Trent Van Epps
+126,Thomasz Stancsak,Tomasz K. Stanczak
+127,Thomasz Stancsak,Tomasz Stancsak
+128,Thomasz Stancsak,Tomasz Stanczak
+129,Alex Guchowski,Alex Gluchowski
+130,Gary Schuite,Gary Schlte
+131,Gary Schuite,Gary Schute
+132,Gary Schuite,Gary Schulte
+133,Gary Schuite,Gary Schultz
+134,Lukasz Rozmej,Lukusz Rozmej
+135,Lukasz Rozmej,Tukasz Rozmej
+136,Lukasz Rozmej,ÃÂukasz Rozmej
+137,Matt Halpern,Matthew Halpern
+138,Tenton Van Epps,Tentonvanepps
+139,Tenton Van Epps,Tren Van Epps
+140,Tenton Van Epps,Trenton van Epps
+141,Tenton Van Epps,Trent Van Epps
+142,Sam Wilson,o_O Sam Wilson
+143,Danny,Danno
+144,Danny,Danny.
+145,Danny,danny
+146,Jochen,jochen
+147,Jochen,John
+148,Rai Ratan Sur,Ratan Sur
+149,Loin Dapplion,Lion Dapplion
+150,Lukusz Rozmej,Tukasz Rozmej
+151,Potus,Potuz
+152,Marius van der Wijden,Marius Van der Wijden
+153,Marius van der Wijden,Marius Van Der Wijden
+154,Marius van der Wijden,Marius VanderWidjen
+155,Marius van der Wijden,MaruisVanDerWijden
+156,testing),Testing)
+157,Mateusz Morus,Mateusz Morusiewicz
+158,James He,James
+159,James He,James H.
+160,Mikhail Kalinin,Mikhail Kalanin
+161,Mikhail Kalinin,Mikhail Khalinin
+162,Mikhail Kalinin,Mikhial Kalinin
+163,Pooja Ranjan.,Pooja Kanjan
+164,Pooja Ranjan.,Pooja Ranjan
+165,Gary Schlte,Gary Schute
+166,Gary Schlte,Gary Schulte
+167,Gary Schlte,Gary Schultz
+168,Marek Moraczyynski,Marek Moraczynski
+169,Marek Moraczyynski,Marek Moroczynski
+170,Marek M,Marek
+171,Fabio,Fabio Di
+172,Fabio Di Fab,Fabio Di
+173,Fabio Di Fab,Fabio Di Fabio
+174,James,James H.
+175,Danno Ferris,Danno Ferrin
+176,Danno Ferris,Danno Fertin
+177,Gary Schute,Gary Schulte
+178,Gary Schute,Gary Schultz
+179,Alex Stokes,Alex St
+180,Dimitry,Dmitry
+181,Sajida Zouarhi,Sajida Zourahi
+182,Karim Taam,Karim T
+183,Daniel Lehmar,Daniel Weaver
+184,Daniel Lehmar,Daniel Heyman
+185,Daniel Lehmar,Daniel Lerhner
+186,Pooja Kanjan,Pooja Ranjan
+187,Ken Ng,Ken NG
+188,Pooja | ECH,Pooja ECH
+189,Karim,Karim T
+190,Baptise Marchand,Baptiste Marchand
+191,Pooja R.,Pooja
+192,Arif Schoe,Afr Schoe
+193,Arif Schoe,Afri Schoedin
+194,Arif Schoe,Afri Schoedon
+195,Arif Schoe,Afri Schoeden
+196,Arif Schoe,Afri Schoe
+197,Kamil ChodoÃÂa,Kamil Chodola
+198,Bhargava,Bhargavasomu
+199,Christian Reitwi,Christian Reitwiessener
+200,Christian Reitwi,Christian Reitwiessner
+201,Marius Van der Wijden,Marius Van Der Wijden
+202,Marius Van der Wijden,Marius VanderWidjen
+203,Marius Van der Wijden,MaruisVanDerWijden
+204,Micah Zoltou,Micah ZOltu
+205,Micah Zoltou,Micah Zoltu
+206,Mikhail Kalanin,Mikhail Khalinin
+207,Mikhail Kalanin,Mikhial Kalinin
+208,Lightcilent,LightClient
+209,Lightcilent,lightclient
+210,Lightcilent,Lightclient
+211,Dimitry Khokhlov,Dimitry Khoklov
+212,SasaWeb,SasaWebUp
+213,Peter,Peter S.
+214,Gerg Colvin,Greg Colvin
+215,Tomasz StaÃÂczak,Tomasz K. Stanczak
+216,Tomasz StaÃÂczak,Tomasz Stancsak
+217,Tomasz StaÃÂczak,Tomasz Stanczak
+218,Ansgar Deitrichs,Ansgar Dietrichs
+219,Ansgar Deitrichs,Ansgar Dietrich
+220,Martin Holst Swende (EF/geth/,Martin Holst Swende
+221,Martin Holst Swende (EF/geth/,Martin Holst Swende (EF/
+222,LightClient,lightclient
+223,LightClient,Lightclient
+224,Afr Schoe,Afri Schoedin
+225,Afr Schoe,Afri Schoedon
+226,Afr Schoe,Afri Schoeden
+227,Afr Schoe,Afri Schoe
+228,Tomasz K. Stanczak,Tomasz Stancsak
+229,Tomasz K. Stanczak,Tomasz Stanczak
+230,Zachary Williamson,Zac Williamson
+231,Danny Ryan (EF/,Danny Ryan
+232,Mikhail Khalinin,Mikhial Kalinin
+233,Dmitry,Dmitrii
+234,Martin Holst Swende,Martin Van Swende
+235,Martin Holst Swende,Martin Swende
+236,Martin Holst Swende,Martin Holst Swende (EF/
+237,Afri Schoedin,Afri Schoedon
+238,Afri Schoedin,Afri Schoeden
+239,Afri Schoedin,Afri Schoe
+240,Guillame,Guillaume
+241,Guillame,Guilaume
+242,Tomasz Stancsak,Tomasz Stanczak
+243,Martin Van Swende,Martin Swende
+244,Hsiao-Wei,Hsiao-Wei Wang
+245,Alex B.,Alex G
+246,lightclient,Lightclient
+247,AlexLG,Alex G
+248,AlexLG,Alex
+249,Terence,terence
+250,Marek Moraczynski,Marek Moroczynski
+251,Christian Reitwiessener,Chris Reitwiessner
+252,Christian Reitwiessener,Christian Reitwiessner
+253,Marcin,Martin
+254,Vitalik Buter,Vitalik Buterin (
+255,Marius Van Der Wijden,Marius VanderWidjen
+256,Marius Van Der Wijden,MaruisVanDerWijden
+257,Afri Schoedon,Afri Schoeden
+258,Afri Schoedon,Afri Schoe
+259,Frederik Harrysson,Fredrik Harrysson
+260,Frederik Harrysson,Fredrik Harryson
+261,Frederik Harrysson,Frederik Harryson
+262,Alex G,Alex
+263,Alex G,Alex St
+264,Georgios Konstantop,Georgios Konstantopoulos
+265,Alex Beregsz,Alex Beregszazi
+266,Alex Beregsz,Alex Beregszaszi
+267,Afri Schoeden,Afri Schoe
+268,Paul D.,Paul D
+269,Tukasz Rozmej,ÃÂukasz Rozmej
+270,Tentonvanepps,Trenton van Epps
+271,Holger Drewes,Holder Drewes
+272,YDXTY TS,YDXTY Thi
+273,Jamie Lokier,Jami Lokier
+274,Micah ZOltu,Micah Zoltu
+275,Ansgar Dietrichs,Ansgar Dietrich
+276,Pawel Bylica,PaweÃÂ Bylica
+277,Pawel Bylica,Pawel Byilca
+278,Barnabas,Barnabe
+279,Peter Szilagy,Peter Szilagyi
+280,Gary Schulte,Gary Schultz
+281,Chris Reitwiessner,Christian Reitwiessner
+282,PÃÂ©ter SzilÃÂ¡gyi (,PÃÂ©ter SzilÃÂ¡gyi
+283,Tren Van Epps,Trenton van Epps
+284,Tren Van Epps,Trent Van Epps
+285,Trenton van Epps,Trent Van Epps
+286,Danno Ferrin,Danno Fertin
+287,Alex Beregszazi,Alex Beregszaszi
+288,Artem V.,Artem
+289,Fredrik Harrysson,Fredrik Harryson
+290,Fredrik Harrysson,Frederik Harryson
+291,David Mechler,David Mechier
+292,Guillaume,Guilaume
+293,Fredrik Harryson,Frederik Harryson
+294,Marius VanderWidjen,MaruisVanDerWijden
