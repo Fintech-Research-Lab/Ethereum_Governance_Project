@@ -15,7 +15,7 @@ graph set window fontface "Times New Roman"
 
 
 
-use "Analysis\Ethereum_Cross-sectional_Data.dta", clear
+use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
 
 
 // Create labels
@@ -99,7 +99,44 @@ esttab using "analysis\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.
 	collabels("N." " Mean" "St. Dev." "Min"  "p25" "p50" "p75" "Max" ) ///
 	tex replace label nonumbers alignment(rrrrrrrr) noobs
 
-  
+	
+* Create gini of n. authors. 
+
+preserve
+keep eip_number author*
+drop author author*commit* author*_follo* author*_job* author*comp* 
+
+foreach var of varlist author*id {
+	local newname = "id_" + subinstr("`var'", "_id","", .)
+   	rename `var' `newname'
+	
+	}
+	
+reshape long author id_author , i(eip) j(id) string
+drop if id_author ==.	
+bys id_author: egen n_eip = count(id) 	
+graph hbar n_eip if _n<11, over(
+
+
+keep author id_author n_eip
+duplicates drop
+gsort -n_eip
+gen cum_n = sum(n_eip)
+gen n = _n
+label var cum_n "Cumulative N. Author-EIPs"
+label var n "N. Authors"
+
+line cum_n n ,  ytitle("N. EIPs") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white)) 
+graph export "analysis\results\Figures\neip_by_author.png", as(png) replace
+
+ineqdec0 n_eip
+
+gsort -n_eip
+graph hbar n_eip if _n<11,  over(author , sort(n_eip) descending)
+
+
+
   
 // Individual Factors
 // following are ols results probit specifications are in the end
