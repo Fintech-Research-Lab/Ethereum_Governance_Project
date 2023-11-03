@@ -8,6 +8,7 @@ Created on Sat Sep 30 02:08:12 2023
 import pandas as pd
 import os as os
 from fuzzywuzzy import fuzz
+import numpy as np
 
 
 # Read Data
@@ -28,7 +29,7 @@ author = author[pd.notnull(author['full_name']) & (author['full_name'] != 'et al
 eip_commit = pd.read_stata("eip_Commit.dta")
 
 # get client data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
 geth = pd.read_stata("commitsgeth.dta")
 besu = pd.read_stata("commitsbesu.dta")
 erigon = pd.read_stata("commitserigon.dta")
@@ -52,8 +53,10 @@ contributor_unique = pd.DataFrame(contributor_unique, columns = ['full_name'])
 contributor_unique = contributor_unique[contributor_unique['full_name'] != 'eth-bot']
 client_unique = pd.unique(clients ['author'])
 client_unique = pd.DataFrame(client_unique, columns = ['full_name'])
-attendee_unique1 = pd.unique(attendees['full_name'])
-attendee_unique1 = pd.DataFrame(attendee_unique1, columns = ['full_name'])
+np.where(client_unique['full_name'].str.contains('bot'))
+# remove dependabot[bot] and github-actions[bot]
+client_unique = client_unique[(client_unique['full_name'] != 'dependabot[bot]') & (client_unique['full_name'] != 'github-actions[bot]' )]
+
 
 
 # create similarity score within attendees list to remove similar name
@@ -124,11 +127,11 @@ unique_attendee3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_nam
 unique_attendee4 = unique_attendee3[(pd.notnull(unique_attendee3['full_name'])) & (unique_attendee3['full_name'] != "NONE")]
 
 
-
-
+# Now the code will do cross-list check of names with Contributors Client, and Author Lists
 # reassign attendee_unique3 as attendee_unique for further coding
 
-attendee_unique = attendee_unique3
+attendee_unique = unique_attendee4
+attendee_unique.to_csv("Unique_Attendee_List.csv", index = False)
   
 # merge documents to run cross-table similarity score
 
@@ -156,7 +159,7 @@ attendees_author_similar_pairs = [
 
 # no similar names in unreconcilable
 
-author_attendees = attendees_with_author[attendees_with_author['_merge'] == 'both'] # 76 attendees are authors
+author_attendees = attendees_with_author[attendees_with_author['_merge'] == 'both'] # 78 attendees are authors
 
 # run the test with eip_contributors
 
@@ -239,7 +242,7 @@ everyone = pd.merge(attendee_author_and_contributor, client_unique, left_on = 'a
 everyone = everyone.sort_values(['attendee_name','author_name','contributor_name','client_name'], na_position = 'last')
 everyone_dep = everyone.drop(columns = ['merge_att&author','merge_att,author&contributor','_merge'])
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Analysis Code/Data Fixing Codes/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 everyone_dep.to_csv ("unique_names_allplayers.csv", index = False)
 
 # Result of Analysis
