@@ -32,7 +32,8 @@
 ,Baptiste Marchand,Baptise Marchand,
 ,Barnabas Busa,Barnabas,
 278,Barnabas Busa,Barnabe,
-198,Bhargava,Bhargavasomu,
+,Somu Bhargava,Bhargava,
+198,Somu Bhargava,Bhargavasomu,
 29,Boris Mann,Borris Mann,
 98,Brett Allsop,Brent Allsop,
 115,Charles St Louis,Charles St. Louis,
@@ -71,9 +72,9 @@
 60,Fabio Di Fabio,Fabio Di Fab,FALSE
 172,Fabio Di Fabio,Fabio Di,FALSE
 59,Frederik Harryson,Fred Harryson,FALSE
-56,Fred Harryson,Frederik Harrysson,FALSE
-58,Fred Harryson,Fredrik Harryson,FALSE
-57,Fred Harryson,Fredrik Harrysson,FALSE
+56,Frederik Harryson,Frederik Harrysson,FALSE
+58,Frederik Harryson,Fredrik Harryson,FALSE
+57,Frederik Harryson,Fredrik Harrysson,FALSE
 261,Frederik Harrysson,Frederik Harryson,FALSE
 260,Frederik Harrysson,Fredrik Harryson,FALSE
 259,Frederik Harrysson,Fredrik Harrysson,FALSE
@@ -90,15 +91,10 @@
 177,Gary Schulte,Gary Schulte,TRUE
 178,Gary Schulte,Gary Schultz,FALSE
 264,Georgios Konstantopoulos,Georgios Konstantop,FALSE
-214,Gerg Colvin,Greg Colvin,FALSE
-113,Gerg Colvin,Greg Colvin,FALSE
-,Gerg Colvin,Greg Colvin (Fell,FALSE
-120,Gerg Colvin,Greg Colvin,FALSE
-241,Guillaume,Guilaume,FALSE
-292,Guillaume,Guilaume,FALSE
+214,Greg Colvin,Gerg Colvin,FALSE
+,Greg Colvin,Greg Colvin (Fell,FALSE
+241,Guillaume Ballet,Guilaume,FALSE
 107,Holger Drewes,Holder Drewes,FALSE
-39,Holger Drewes,Helen George,FALSE
-271,Holger Drewes,Holder Drewes,FALSE
 244,Hsiao-Wei Wang,Hsiao-Wei,FALSE
 73,Ian Norden,Iannorden,FALSE
 174,James He,James H.,FALSE
@@ -190,8 +186,6 @@
 22,Paul Dworzanski,Paul Dworzanski (,FALSE
 276,Pawel Bylica,PaweÃÂ Bylica,FALSE
 277,Pawel Bylica,Pawel Byilca,FALSE
-,Peter Szilagyi,Peter,FALSE
-213,Peter Szilagyi,Peter S.,FALSE
 279,Peter Szilagyi,Peter Szilagy,FALSE
 5,Phil Lucsak,Phil Lucsok,FALSE
 121,Phil Ngo,Phil No,FALSE
@@ -202,10 +196,11 @@
 ,Pooja Ranjan,Pooja Ranjan.,FALSE
 163,Pooja Ranjan,Pooja Kanjan,FALSE
 151,Potuz,Potus,FALSE
-21,Protolambda,protolambda,FALSE
+,Diederik Loerakker protolambda,Protolambda,
+21,Diederik Loerakker protolambda,protolambda,FALSE
 148,Rai Ratan Sur,Ratan Sur,FALSE
 ,Rai Ratan Sur,Ratan  Sur,FALSE
-1,Roberto B,Roberto,FALSE
+1,Roberto Bayardo,Roberto,FALSE
 181,Sajida Zouarhi,Sajida Zourahi,FALSE
 142,Sam Wilson,o_O Sam Wilson,FALSE
 212,SasaWebUp,SasaWeb,FALSE
@@ -233,7 +228,6 @@
 229,Tomasz Stanczak,Thomasz Stancsak,FALSE
 ,Tomasz Stanczak,Tomasz S,FALSE
 97,Tomasz Stanczak,Thomasz S.,FALSE
-96,Tomasz Stanczak,Tomasz,FALSE
 ,Tomasz Stanczak,Tomasz StaÃÂczak,FALSE
 215,Tomasz Stanczak,Tomasz K. Stanczak,FALSE
 216,Tomasz Stanczak,Tomasz Stancsak,FALSE
@@ -248,7 +242,7 @@
 74,Vitalik Buterin,Vitalik Buteri,
 92,William Morris,William Morriss,
 272,YDXTY Thi,YDXTY TS,
-28,Yoav,Yoavw,
+28,Yoav Weiss,Yoavw,
 31,Yuga Choler,Yuga Cohler,
 230,Zachary Williamson,Zac Williamson,
 95,Zsfelfoldi,zsfelfoldi,
