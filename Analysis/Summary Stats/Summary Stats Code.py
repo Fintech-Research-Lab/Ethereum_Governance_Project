@@ -117,25 +117,20 @@ summary_stats.loc[len(summary_stats)] = ['Top 10 Client Contributors as a Percen
 
 summary_stats.loc[len(summary_stats)] = ['HHI of Client Contributors', hhi(clients.groupby('login').size())]
 
-# analysis on eip commit and client commit data
+# use name analysis file to complete the following summary stats
 
-eip_contributors = eip_commit[eip_commit['github_username'] != ""].groupby('github_username').size().reset_index(name='count')
-eip_contributor_clients = pd.merge(clients,eip_contributors, left_on = 'login', right_on = 'github_username', how = 'inner')
-eip_contributors_clients_agg = eip_contributor_clients.groupby('login').size().reset_index(name = 'count')
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+
+name_analysis = pd.read_csv("Name_Results.csv")
  
 # percent of eip authors who are clients
 
-summary_stats.loc[len(summary_stats)] = ['Percent of EIP Authors that are clients', 
-                                         eip_contributor_clients[eip_contributor_clients['login'].isin(author_ref['github_username'])].groupby('github_username').size().shape[0]
-                                         /
-                                         eip_contributors.shape[0]]
+summary_stats.loc[len(summary_stats)] = ['Percent of EIP Authors that are clients', name_analysis.loc[8,"Result"]/name_analysis.loc[1,"Result"]]
 
 
 # percent of eip contrubutors who are clients
 
-summary_stats.loc[len(summary_stats)] = ['Percent of EIP Contributors that are clients', eip_contributors_clients_agg.shape[0]
-                                         /
-                                         eip_contributors.shape[0]]
+summary_stats.loc[len(summary_stats)] = ['Percent of EIP Contributors that are clients', name_analysis.loc[7,"Result"]/name_analysis.loc[1,"Result"]]
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Analysis Code/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Summary Stats/")
 summary_stats.to_csv("Summary_Stats.csv")
