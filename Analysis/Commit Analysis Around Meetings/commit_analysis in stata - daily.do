@@ -8,6 +8,7 @@ os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project
 
 commit = pd.read_stata("eip_commit.dta")
 commit = commit[commit['Author'] != 'eth-bot']
+commit['distance'] = (commit['CommitDate'] - commit['MeetingDate']).dt.total_seconds() / (24 * 60 * 60)
 commit['day'] = commit['distance']//1
 daily_commits = commit.groupby(["eip_number","day"])['CommitDate'].count().reset_index()
 daily_commits2 = daily_commits[(daily_commits['day'] >= -30) & (daily_commits['day'] <= 30)]
@@ -28,7 +29,7 @@ daily_commits3 = pd.merge(zero_df,daily_commits2, on = ['eip_number','day'], how
 daily_commits3 = daily_commits3.rename(columns = {'Commits_y':'Commits'})
 daily_commits3['Commits'].fillna(0, inplace = True)
 daily_commits4 = daily_commits3.drop(columns = ['Commits_x', '_merge'])
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/")
 daily_commits4.to_stata("daily_commits.dta")
 end 
 
