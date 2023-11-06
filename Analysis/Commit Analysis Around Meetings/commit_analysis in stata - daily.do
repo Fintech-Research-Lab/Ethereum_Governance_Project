@@ -4,9 +4,10 @@ import pandas as pd
 import os as os
 
 
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data/")
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
-commit = pd.read_stata("Ethereum_Commit.dta")
+commit = pd.read_stata("eip_commit.dta")
+commit = commit[commit['Author'] != 'eth-bot']
 commit['day'] = commit['distance']//1
 daily_commits = commit.groupby(["eip_number","day"])['CommitDate'].count().reset_index()
 daily_commits2 = daily_commits[(daily_commits['day'] >= -30) & (daily_commits['day'] <= 30)]
@@ -27,11 +28,11 @@ daily_commits3 = pd.merge(zero_df,daily_commits2, on = ['eip_number','day'], how
 daily_commits3 = daily_commits3.rename(columns = {'Commits_y':'Commits'})
 daily_commits3['Commits'].fillna(0, inplace = True)
 daily_commits4 = daily_commits3.drop(columns = ['Commits_x', '_merge'])
-
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/")
 daily_commits4.to_stata("daily_commits.dta")
 end 
 
-cd "C:/Users/moazz/Box/Fintech Research Lab/Ethereum Governance Project/Ethereum Project Data/"
+cd "C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/"
 use "daily_commits.dta"
 
 bysort eip_number : gen dy = _n
