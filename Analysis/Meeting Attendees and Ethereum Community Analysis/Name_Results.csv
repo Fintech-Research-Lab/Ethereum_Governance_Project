@@ -1,16 +1,16 @@
-Issue,Result
-Unique Attendees,448
-Unique Authors,703
-Unique Eip Contributors,571
-Unique Client Contributors,1339
-Authors who Attended Meetings,76
-Contributors who Attended Meetings,63
-Clients who Attended Meetings,62
-Authors who are also Contributors,235
-Authors who are also Clients,61
-Client who are also Contributors,94
-Authors who are Clients and also attended meetings,22
-Authors who are Contributors and also attended meetings,43
-Authors who are Clients and Contributors,46
-Contributors who are Clients and also attended meetings,25
-People who did everything,16
+Issue,Result,,,,,,,,
+Unique Attendees,418,,,,,,,,
+Unique Authors,703,,,,,,,,
+Unique Eip Contributors,570,,,,,,,,
+Unique Client Contributors,1337,,,,,,,,
+Authors who Attended Meetings,78,,,,,,,,
+Contributors who Attended Meetings,64,,,,,,,,
+Clients who Attended Meetings,63,,,,,,,,
+Authors who are also Contributors,235,,,,,,,,
+Authors who are also Clients,61,,,,,,,,
+Client who are also Contributors,94,,,,,,,,
+Authors who are Clients and also attended meetings,21,,,,,,,,
+Authors who are Contributors and also attended meetings,45,,,,,,,,106
+Authors who are Clients and Contributors,46,,,,,,,,45
+Contributors who are Clients and also attended meetings,25,,,,,,,,201
+People who did everything,16,,,,,,,,1011

@@ -8,16 +8,17 @@ Created on Sat Sep 30 02:08:12 2023
 import pandas as pd
 import os as os
 from fuzzywuzzy import fuzz
+import numpy as np
 
 
 # Read Data
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 attendees = pd.read_csv("flat_list_meeting_attendees.csv", encoding='latin1')
 
 
 # get author data and remove nan and et al. from the author list
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 cs = pd.read_csv("Ethereum_Cross-sectional_Data.csv")
 author_values = cs.loc[:,'Author1':'Author15'].values.tolist()
 author = set([item for sublist in author_values for item in sublist])
@@ -52,8 +53,10 @@ contributor_unique = pd.DataFrame(contributor_unique, columns = ['full_name'])
 contributor_unique = contributor_unique[contributor_unique['full_name'] != 'eth-bot']
 client_unique = pd.unique(clients ['author'])
 client_unique = pd.DataFrame(client_unique, columns = ['full_name'])
-attendee_unique1 = pd.unique(attendees['full_name'])
-attendee_unique1 = pd.DataFrame(attendee_unique1, columns = ['full_name'])
+np.where(client_unique['full_name'].str.contains('bot'))
+# remove dependabot[bot] and github-actions[bot]
+client_unique = client_unique[(client_unique['full_name'] != 'dependabot[bot]') & (client_unique['full_name'] != 'github-actions[bot]' )]
+
 
 
 # create similarity score within attendees list to remove similar name
@@ -75,7 +78,7 @@ name_to_replace_with = [row[2] for row in high_similarity_score1]
 # manually change the list. This process is better done in a spreadsheet manually
 
 names_to_change = pd.concat([pd.DataFrame(name_to_replace_with),pd.DataFrame(name_to_replace)], axis = 1)
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change.to_csv("names_to_change.csv")
 
 # There was a manual process to map names to replace and names_to_replace_with
@@ -94,56 +97,52 @@ names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(n
 os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change2.to_csv("names_to_change2.csv")
 
+# create second replacement based on manually corrected names between the threshold of 55 to 75
 
-attendee_unique2 = pd.DataFrame(pd.Series(names2).unique(), columns = ['full_name'])
+names_to_change2_mod = pd.read_csv("names_to_change2_post_manual.csv")
+right_names2 = names_to_change2_mod['Names_to_Keep'].tolist()
+wrong_names2 = names_to_change2_mod['Names_to_Replace'].tolist()
+name_dict2 = dict(zip(wrong_names2,right_names2))
+names3 = [name_dict2[name] if name in name_dict2 else name for name in names2]
+sorted_names3 = sorted(names3, key=lambda x: (isinstance(x, str), x))
 
-# the second phase of prunning be based on a lower threshold 55 to 75 and manual checking
+# create a unique list
 
-similarity_score =  []
-names = attendee_unique2['full_name'].tolist()
-for i in range(len(names)):
-               for j in range(i+1,len(names)):
-                   score = fuzz.ratio(names[i],names[j])
-                   similarity_score.append((i,j,names[i],names[j],score))
+unique_attendees_list = set(names3)
+unique_attendeee2 = pd.DataFrame(unique_attendees_list , columns = ['full_name'])
+# manual check and fixing last time without similarity scores
+unique_attendeee2.to_csv("names_to_change3.csv")
 
+# last manual check and last corrections that might were missed in similarity scores
 
+names_to_change3_mod = pd.read_csv("names_to_change3_post_manual.csv")
+right_names3 = names_to_change3_mod['Names_to_Keep'].tolist()
+wrong_names3 = names_to_change3_mod['Names_to_Replace'].tolist()
+name_dict3 = dict(zip(wrong_names3,right_names3))
+names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 
-threshold = 55 # after manually iterating 55seems to be the best second cutoff
+# create a dataframe
 
-high_similarity_score2 = [score for score in similarity_score if score[4] > threshold]
-name_check = [score for score in high_similarity_score2 if (score[4]>54 and score[4]<76)] # to manually check
-name_to_change2 = [[row[i] for i in [2, 3, 4]] for row in name_check]
-names_to_change = pd.DataFrame(name_to_change2)
-names_to_change.to_csv("names_to_change2.csv")
-
-
-# There was a manual process to map names to replace and names_to_replace_with this time on names with similarity score of 55-75
-
-names_to_change_mod = pd.read_csv("names_to_change2_post_manual.csv")
-right_names = names_to_change_mod['Names_to_Keep'].tolist()
-wrong_names = names_to_change_mod['Names_to_Replace'].tolist()
-name_dict = dict(zip(wrong_names,right_names))
-names3 = [name_dict[name] if name in name_dict else name for name in names]
+unique_attendee3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
+unique_attendee4 = unique_attendee3[(pd.notnull(unique_attendee3['full_name'])) & (unique_attendee3['full_name'] != "NONE")]
 
 
-attendee_unique3 = pd.DataFrame(pd.Series(names3).unique(), columns = ['full_name'])
+# create mapping file
+df1 = pd.DataFrame(names, columns=['Original_Name'])
+df2 = pd.DataFrame(names4, columns=['Replace_Name'])
 
-# last manual check
+mapping_file = pd.concat([df1, df2], axis=1)
 
-names_to_change_mod = pd.read_csv("names_to_change3_post_manual.csv")
-right_names = names_to_change_mod['Names_to_Keep'].tolist()
-wrong_names = names_to_change_mod['Names_to_Replace'].tolist()
-name_dict = dict(zip(wrong_names,right_names))
-names4 = [name_dict[name] if name in name_dict else name for name in names]
+# save mapping file
 
-
-attendee_unique4 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
+mapping_file.to_csv("Mapping_File.csv")
 
 
-
+# Now the code will do cross-list check of names with Contributors Client, and Author Lists
 # reassign attendee_unique3 as attendee_unique for further coding
 
-attendee_unique = attendee_unique3
+attendee_unique = unique_attendee4
+attendee_unique.to_csv("Unique_Attendee_List.csv", index = False)
   
 # merge documents to run cross-table similarity score
 
@@ -171,7 +170,7 @@ attendees_author_similar_pairs = [
 
 # no similar names in unreconcilable
 
-author_attendees = attendees_with_author[attendees_with_author['_merge'] == 'both'] # 76 attendees are authors
+author_attendees = attendees_with_author[attendees_with_author['_merge'] == 'both'] # 78 attendees are authors
 
 # run the test with eip_contributors
 
@@ -254,7 +253,7 @@ everyone = pd.merge(attendee_author_and_contributor, client_unique, left_on = 'a
 everyone = everyone.sort_values(['attendee_name','author_name','contributor_name','client_name'], na_position = 'last')
 everyone_dep = everyone.drop(columns = ['merge_att&author','merge_att,author&contributor','_merge'])
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum Governance Project/Analysis Code/Data Fixing Codes/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 everyone_dep.to_csv ("unique_names_allplayers.csv", index = False)
 
 # Result of Analysis
