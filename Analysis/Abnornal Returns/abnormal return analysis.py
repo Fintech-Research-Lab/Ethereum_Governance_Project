@@ -11,87 +11,82 @@ import yfinance as yf
 from datetime import timedelta
 import numpy as np
 import matplotlib.pyplot as plt
+from pytz import timezone
 
 # get startdates of all eips
 
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
-cs = pd.read_stata("Ethereum_Cross-sectional_Data.dta")
-cs_dates = cs[['eip_number','sdate','edate']]
-meta = [606,607,608,609,779,1013,1679,1716,1716,2387]
-end_date = ["2016-02-29","2016-11-18","2016-10-13","2017-10-12",""]
-cs_dates = cs_dates[cs_dates['eip_number'].isin(meta)]
-cs_dates['sdate'] = pd.to_datetime(cs_dates['sdate']).dt.strftime('%Y-%m-%d')
-cs_dates['edate'] = pd.to_datetime(cs_dates['edate']).dt.strftime('%Y-%m-%d')
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
-symbols = ['SPY','ETH-USD']
-data = {}
-start_date = pd.to_datetime(cs_dates['sdate']).min()-timedelta(days = 40)
-
-for symbol in symbols:
-    data[symbol] = yf.Ticker(symbol).history(start=start_date, end=cs['sdate'].max(), auto_adjust=True)
-    
-for symbol in symbols:
-    data[symbol] = data[symbol]['Close']
-
-eth = pd.DataFrame(data['ETH-USD'])
-eth['date'] = eth.index
+# convert eth hourly prices to daily price based on 4:00 PM EST close
+eth_prices = pd.read_csv("eth_prices.csv")
+eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
+eod_eth= eth_prices[eth_prices['START'].dt.hour == 16]
+eod_eth = eod_eth.sort_values('START')
+eod_eth = eod_eth.rename(columns = {'START':"date",'CLOSE':'close'})
+eth = eod_eth[['date','close']]
 eth['date'] = eth['date'].dt.strftime('%Y-%m-%d')
-spy = pd.DataFrame(data['SPY']) 
-spy['date'] = spy.index
-spy['date'] = spy['date'].dt.strftime('%Y-%m-%d')  
 
+
+
+# get spy data from yahoo finance
+
+spy = pd.DataFrame()
+spy = yf.Ticker('spy').history(start=eth['date'].min(), end=eth['date'].max(), auto_adjust=True)
+spy['date'] = spy.index
+spy = spy[['date','Close']]
+spy['date'] = pd.to_datetime(spy['date']).dt.strftime('%Y-%m-%d')
+spy = spy.rename(columns = {'Close':'close'})
+    
+# create event_dates
+
+fork = pd.read_csv("Fork_announcement.csv")
+ann_dates = fork['ann_date']
+ann_dates = pd.to_datetime(ann_dates)  # Convert 'ann_dates' to datetime
+
+
+# merge
 dat = pd.merge(eth,spy, on = 'date', how = 'inner')
-dat = dat.rename(columns = {'Close_x' : 'eth_price', 'Close_y':'spy_price'})
+dat = dat.rename(columns = {'close_x' : 'eth_price', 'close_y':'spy_price'})
+
 
 # calculate returns
 
 dat = dat.sort_values('date')
 dat[['eth_ret', 'spy_ret']] = dat[['eth_price', 'spy_price']].apply(lambda x: x.pct_change())
-dat['eth_cumulative'] = (1 + dat['eth_ret']).cumprod() - 1
-dat['spy_cumulative'] = (1 + dat['spy_ret']).cumprod() - 1
 
 # create abnormal return
 
-dat['AR'] = dat['eth_cumulative'] - dat['spy_cumulative']
+dat['AR'] = dat['eth_ret'] - dat['spy_ret']
 
 
 # create markers 
 
-for eip in cs_dates['eip_number']:
-    dat[f'{eip}_marker'] = None
-
-emarker = pd.DataFrame()   
-for eip in cs_dates['eip_number']:
-        dat[f'{eip}_emarker'] = None
+for fork in fork['release']:
+    dat[f'{fork}_marker'] = None
 
     
 # create event dates
-dates = pd.to_datetime(dat['date'])
+dates = dat['date']
+dates = pd.to_datetime(dates)
 dates_arrays = dates.values
-event_dates = pd.to_datetime(cs_dates['sdate'])
-end_dates = pd.to_datetime(cs_dates['edate'])
-end_dates = end_dates[pd.notnull(end_dates)]
-event_dates_arrays = event_dates.values
-end_dates_arrays = end_dates.values
+ann_dates_arrays = ann_dates.values
 
 # create differences in days
-day_differences = np.subtract.outer(dates_arrays, event_dates_arrays)
+day_differences = np.subtract.outer(dates_arrays, ann_dates_arrays)
 day_differences = (day_differences / np.timedelta64(1, 'D')).astype(int)
 
-# create end day differences
-eday_differences = np.subtract.outer(dates_arrays, end_dates_arrays)
-eday_differences = (eday_differences / np.timedelta64(1, 'D')).astype(int)
 
 # create marker
-mark = (day_differences >= -40) & (day_differences <= 10)
-emark = (eday_differences >= -40) & (eday_differences <= 10)
-dat.iloc[:,8:] = np.where(emark, eday_differences, np.nan)
+day_differences_int = day_differences.astype(int)
+mark = (day_differences_int >= -40) & (day_differences_int <= 10)
+columns_to_update = dat.columns[6:]
+dat[columns_to_update] = np.where(mark, day_differences_int, np.nan)
 
 # generate return matrix from -40 to +10
 
 ret = pd.DataFrame()
 for i in range(-40,11):
-    condition = (dat.iloc[:, 8:] == i)
+    condition = (dat.iloc[:, 6:] == i)
     #ret_mark = np.where(dat.iloc[:,8:] == i,1,0)
     #ret[f'AR{i}'] = dat.loc[np.where(np.any(condition, axis = 1))[0],'AR']
     ret[f'AR{i}'] = np.where(condition.any(axis=1), dat['AR'], np.nan)
@@ -102,12 +97,12 @@ for i in range(-40,11):
 # take average returns for all eips
 
 mean_ret = pd.DataFrame(ret.mean()).transpose()
-lower_5 = ret.quantile(0.05)
-upper_95 = ret.quantile(0.95)
+cumulative_returns = mean_ret.iloc[0,:].cumsum()
+mean_ret = mean_ret.append(cumulative_returns, ignore_index=True)
 
 # plot
 
-row = mean_ret.iloc[0]
+row = mean_ret.iloc[1]
 plt.plot(row, marker = 'o', label = "Mean")
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
