@@ -279,8 +279,11 @@ restore
 // Individual Factors
 // following are ols results probit specifications are in the end
 
-* Finalization
 
+
+
+********************************************************************************
+* Regressions
 
 *success
 eststo clear

@@ -3,8 +3,15 @@ python:
 import pandas as pd
 import os as os
 
+* Define Directory: 
 
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+* Cesare
+direc = "C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/"
+
+* Moazzam
+direc = "C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/"
+
+os.chdir (direc + "Data/Raw Data/")
 
 commit = pd.read_stata("eip_commit.dta")
 commit = commit[commit['Author'] != 'eth-bot']
@@ -29,11 +36,18 @@ daily_commits3 = pd.merge(zero_df,daily_commits2, on = ['eip_number','day'], how
 daily_commits3 = daily_commits3.rename(columns = {'Commits_y':'Commits'})
 daily_commits3['Commits'].fillna(0, inplace = True)
 daily_commits4 = daily_commits3.drop(columns = ['Commits_x', '_merge'])
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/")
+os.chdir(direc + "Analysis/Commit Analysis Around Meetings/")
 daily_commits4.to_stata("daily_commits.dta")
 end 
 
-cd "C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Commit Analysis Around Meetings/"
+* Cesare
+local direc = "C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/"
+
+* Moazzam
+*local direc = "C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/"
+
+
+cd "`direc'Analysis/Commit Analysis Around Meetings/"
 use "daily_commits.dta"
 
 bysort eip_number : gen dy = _n
