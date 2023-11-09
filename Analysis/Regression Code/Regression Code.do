@@ -257,6 +257,15 @@ replace cum_n_imp =0 if n==.
 replace n =0 if n==.
 
 
+* gen percentile of n. 
+foreach var in "" "_final" "_imp" {
+	egen ntot = count(cum_n`var')  
+	gen np`var' = n/(ntot-1) if cum_n`var'~=.
+	drop ntot
+	}
+	
+label var np "% of Authors"
+
 * plot lorenz curve
 twoway line cum_n n ,  ytitle("% of EIPs") || line cum_n_final n ,  ytitle("% of EIPs") || ///
     line cum_n_imp n ,  ytitle("% of EIPs") ///
@@ -264,9 +273,22 @@ twoway line cum_n n ,  ytitle("% of EIPs") || line cum_n_final n ,  ytitle("% of
 	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1))
 graph export "analysis\results\Figures\neip_by_author.png", as(png) replace
 
+
+* plot lorenz curve percentile
+twoway line cum_n np ,  ytitle("% of EIPs") || line cum_n_final np_final ,  ytitle("% of EIPs") || ///
+    line cum_n_imp np_imp ,  ytitle("% of EIPs") xtitle("% of Authors") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1))
+graph export "analysis\results\Figures\npeip_by_author.png", as(png) replace
+
+
+
+
+
 erase temp_final.dta
 erase temp3.dta
 erase temp.dta
+erase temp_imp.dta
 
 *% top 10 authors  
 di cum_n[10]
