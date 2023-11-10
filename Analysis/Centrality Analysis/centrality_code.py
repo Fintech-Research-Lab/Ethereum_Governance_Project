@@ -52,7 +52,10 @@ def plot_bc_graph(df, G, centrality, typ):
     nx.draw_networkx_labels(G,  pos , aut_id_names, font_size=10, font_weight='bold')
 #    plt.title('Betweenness Centrality of Ethereum EIP Co-authorship Graph', fontsize=25, fontweight='bold')
     plt.axis('off')
-    plt.savefig('Analysis/Centrality Analysis/eip_' + typ + '.png')
+    
+    #We remove the surrounding box.
+    plt.box(False)
+    plt.savefig('Analysis/Centrality Analysis/eip_' + typ + '.png', bbox_inches="tight")
     plt.show()
 
 
