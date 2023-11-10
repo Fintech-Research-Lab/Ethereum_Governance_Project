@@ -28,6 +28,8 @@ eth['date'] = eth['date'].dt.strftime('%Y-%m-%d')
 
 
 
+
+
 # get spy data from yahoo finance
 
 spy = pd.DataFrame()
@@ -36,7 +38,25 @@ spy['date'] = spy.index
 spy = spy[['date','Close']]
 spy['date'] = pd.to_datetime(spy['date']).dt.strftime('%Y-%m-%d')
 spy = spy.rename(columns = {'Close':'close'})
-    
+
+# Fix missing dates 
+
+missing = spy[~spy['date'].isin(eth['date'])]
+missing['date'] = pd.to_datetime(missing['date']).dt.strftime('%Y-%m-%d') 
+eth_prices['START_DATE'] = pd.to_datetime(eth_prices['START_DATE']).dt.strftime('%Y-%m-%d') 
+missing_dates_list = missing['date'].tolist()
+eth_dates_list = eth_prices['START_DATE'].tolist()
+fill = eth_prices[eth_prices['START_DATE'].isin(missing_dates_list)]
+fill['START_DATE'] = pd.to_datetime(fill['START_DATE'])
+fill = fill.sort_values('START')
+close = fill[fill['START'].dt.hour < 13].groupby('START_DATE').agg({'START': 'last', 'CLOSE': 'last'}).reset_index()
+close = close[['START_DATE','CLOSE']]
+close = close.rename(columns = {'START_DATE' : 'date','CLOSE' : 'close'})
+eth = eth.append(close)
+eth['date'] = pd.to_datetime(eth['date']).dt.strftime('%Y-%m-%d')
+eth = eth.sort_values('date')
+
+
 # create event_dates  from forks
 
 fork = pd.read_csv("Fork_announcement.csv")
@@ -91,23 +111,34 @@ mark = (day_differences > -41) & (day_differences < 11)
 columns_to_update = dat.columns[6:] 
 dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 
-# generate return matrix from -40 to +10 for all forks
+# generate abnormal return matrix from -40 to +10 for all forks
 ret = pd.DataFrame()
 for frk in dat.columns[6:]:
-    for i in range(-40,11):
-        condition = (dat[frk] == i)
-        ret[f'AR{i}_{frk}'] = np.where(condition, dat['AR'], np.nan)
+    conditions = [(dat[frk] == i) for i in range(-40, 11)]
+    columns = [f'AR{i}_{frk}' for i in range(-40, 11)]
+    ret = pd.concat([ret, pd.DataFrame({col: np.where(cond, dat['AR'], np.nan) for col, cond in zip(columns, conditions)})], axis=1)
 
              
 
-# take average returns for all forks
+# take average abnormal returns for all forks
 
 mean_ret = pd.DataFrame(ret.mean()).transpose()
-cumulative_returns = (1+mean_ret.iloc[0,:]).cumprod() - 1
-mean_ret = mean_ret.append(cumulative_returns, ignore_index=True)
+
+for frk in fork['release'][1:]:
+    columns = mean_ret[mean_ret.columns[mean_ret.columns.str.contains(frk)]].iloc[0].dropna()
+    columns = columns.index
+    if not mean_ret.loc[0, columns].isnull().all():
+        cumulative_returns = (1 + mean_ret.loc[0,columns]).cumprod() - 1
+        mean_ret.loc[1, columns] = cumulative_returns.values
+
+
+
+    
 # remove null
 mean_ret_notnull = mean_ret.iloc[:2].dropna(how = 'all', axis = 1)
 
+# summary stats 
+describe = mean_ret_notnull.iloc[1].filter(like="-40").describe()
 
 # Assuming 'frk' contains at least 16 items for the 4x4 grid
 frk = fork['release'][1:]
@@ -145,7 +176,3 @@ plt.show()
 
 
 
-
-
-    
-    
