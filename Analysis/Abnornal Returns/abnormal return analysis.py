@@ -8,19 +8,19 @@ Created on Mon Nov  6 13:41:38 2023
 import pandas as pd
 import os as os
 import yfinance as yf
-from datetime import timedelta
 import numpy as np
 import matplotlib.pyplot as plt
-from pytz import timezone
 
-# get startdates of all eips
 
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+# get eth price data
+
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
 eth_prices = pd.read_csv("eth_prices.csv")
 eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
-eod_eth= eth_prices[eth_prices['START'].dt.hour == 16]
+eod_eth= eth_prices[eth_prices['START'].dt.hour == 15]
+np.where(pd.isnull(eod_eth['CLOSE'])) # no missing close price
 eod_eth = eod_eth.sort_values('START')
 eod_eth = eod_eth.rename(columns = {'START':"date",'CLOSE':'close'})
 eth = eod_eth[['date','close']]
@@ -37,11 +37,10 @@ spy = spy[['date','Close']]
 spy['date'] = pd.to_datetime(spy['date']).dt.strftime('%Y-%m-%d')
 spy = spy.rename(columns = {'Close':'close'})
     
-# create event_dates
+# create event_dates  from forks
 
 fork = pd.read_csv("Fork_announcement.csv")
 ann_dates = fork['ann_date']
-ann_dates = pd.to_datetime(ann_dates)  # Convert 'ann_dates' to datetime
 
 
 # merge
@@ -59,58 +58,90 @@ dat[['eth_ret', 'spy_ret']] = dat[['eth_price', 'spy_price']].apply(lambda x: x.
 dat['AR'] = dat['eth_ret'] - dat['spy_ret']
 
 
-# create markers 
+# create columns ind dat to place -40 to 10 markers on dates 
 
-for fork in fork['release']:
-    dat[f'{fork}_marker'] = None
+for frk in fork['release']:
+    dat[f'{frk}_marker'] = None
 
     
-# create event dates
+# generate differences in days from the announcement days
+
 dates = dat['date']
 dates = pd.to_datetime(dates)
+dates = dates.sort_values()
 dates_arrays = dates.values
+dates2 = np.array(dates_arrays, dtype='datetime64[D]')
+
+ann_dates = pd.to_datetime(ann_dates)  # Convert 'ann_dates' to datetime
+ann_dates = ann_dates.sort_values()
 ann_dates_arrays = ann_dates.values
+ann_dates2 = np.array(ann_dates_arrays, dtype='datetime64[D]')
 
 # create differences in days
-day_differences = np.subtract.outer(dates_arrays, ann_dates_arrays)
-day_differences = (day_differences / np.timedelta64(1, 'D')).astype(int)
+day_differences = np.busday_count(ann_dates2,dates2[:, None])
 
+# insert date difference markers in dat
 
-# create marker
 day_differences_int = day_differences.astype(int)
-mark = (day_differences_int >= -40) & (day_differences_int <= 10)
+mark = (day_differences_int > -41) & (day_differences_int < 11)
 columns_to_update = dat.columns[6:]
 dat[columns_to_update] = np.where(mark, day_differences_int, np.nan)
 
-# generate return matrix from -40 to +10
-
+# generate return matrix from -40 to +10 for all forks
 ret = pd.DataFrame()
-for i in range(-40,11):
-    condition = (dat.iloc[:, 6:] == i)
-    #ret_mark = np.where(dat.iloc[:,8:] == i,1,0)
-    #ret[f'AR{i}'] = dat.loc[np.where(np.any(condition, axis = 1))[0],'AR']
-    ret[f'AR{i}'] = np.where(condition.any(axis=1), dat['AR'], np.nan)
-    #ret[f'AR{i}'] = (condition).astype(int).any(axis=1).astype(int)
-    
+for frk in dat.columns[6:]:
+    for i in range(-40,11):
+        condition = (dat[frk] == i)
+        ret[f'AR{i}_{frk}'] = np.where(condition, dat['AR'], np.nan)
 
+             
 
-# take average returns for all eips
+# take average returns for all forks
 
 mean_ret = pd.DataFrame(ret.mean()).transpose()
-cumulative_returns = mean_ret.iloc[0,:].cumsum()
+cumulative_returns = (1+mean_ret.iloc[0,:]).cumprod() - 1
 mean_ret = mean_ret.append(cumulative_returns, ignore_index=True)
+# remove null
+mean_ret_notnull = mean_ret.iloc[:2].dropna(how = 'all', axis = 1)
 
-# plot
 
-row = mean_ret.iloc[1]
-plt.plot(row, marker = 'o', label = "Mean")
-#plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
-#plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
-plt.xlabel('Days to Start Date')
-plt.ylabel('Abnormal Returns')
-plt.title("Abnormal Returns Start Dates")
-labels = [column.replace('AR','') for column in mean_ret.columns]
-plt.xticks(range(len(labels)), labels, rotation=0, fontsize = 4)
-plt.axvline(x=mean_ret.columns.get_loc('AR0'), color='red', linestyle='--', label='Start Date')
+# Assuming 'frk' contains at least 16 items for the 4x4 grid
+frk = fork['release'][1:]
+
+fig, axs = plt.subplots(4, 4, figsize=(15, 15))  # Creating a 4x4 grid of subplots
+
+for i, frk_word in enumerate(frk):
+    row = i // 4  # Row index for subplot
+    col = i % 4   # Column index for subplot
+
+    selected_columns = [col for col in mean_ret_notnull.columns if f'_{frk_word}_' in col]
+    
+    if not selected_columns:  # Skip if selected_columns is empty
+        continue
+    
+    row_data = mean_ret_notnull.iloc[1][selected_columns]
+    
+    x_axis_values = []
+    for column in selected_columns:
+        numeric_part = ''.join(filter(lambda x: x.isdigit() or x == '-', column.split('_')[0]))
+        x_axis_values.append(numeric_part)
+    
+    # Plotting in each subplot
+    axs[row, col].plot(x_axis_values, row_data, marker='o', label="Mean")
+    axs[row, col].set_xlabel('Days to Release Date')
+    axs[row, col].set_ylabel('Abnormal Returns')
+    axs[row, col].set_title(f"Abnormal Returns - {frk_word}")
+
+    if '0' in x_axis_values:
+        zero_index = x_axis_values.index('0')
+        axs[row, col].axvline(x=zero_index, color='red', linestyle='--', label='x=0')
+
+plt.tight_layout()  # Automatically adjust subplot parameters to give specified padding
 plt.show()
+
+
+
+
+
+    
     
