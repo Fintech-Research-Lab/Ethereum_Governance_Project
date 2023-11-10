@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 # get eth price data
 
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
 eth_prices = pd.read_csv("eth_prices.csv")
@@ -58,10 +58,6 @@ dat[['eth_ret', 'spy_ret']] = dat[['eth_price', 'spy_price']].apply(lambda x: x.
 dat['AR'] = dat['eth_ret'] - dat['spy_ret']
 
 
-# create columns ind dat to place -40 to 10 markers on dates 
-
-for frk in fork['release']:
-    dat[f'{frk}_marker'] = None
 
     
 # generate differences in days from the announcement days
@@ -70,22 +66,30 @@ dates = dat['date']
 dates = pd.to_datetime(dates)
 dates = dates.sort_values()
 dates_arrays = dates.values
-dates2 = np.array(dates_arrays, dtype='datetime64[D]')
 
 ann_dates = pd.to_datetime(ann_dates)  # Convert 'ann_dates' to datetime
 ann_dates = ann_dates.sort_values()
-ann_dates_arrays = ann_dates.values
-ann_dates2 = np.array(ann_dates_arrays, dtype='datetime64[D]')
 
-# create differences in days
-day_differences = np.busday_count(ann_dates2,dates2[:, None])
+# Find indices in dates where ann_dates and dates are common
+indices = np.full((len(ann_dates),), fill_value=np.nan, dtype=np.float64)
+common_dates_mask = np.isin(ann_dates, dates)
+indices[common_dates_mask] = np.searchsorted(dates, ann_dates[common_dates_mask], side='right')
+
+
+# Create a 1877x 15 matrix of days difference between announcement date and trading dates
+day_differences = np.arange(len(dates)) - indices[:, None]
+day_differences = day_differences.reshape(len(ann_dates), -1).T
 
 # insert date difference markers in dat
 
-day_differences_int = day_differences.astype(int)
-mark = (day_differences_int > -41) & (day_differences_int < 11)
-columns_to_update = dat.columns[6:]
-dat[columns_to_update] = np.where(mark, day_differences_int, np.nan)
+# create columns ind dat to place -40 to 10 markers on dates 
+for frk in fork['release']:
+    dat[f'{frk}_marker'] = None
+
+# filter day differences between 40 and 10 and then add them into dat at the right place
+mark = (day_differences > -41) & (day_differences < 11) 
+columns_to_update = dat.columns[6:] 
+dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 
 # generate return matrix from -40 to +10 for all forks
 ret = pd.DataFrame()
