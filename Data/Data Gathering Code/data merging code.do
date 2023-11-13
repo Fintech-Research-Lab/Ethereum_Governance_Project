@@ -74,7 +74,7 @@ use "Ethereum_Cross-sectional_Data.dta"
 
 forvalues id = 1/15{
 rename author`id'_id author_id
-merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle1_company3 jobtitle1_company4 jobtitle1_pastcompany1 jobtitle1_pastcompany2 jobtitle1_pastcompany3 jobtitle1_pastcompany4 jobtitle1_pastcompany5 jobtitle1_pastcompany6 jobtitle1_pastcompany7 jobtitle1_pastcompany8 jobtitle1_pastcompany9 jobtitle1_pastcompany10)
+merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 company5 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle1_company3 jobtitle1_company4 jobtitle1_company5 jobtitle1_pastcompany1 jobtitle1_pastcompany2 jobtitle1_pastcompany3 jobtitle1_pastcompany4 jobtitle1_pastcompany5 jobtitle1_pastcompany6 jobtitle1_pastcompany7 jobtitle1_pastcompany8 jobtitle1_pastcompany9 jobtitle1_pastcompany10)
 drop if _merge == 2
 drop _merge
 rename author_id author`id'_id
@@ -82,6 +82,7 @@ rename company1 author`id'_company1
 rename company2 author`id'_company2
 rename company3 author`id'_company3
 rename company4 author`id'_company4
+rename company5 author`id'_company5
 rename pastcompany1 author`id'_pastcompany1
 rename pastcompany2 author`id'_pastcompany2
 rename pastcompany3 author`id'_pastcompany3
@@ -98,6 +99,7 @@ rename jobtitle3_company1 author`id'_jobtitle3_company1
 rename jobtitle1_company2 author`id'_jobtitle1_company2
 rename jobtitle1_company3 author`id'_jobtitle1_company3
 rename jobtitle1_company4 author`id'_jobtitle1_company4
+rename jobtitle1_company5 author`id'_jobtitle1_company5
 rename jobtitle1_pastcompany1 author`id'_jobtitle1_pastcompany1
 rename jobtitle1_pastcompany2 author`id'_jobtitle1_pastcompany2
 rename jobtitle1_pastcompany3 author`id'_jobtitle1_pastcompany3
@@ -140,12 +142,31 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 // Add betweenness_centrality measure for each EIPs
 
 clear
-import delimited "betweenness.csv"
-save "betweenness.dta", replace
+cd "C:\Users\khojama\Box\Fintech Research Lab\\Ethereum_Governance_Project\Analysis\Centrality Analysis\"
+import delimited "centrality_all'.csv"
+rename id author_id
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
+save "centrality.dta", replace
 
 use "Ethereum_Cross-sectional_Data.dta"
-merge 1:1 eip_number using "betweenness.dta", keepusing(betweenness_centrality)
-save "Ethereum_Cross-sectional_Data.dta", replace
+forvalues id = 1/15{
+rename author`id'_id author_id
+merge m:1 author_id using "centrality.dta",keepusing(between close eigen)
+drop if _merge == 2
+drop _merge
+rename author_id author`id'_id
+rename between author`id'_betweenness
+rename close author`id'_closeness
+rename eigen author`id'_eigen_value_centrality
+}
+
+egen betweenness_centrality = rowmax(author1_betweenness author2_betweenness author3_betweenness author4_betweenness author5_betweenness author6_betweenness author7_betweenness author8_betweenness author9_betweenness author10_betweenness author11_betweenness author12_betweenness author13_betweenness author14_betweenness author15_betweenness)
+
+egen closeness_centrality = rowmax(author1_closeness author2_closeness author3_closeness author4_closeness author5_closeness author6_closeness author7_closeness author8_closeness author9_closeness author10_closeness author11_closeness author12_closeness author13_closeness author14_closeness author15_closeness)
+
+egen eigen_value_centrality = rowmax(author1_eigen_value_centrality author2_eigen_value_centrality author3_eigen_value_centrality author4_eigen_value_centrality author5_eigen_value_centrality author6_eigen_value_centrality author7_eigen_value_centrality author8_eigen_value_centrality author9_eigen_value_centrality author10_eigen_value_centrality author11_eigen_value_centrality author12_eigen_value_centrality author13_eigen_value_centrality author14_eigen_value_centrality author15_eigen_value_centrality)
+
+save "Ethereum_Cross-sectional_Data.dta",replace
 
 // add end dates of all EIPs that have been finalized
 clear
@@ -156,7 +177,6 @@ format edate %td
 save "finaleip_enddates.dta", replace
 
 use "Ethereum_Cross-sectional_Data" , clear
-drop _merge
 merge 1:1 eip_number using "finaleip_enddates.dta", keepusing(edate)
 drop if _merge == 2
 drop _merge
@@ -202,7 +222,8 @@ move total_commit author1
 move author_commit author1
 move eip_contributors author1
 move betweenness_centrality author1
-
+move closeness_centrality author1
+move eigen_value_centrality author1
 
 save "Ethereum_Cross-sectional_Data.dta", replace
 
