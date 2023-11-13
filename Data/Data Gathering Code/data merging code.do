@@ -4,7 +4,7 @@
 
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
 clear
-import delimited "Ethereum_Cross-Sectional_Data.csv"
+import delimited "Ethereum_Cross-Sectional_Data_beg.csv"
 
 
 // save this imported file as a stata file
@@ -216,6 +216,8 @@ local files : dir "`path'" files "*.dta" // Get the list of .dta files in the di
 di `files'
 foreach file of local files {
     use "`file'", clear
+	// remove dependabot[bot] and github-actions[bot]
+	drop if login == "dependabot[bot]"|login == "github-actions[bot]"
 	local newvar = substr("`file'", 8, strlen("`file'")-11)
 	di "`newvar'"
     collapse (count) date, by(login)
@@ -251,8 +253,8 @@ foreach var of varlist(besu_commits-nethermind_commits){
 }
 save "Ethereum_Cross-sectional_Data.dta", replace
 
-outsheet using "Ethereum_Cross-sectional_Data_output.csv", comma nolabel
+//outsheet using "Ethereum_Cross-sectional_Data_output.csv", comma nolabel
 
-
+ 
 
 
