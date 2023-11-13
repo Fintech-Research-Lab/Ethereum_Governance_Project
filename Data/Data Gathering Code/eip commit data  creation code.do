@@ -1,8 +1,8 @@
 // first we import updated commit file which contains the raw data of commitment and convert it into an stata file
 
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
+cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
 clear
- import excel "updated_commits.xlsx", sheet("Sheet 1") firstrow
+ import excel "eip_commit_beg.xlsx", sheet("Sheet1") firstrow
  rename EIP eip_number
  save "eip_commit_wip.dta", replace
  
