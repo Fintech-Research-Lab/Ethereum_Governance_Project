@@ -67,7 +67,8 @@ def rearrange_authors(row):
 # Apply the rearrange_authors function to each row
 dat_rearranged = dat.apply(rearrange_authors, axis=1)
 dat_rearranged.columns =  ["Author1","Author2","Author3","Author4","Author5","Author6","Author7","Author8","Author9","Author10","Author11","Author12","Author13","Author14", "Author15"]
-dat = pd.concat([dat.iloc[:,0:3],dat_rearranged], axis = 1)
+dat = dat.loc[:,['Number', 'Title', 'Author', 'Status']]
+dat = pd.concat([dat,dat_rearranged], axis = 1)
 
 # remove authors that are modified
 
@@ -84,7 +85,11 @@ for i in range(1, 16):
 # rename Number to eip_number
 
 dat = dat.rename(columns = {'Number' : 'eip_number'})    
+
+# changing status of eip 1283 to stagnant after further investigation
+
+dat.loc[dat['eip_number']==1283,'Status'] = 'Stagnant'
  
 # save the Cross Sectional and Author files
-dat.to_csv("Ethereum_Cross-sectional_Data.csv", encoding='utf-8', index = False)
+dat.to_csv("Ethereum_Cross-sectional_Data_beg.csv", encoding='utf-8', index = False)
 new_author_in_author.to_csv("unique_author_names_with_id.csv") # saving new author list after modifications
