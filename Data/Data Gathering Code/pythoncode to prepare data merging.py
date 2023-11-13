@@ -56,7 +56,7 @@ def rearrange_authors(row):
     seen_authors = set()
     rearranged_authors = []
     
-    for col in row.index[3:]:
+    for col in row.index[4:]:
         author = row[col]
         if author not in seen_authors:
             rearranged_authors.append(author)
@@ -87,4 +87,4 @@ dat = dat.rename(columns = {'Number' : 'eip_number'})
  
 # save the Cross Sectional and Author files
 dat.to_csv("Ethereum_Cross-sectional_Data.csv", encoding='utf-8', index = False)
-new_author_in_author.to_csv("unique_author_names_with_id") # saving new author list after modifications
+new_author_in_author.to_csv("unique_author_names_with_id.csv") # saving new author list after modifications
