@@ -145,7 +145,7 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 
 clear
 cd "C:\Users\khojama\Box\Fintech Research Lab\\Ethereum_Governance_Project\Analysis\Centrality Analysis\"
-import delimited "centrality_all'.csv"
+import delimited "centrality_all.csv"
 rename id author_id
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
 save "centrality.dta", replace
