@@ -2,18 +2,20 @@
 
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
 clear
- import excel "updated_commits.xlsx", sheet("Sheet 1") firstrow
+ import excel "eip_commit_beg.xlsx", sheet("Sheet1") firstrow
  rename EIP eip_number
  save "eip_commit_wip.dta", replace
  
- // import unique author ids with client information file 
+ // import unique author ids with client information file
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\" 
   import delimited "unique_author_names_with_id", clear
   save "author.dta", replace
   
   // merge commit data with authors using author_id
+  cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\Eip Commit Data\"
   use "eip_commit_wip.dta", clear
   rename Author_Id author_id
-merge m:1 author_id using "author.dta"
+merge m:1 author_id using "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\author.dta"
 drop if _merge == 2 // remove authors that did not add any 
 
 // create a flag whether the commit author is an EIP author. If the commit author does not exist in our author list then we assume that commit author is not

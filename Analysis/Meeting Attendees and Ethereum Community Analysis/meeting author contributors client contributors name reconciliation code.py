@@ -57,7 +57,7 @@ np.where(client_unique['full_name'].str.contains('bot'))
 # remove dependabot[bot] and github-actions[bot]
 client_unique = client_unique[(client_unique['full_name'] != 'dependabot[bot]') & (client_unique['full_name'] != 'github-actions[bot]' )]
 
-
+## The following is one time code to clean data to find unique attendees names
 
 # create similarity score within attendees list to remove similar name
 
@@ -94,7 +94,7 @@ high_similarity_score2 = [score for score in similarity_score if score[4] > 54 a
 name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change2.to_csv("names_to_change2.csv")
 
 # create second replacement based on manually corrected names between the threshold of 55 to 75
@@ -143,8 +143,14 @@ mapping_file.to_csv("Mapping_File.csv")
 
 attendee_unique = unique_attendee4
 attendee_unique.to_csv("Unique_Attendee_List.csv", index = False)
+
+
+## Run this part of the code once you have unique attendees, authors, contributors and clients
   
 # merge documents to run cross-table similarity score
+
+attendee_unique = pd.read_csv("Unique_Attendee_List.csv")
+attendee_unique = attendee_unique.rename(columns = {'attendee_name' : 'full_name'})
 
 attendees_with_author = pd.merge(attendee_unique,author_unique, on = 'full_name', how = 'outer', indicator = True) 
 unreconciled_attendees_with_author = attendees_with_author[(attendees_with_author['_merge'] == 'left_only') | (attendees_with_author['_merge'] == 'right_only')]
@@ -253,7 +259,7 @@ everyone = pd.merge(attendee_author_and_contributor, client_unique, left_on = 'a
 everyone = everyone.sort_values(['attendee_name','author_name','contributor_name','client_name'], na_position = 'last')
 everyone_dep = everyone.drop(columns = ['merge_att&author','merge_att,author&contributor','_merge'])
 
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 everyone_dep.to_csv ("unique_names_allplayers.csv", index = False)
 
 # Result of Analysis
