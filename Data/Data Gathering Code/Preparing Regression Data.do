@@ -10,7 +10,7 @@ import pandas as pd
 
 os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 
-linkedin = pd.read_stata("linkedin_Data.dta")
+linkedin = pd.read_csv("linkedin_Data.csv")
 top_10_companies = linkedin[linkedin['company1'] != ""].groupby('company1').size().sort_values(ascending=False).head(10).reset_index()
 
 cs = pd.read_stata("Ethereum_Cross-sectional_Data.dta")
