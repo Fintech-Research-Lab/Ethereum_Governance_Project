@@ -71,6 +71,7 @@ gen log_gh = log(1+gh_follower)
 gen tf_scale = tw_follower/1000 
 
 
+erase "stata_data_with_dummies.xlsx"
 save "Ethereum_Cross-sectional_Data", replace
 
 
