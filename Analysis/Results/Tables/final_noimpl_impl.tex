@@ -1,0 +1,49 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{8}{c}}
+\hline\hline
+                                   &\multicolumn{4}{c}{Finalized ERC EIP}                                                  &\multicolumn{4}{c}{Implemented Core EIP}                                               \\\cmidrule(lr){2-5}\cmidrule(lr){6-9}
+                                   &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         &\multicolumn{1}{c}{(7)}         &\multicolumn{1}{c}{(8)}         \\
+                                   &   Finalized         &   Finalized         &   Finalized         &   Finalized         & Implemented         & Implemented         & Implemented         & Implemented         \\
+\hline
+GitHub Followers (log)             &      1.2913\sym{***}&                     &                     &                     &      1.1277         &                     &                     &                     \\
+                                   &      (2.83)         &                     &                     &                     &      (0.99)         &                     &                     &                     \\
+[1em]
+Twitter Followers (log)            &      1.1555\sym{*}  &                     &                     &                     &      1.1816\sym{**} &                     &                     &                     \\
+                                   &      (1.85)         &                     &                     &                     &      (2.27)         &                     &                     &                     \\
+[1em]
+Number of EIP Authors              &                     &      1.4494\sym{***}&                     &                     &                     &      1.8964\sym{***}&                     &                     \\
+                                   &                     &      (3.30)         &                     &                     &                     &      (2.71)         &                     &                     \\
+[1em]
+EIP Contributors                   &                     &      2.6278\sym{***}&                     &                     &                     &      1.7650\sym{**} &                     &                     \\
+                                   &                     &      (4.39)         &                     &                     &                     &      (2.21)         &                     &                     \\
+[1em]
+Betweenness Centrality             &                     &                     &  1.5868e+36\sym{**} &                     &                     &                     &  3.2918e+13\sym{*}  &                     \\
+                                   &                     &                     &      (2.40)         &                     &                     &                     &      (1.76)         &                     \\
+[1em]
+EIP Author also Client Dev         &                     &                     &      1.7804         &                     &                     &                     &      1.5954         &                     \\
+                                   &                     &                     &      (0.97)         &                     &                     &                     &      (0.82)         &                     \\
+[1em]
+EIP Author Commits                 &                     &                     &      1.5003\sym{***}&                     &                     &                     &      1.1758\sym{***}&                     \\
+                                   &                     &                     &      (5.24)         &                     &                     &                     &      (2.66)         &                     \\
+[1em]
+Social Influence Index (PCA)       &                     &                     &                     &      1.0306         &                     &                     &                     &      2.0397\sym{**} \\
+                                   &                     &                     &                     &      (0.12)         &                     &                     &                     &      (2.42)         \\
+[1em]
+Engagement Index (PCA)             &                     &                     &                     &      5.6157\sym{***}&                     &                     &                     &      2.3241\sym{***}\\
+                                   &                     &                     &                     &      (5.72)         &                     &                     &                     &      (3.22)         \\
+[1em]
+Skill Index (PCA)                  &                     &                     &                     &      5.1900\sym{***}&                     &                     &                     &      0.8685         \\
+                                   &                     &                     &                     &      (4.35)         &                     &                     &                     &     (-0.47)         \\
+[1em]
+Category FE                        &         Yes         &         Yes         &         Yes         &         Yes         &          No         &          No         &          No         &          No         \\
+[1em]
+Company FE                         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+Year FE                            &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
+\hline
+Observations                       &         236         &         236         &         236         &         236         &         176         &         176         &         176         &         176         \\
+Adjusted \(R^{2}\)                 &                     &                     &                     &                     &                     &                     &                     &                     \\
+\hline\hline
+\end{tabular}
+}

@@ -22,6 +22,8 @@ graph set window fontface "Times New Roman"
 use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
 
 
+drop if Category =="Meta" | Category == "Informational" 
+
 // Create labels
 label var log_tw "Twitter Followers (log)"
 label var log_gh "GitHub Followers (log)"
@@ -47,7 +49,7 @@ label var SpruceSystemsInc_dummy "Spruce Systems"
 label var ChainSafeSystems_dummy "Chain Safe Systems"
 label var Polytrade_dummy "Polytrade"
 label var Google_dummy "Google"
-label var success "Finalized EIP"
+label var success "Finalized"
 label var implementation "Implemented EIP"
 label var time_to_final "Time from EIP Start to Finalization"
 	
@@ -80,12 +82,11 @@ label var pca_skill "Skill Index (PCA)"
 gen implemented = implementation 
 replace implemented = . if (status =="Draft" |  status =="Final"  | ///
 	status =="Last Call" |   status =="Living" |  status =="Review" ) & implementation ~=1
-
+label var implemented "Implemented"
 
 gen time_start_today = date("june 21, 2023", "MDY") - dofc(sdate)
 
 gen year = year(dofc(sdate))
-
 
 gen success2 = "Finalized" if status =="Final"
 replace success2 = "In Progress" if status =="Draft" | status =="Review" |  status =="Last Call" 
@@ -106,14 +107,166 @@ esttab using "analysis\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.
 	tex replace label nonumbers alignment(rrrrrrrr) noobs
 
 
+	
+********************************************************************************
+* Stats on Success
+
+generate order =4 if status=="Final"
+replace order = 5 if status=="Withdrawn"
+replace order = 6 if status=="Stagnant"
+replace order = 1 if status=="Draft"
+replace order = 2 if status=="Review"
+replace order = 3 if status=="Last Call"
+
+
+graph pie, over(status) sort(order) plabel(_all percent , format(%9.1f) color(black))  pie(4, explode) plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\success.png", as(png) replace
+
+
+
+
+********************************************************************************
+* Regressions
+
+*success
+eststo clear
+eststo : logit success log_gh log_tw  i.category_encoded *_dummy i.year , robust or
+eststo : logit success n_author eip_contributors  i.category_encoded *_dummy  i.year, robust or
+eststo : logit success between client_commits_dum author_commit  i.category_encoded *_dummy  i.year, robust or
+eststo : logit success pca_social pca_author pca_skill i.category_encoded *_dummy i.year, robust or
+esttab using analysis\Results\Tables\final_all.tex , eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy" "Year FE = *year") 
+
+eststo clear
+eststo res: logit success pca_social pca_author pca_skill i.category_encoded  i.year,  or
+eststo full: logit success pca_social pca_author pca_skill i.category_encoded *_dummy i.year,  or
+test ConsenSys_dummy StarkWare_dummy Nethermind_dummy Coinbase_dummy BraveSoftware_dummy SpruceSystemsInc_dummy ChainSafeSystems_dummy EthereumNameService_dummy Polytrade_dummy Google_dummy	
+lrtest full res
+
+
+	eststo : logit success log_gh log_tw n_author eip_contributors between client_commits_dum author_commit  i.category_encoded *_dummy  i.year, robust or
+	
+* EIP SUCCESS NO IMPL/ IMPL
+	
+
+*success
+eststo clear
+eststo : logit success log_gh log_tw  i.category_encoded *_dummy  i.year if implementation ==., robust or
+eststo : logit success n_author eip_contributors  i.category_encoded *_dummy   i.year if implementation ==., robust or
+eststo : logit success between client_commits_dum author_commit  i.category_encoded *_dummy  i.year  if implementation ==., robust or
+eststo : logit success pca_social pca_author pca_skill i.category_encoded *_dummy  i.year if implementation ==., robust or
+eststo : logit implemented log_gh log_tw *_dummy  i.year , robust or
+eststo : logit implemented  n_author eip_contributors  *_dummy  i.year , robust or
+eststo : logit implemented between  client_commits_dum author_commit   *_dummy i.year , robust 
+eststo : logit implemented  pca_social pca_author pca_skill  *_dummy i.year , robust or
+
+
+esttab using analysis\Results\Tables\final_noimpl_impl.tex ,  eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = *_dummy" "Year FE = *year") ///
+	mgroups("Finalized ERC EIP" "Implemented Core EIP", pattern(1 0 0 0 1 0 0 0 ) prefix(\multicolumn{@span}{c}{) ///
+	suffix(}) span erepeat(\cmidrule(lr){@span})) 
+	
+	
+	
+* implemented EIP
+
+eststo clear
+eststo : logit implemented log_gh log_tw *_dummy , robust or
+eststo : logit implemented  n_author eip_contributors  *_dummy , robust or
+eststo : logit implemented between  client_commits_dum author_commit   *_dummy, robust 
+eststo : logit implemented  pca_social pca_author pca_skill  *_dummy, robust or
+esttab using analysis\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(10) ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant  eform ///
+	indicate("Company FE = *_dummy") 
+
+	
+	
+********************************************************************************
+* Concentration of EIP Development 
+* Company Involvment
+
+preserve 
+
+keep eip_number author*id *company*
+drop *pastcompany* *jobtitle*
+
+tostring author*_company*, replace
+
+reshape long author@_id author@_company1 author@_company2 author@_company3 author@_company4 author@_company5, i(eip_number) j(id) string
+drop if author_id==.
+drop id
+duplicates drop
+reshape long author_company, i(eip_number author_id) j(c) string
+rename author_company company
+drop if company ==""
+drop c
+
+* raw count of companies-eip
+
+save temp, replace
+gen one = 1
+drop if company =="."
+collapse (sum) one, by(company)
+gsort -one
+graph hbar one if _n<11, ytitle("N. EIP-Authors") over(company, sort((sum) one) descending) ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\company_neip1.png", as(png) replace
+
+use temp, clear
+
+drop eip_number
+duplicates drop
+gen one = 1
+drop if company =="."
+collapse (sum) one, by(company)
+gsort -one
+graph hbar one if _n<11, ytitle("N. Authors") over(company, sort((sum) one) descending) ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\company_neip2.png", as(png) replace
+
+erase temp.dta
+
+restore
+
+
+
+
+********************************************************************************
+* EVOLUTION OF EIP DEVELOPMENT OVER TIME.
+
+* EIP Over time
+
+graph bar (count) eip_number,  over(Category) over(year) stack asyvars ytitle("N. EIPs") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\neip_by_year.png", as(png) replace
+
+
+* EIP STATUS OVER TIME
+
+graph bar (count) eip_number ,  over(status) over(year) stack asyvars ytitle("% of EIPs") ///
+	percent plotregion(fcolor(white))  graphregion(fcolor(white) lcolor(white) ilcolor(white)) 
+graph export "analysis\results\Figures\neip_by_yearstatus.png", as(png) replace
+
+
+
+	
 
 ********************************************************************************
 * Concentration of EIP Development
 
-*top 10 authors	
 preserve
-keep eip_number author* status implemented
-drop author author*commit* author*_follo* author*_job* author*comp* 
+
+
+
+
+*top 10 authors	
+keep eip_number author* status implemented Category
+drop author author*commit* author*_follo* author*_job* author*comp* author*between* author*close* author*eigen*
 
 
 foreach var of varlist author*id {
@@ -124,20 +277,77 @@ foreach var of varlist author*id {
 reshape long author id_author , i(eip status) j(id) string
 drop if id_author ==.	
 bys id_author: egen n_eip = count(id) 	
-bys id_author: egen n_eip_final = count(id) if status=="Final" 	
+bys id_author: egen n_eip_final = count(id) if status=="Final" & (Category =="ERC" | Category == "Interface")	
 bys id_author: egen n_eip_imp = count(id) if implemented==1 	
 
 
 save temp, replace
 
+* Number of authors working on EIPs.
+use temp,clear
+gen one = 1
+collapse (sum) one , by(id_author Category)
+bys id_author: egen N = total(one)
+replace one = one/N
+drop N
+bys Category: egen N_All= total(one)
+duplicates drop Category, force
+keep Category N_All
+save temp_all, replace
+
+use temp,clear
+keep if status == "Final"  & (Category =="ERC" | Category == "Interface")	
+gen one = 1
+collapse (sum) one , by(id_author Category)
+bys id_author: egen N = total(one)
+replace one = one/N
+drop N
+bys Category: egen N_Finalized= total(one)
+duplicates drop Category, force
+keep Category N_Finalized
+save temp_final, replace
+
+
+use temp,clear
+keep if implemented ==1
+gen one = 1
+collapse (sum) one , by(id_author Category)
+bys id_author: egen N = total(one)
+replace one = one/N
+drop N
+bys Category: egen N_Implemented= total(one)
+duplicates drop Category, force
+keep Category N_Implemented
+merge m:m Category using temp_final
+drop _merge
+merge m:m Category using temp_all
+drop _merge 
+
+reshape long N_, i(Category) j(type) string
+drop if N_ ==.
+replace type = "All EIPs" if type == "All"
+replace type = "Finalized ERC/Interf." if type =="Finalized"
+replace type = "Implemented Core/Network EIP" if type =="Implemented"
+
+
+graph bar (asis) N_* , over(Category) over(type) asyvars  stack  ///
+	ytitle("N. of Authors")  plotregion(fcolor(white)) graphregion(fcolor(white) ///
+	lcolor(white) ilcolor(white)) blabel(none)  
+graph export "analysis\results\Figures\n_authors_by_stage.png", as(png) replace
+
+erase temp_all.dta
+erase temp_final.dta
+
+
 * Implemented EIPs
+use temp, clear
 keep author n_eip* 
 duplicates drop
 gsort author -n_eip_imp
 bys author: keep if _n==1
 gsort -n_eip_imp
 graph hbar n_eip_imp if _n<11,  over(author , sort(n_eip_imp) descending) ///
-	ytitle("N. of EIPs") plotregion(fcolor(white)) graphregion(fcolor(white) ///
+	ytitle("N. of Implemented Core/Network. EIPs") plotregion(fcolor(white)) graphregion(fcolor(white) ///
 	lcolor(white) ilcolor(white)) 
 graph export "analysis\results\Figures\neip_imp_top10author.png", as(png) replace
 
@@ -155,7 +365,7 @@ graph export "analysis\results\Figures\neip_top10author.png", as(png) replace
 
 gsort -n_eip_final
 graph hbar n_eip_final if _n<11,  over(author , sort(n_eip_final) descending) ///
-	ytitle("N. of Finalized EIPs") plotregion(fcolor(white)) ///
+	ytitle("N. of Finalized ERCs/Inter.") plotregion(fcolor(white)) ///
 	graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\neip_final_top10author.png", as(png) replace
 
@@ -166,8 +376,8 @@ egen toteip = nvals(eip_number)
 bys id_author: egen n_eip_frac = total(frac)	
 replace n_eip_frac = n_eip_frac/toteip 
 
-egen toteip_final = nvals(eip_number) if status =="Final"
-bys id_author: egen n_eip_frac_final = total(frac) if status =="Final"	
+egen toteip_final = nvals(eip_number) if status =="Final"  & (Category =="ERC" | Category == "Interface")	
+bys id_author: egen n_eip_frac_final = total(frac) if status =="Final"  & (Category =="ERC" | Category == "Interface")		
 replace n_eip_frac_final = n_eip_frac_final/toteip_final 
 
 egen toteip_imp = nvals(eip_number) if implemented == 1
@@ -213,7 +423,7 @@ gsort -n_eip_frac_final
 gen cum_n_final = sum(n_eip_frac_final)
 gen n_final = _n 
 replace n_final = . if n_eip_frac_final ==.
-label var cum_n_final "Finalized EIPs"
+label var cum_n_final "Finalized ERCs/Inter."
 label var n_final "N. Authors"
 keep *_final
 rename n_final n
@@ -227,7 +437,7 @@ gsort -n_eip_frac_imp
 gen cum_n_imp = sum(n_eip_frac_imp)
 gen n_imp = _n 
 replace n_imp = . if n_eip_frac_imp ==.
-label var cum_n_imp "Implemented EIPs"
+label var cum_n_imp "Implemented Core/Network. EIPs"
 label var n_imp "N. Authors"
 keep *_imp
 rename n_imp n
@@ -304,127 +514,5 @@ restore
 
 
 
-********************************************************************************
-* Regressions
-
-*success
-eststo clear
-eststo : mlogit success2_enc log_gh log_tw  i.category_encoded *_dummy , robust
-eststo : mlogit success2_enc n_author eip_contributors  i.category_encoded *_dummy , robust
-eststo : mlogit success2_enc between client_commits_dum author_commit  i.category_encoded *_dummy , robust
-eststo : mlogit success2_enc pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\final_all.tex , unstack varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-	
-*Time to success
-eststo clear
-eststo : quietly reg time_to_final log_gh log_tw i.category_encoded *_dummy, robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded *_dummy, robust
-eststo : quietly reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy, robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\final_all_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-	
-
-	
-* EIP SUCCESS NO IMPL
-	
-
-*success
-eststo clear
-eststo : mlogit success2_enc log_gh log_tw  i.category_encoded *_dummy  if implementation ==., robust
-eststo : mlogit success2_enc n_author eip_contributors  i.category_encoded *_dummy  if implementation ==., robust
-eststo : mlogit success2_enc between client_commits_dum author_commit  i.category_encoded *_dummy  if implementation ==., robust
-eststo : mlogit success2_enc pca_social pca_author pca_skill i.category_encoded *_dummy if implementation ==., robust
-esttab using analysis\Results\Tables\final_noimpl.tex , unstack varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-	
-	
-	
-*Time to success
-eststo clear
-eststo : quietly reg time_to_final log_gh log_tw  i.category_encoded *_dummy if implementation ==., robust
-eststo : quietly reg time_to_final n_author eip_contributors  i.category_encoded *_dummy if implementation ==., robust
-eststo : quietly reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy if implementation ==., robust
-eststo : quietly reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy if implementation ==., robust
-esttab using analysis\Results\Tables\final_noimpl_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-	
-* implemented EIP
-
-eststo clear
-eststo : quietly reg implemented log_gh log_tw i.category_encoded *_dummy , robust
-eststo : quietly reg implemented  n_author eip_contributors  i.category_encoded *_dummy , robust
-eststo : quietly reg implemented between  client_commits_dum author_commit  i.category_encoded *_dummy, robust
-eststo : quietly reg implemented  pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-	
-eststo clear
-eststo : quietly reg time_to_final log_gh log_tw i.category_encoded *_dummy , robust
-eststo : quietly reg time_to_final  n_author eip_contributors  i.category_encoded *_dummy , robust
-eststo : quietly reg time_to_final   between client_commits_dum author_commit  i.category_encoded *_dummy, robust
-eststo : quietly reg time_to_final  pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\implemented_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-
-	
-* Figures: 
-
-*Company
-
-preserve 
-
-keep eip_number *_dummy
-
-foreach x of var *_dummy { 
-	rename `x' c_`x' 
-	} 
-
-reshape long c_, i(eip_number) j(dum) string
-rename c_ num
-
-replace dum = subinstr(dum,"_dummy","",.)
-label var num "N. EIPs"
-graph hbar (sum) num, over(dum, sort((sum) num) descending) ytitle("N. EIPs") ///
-	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
-graph export "analysis\results\Figures\company_neip.png", as(png) replace
-
-restore
-
-* EIP Over time
-
-graph bar (count) eip_number,  over(Category) over(year) stack asyvars ytitle("N. EIPs") ///
-	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
-graph export "analysis\results\Figures\neip_by_year.png", as(png) replace
-
-
-* EIP STATUS OVER TIME
-
-graph bar (count) eip_number ,  over(status) over(year) stack asyvars ytitle("% of EIPs") ///
-	percent plotregion(fcolor(white))  graphregion(fcolor(white) lcolor(white) ilcolor(white)) 
-graph export "analysis\results\Figures\neip_by_yearstatus.png", as(png) replace
-
-
-
-	
 	
 	
