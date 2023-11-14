@@ -134,3 +134,4 @@ summary_stats.loc[len(summary_stats)] = ['Percent of EIP Contributors that are c
 
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Summary Stats/")
 summary_stats.to_csv("Summary_Stats.csv")
+
