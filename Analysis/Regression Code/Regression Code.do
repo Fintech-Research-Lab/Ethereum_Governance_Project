@@ -185,43 +185,6 @@ esttab using analysis\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(
 	indicate("Company FE = *_dummy") 
 
 	
-
-*Time to success
-eststo clear
-eststo :   reg time_to_final log_gh log_tw i.category_encoded *_dummy, robust or
-eststo :   reg time_to_final n_author eip_contributors  i.category_encoded *_dummy, robust or
-eststo :   reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy, robust
-eststo :   reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\final_all_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-		
-	
-*Time to success
-eststo clear
-eststo :   reg time_to_final log_gh log_tw  i.category_encoded *_dummy if implementation ==., robust or
-eststo :   reg time_to_final n_author eip_contributors  i.category_encoded *_dummy if implementation ==., robust or
-eststo :   reg time_to_final between client_commits_dum author_commit  i.category_encoded *_dummy if implementation ==., robust or
-eststo :   reg time_to_final pca_social pca_author pca_skill i.category_encoded *_dummy if implementation ==., robust or
-esttab using analysis\Results\Tables\final_noimpl_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-
-eststo clear
-eststo :   reg time_to_final log_gh log_tw i.category_encoded *_dummy , robust
-eststo :   reg time_to_final  n_author eip_contributors  i.category_encoded *_dummy , robust
-eststo :   reg time_to_final   between client_commits_dum author_commit  i.category_encoded *_dummy, robust
-eststo :   reg time_to_final  pca_social pca_author pca_skill i.category_encoded *_dummy, robust
-esttab using analysis\Results\Tables\implemented_time.tex ,  varwidth(35) modelwidth(10) ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy") 
-
-
 	
 ********************************************************************************
 * Concentration of EIP Development 
@@ -234,7 +197,7 @@ drop *pastcompany* *jobtitle*
 
 tostring author*_company*, replace
 
-reshape long author@_id author@_company1 author@_company2 author@_company3 author@_company4, i(eip_number) j(id) string
+reshape long author@_id author@_company1 author@_company2 author@_company3 author@_company4 author@_company5, i(eip_number) j(id) string
 drop if author_id==.
 drop id
 duplicates drop
@@ -303,7 +266,7 @@ preserve
 
 *top 10 authors	
 keep eip_number author* status implemented Category
-drop author author*commit* author*_follo* author*_job* author*comp* 
+drop author author*commit* author*_follo* author*_job* author*comp* author*between* author*close* author*eigen*
 
 
 foreach var of varlist author*id {
@@ -366,9 +329,10 @@ replace type = "All EIPs" if type == "All"
 replace type = "Finalized ERC/Interf." if type =="Finalized"
 replace type = "Implemented Core/Network EIP" if type =="Implemented"
 
-graph bar (sum) N_ , over(Category) over(type) asyvars stack  ///
+
+graph bar (asis) N_* , over(Category) over(type) asyvars  stack  ///
 	ytitle("N. of Authors")  plotregion(fcolor(white)) graphregion(fcolor(white) ///
-	lcolor(white) ilcolor(white))
+	lcolor(white) ilcolor(white)) blabel(none)  
 graph export "analysis\results\Figures\n_authors_by_stage.png", as(png) replace
 
 erase temp_all.dta
