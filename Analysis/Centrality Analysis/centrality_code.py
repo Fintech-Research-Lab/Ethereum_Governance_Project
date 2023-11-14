@@ -67,6 +67,7 @@ def plot_bc_graph(df, G, centrality, typ):
 # Load the CSV file
 data = pd.read_csv('Data/Raw Data/Ethereum_Cross-sectional_Data_output.csv')
 
+data = data.loc[(data['Category']!='Meta') & (data['Category']!='Informational' )]
 data.loc[data['author3'] == 'et al.', 'author3'] = np.NaN
 
 # Combine all author names into a single column separated by commas
@@ -164,18 +165,18 @@ eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rena
 
 
 # Create and save a DataFrame for betweenness centrality scores
-eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_all'.csv", index = False)
+eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_all.csv", index = False)
 
 
 
 ###############################################################################
-# NETWORK OF FINALIZED EIPS
+# NETWORK OF FINALIZED ERC-Interfacee EIPS
 
 # Create an empty graph for last names
 
 G_final = nx.Graph()
 
-data_final = data.loc[data['status']=='Final']
+data_final = data.loc[(data['status']=='Final') & ((data['Category'] == 'ERC') | (data['Category'] == 'Interface')) ]
 
 # Iterate through each row in the dataset to construct the co-authorship graph using authorid
 for _, row in data_final.iterrows():
@@ -252,7 +253,7 @@ eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rena
 
 
 # Create and save a DataFrame for betweenness centrality scores
-eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_final'.csv", index = False)
+eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_final.csv", index = False)
 
 
 
@@ -340,4 +341,4 @@ eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rena
 
 
 # Create and save a DataFrame for betweenness centrality scores
-eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_imp'.csv", index = False)
+eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_imp.csv", index = False)

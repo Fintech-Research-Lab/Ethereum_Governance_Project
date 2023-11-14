@@ -1,46 +1,48 @@
 {
 \def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
-\begin{tabular}{l*{8}{c}}
+\begin{tabular}{l*{4}{c}}
 \hline\hline
-                                   &\multicolumn{1}{c}{(1)}         &                   &\multicolumn{1}{c}{(2)}         &                   &\multicolumn{1}{c}{(3)}         &                   &\multicolumn{1}{c}{(4)}         &                   \\
-                                   & Finalized         &In\_Progress         & Finalized         &In\_Progress         & Finalized         &In\_Progress         & Finalized         &In\_Progress         \\
+                                   &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         \\
+                                   &   Finalized         &   Finalized         &   Finalized         &   Finalized         \\
 \hline
-GitHub Followers (log)             &    0.1957\sym{***}&    0.0542         &                   &                   &                   &                   &                   &                   \\
-                                   &    (2.98)         &    (1.09)         &                   &                   &                   &                   &                   &                   \\
+GitHub Followers (log)             &      1.1665\sym{**} &                     &                     &                     \\
+                                   &      (2.29)         &                     &                     &                     \\
 [1em]
-Twitter Followers (log)            &    0.1548\sym{***}&    0.0809\sym{**} &                   &                   &                   &                   &                   &                   \\
-                                   &    (3.55)         &    (2.41)         &                   &                   &                   &                   &                   &                   \\
+Twitter Followers (log)            &      1.1584\sym{***}&                     &                     &                     \\
+                                   &      (2.97)         &                     &                     &                     \\
 [1em]
-Number of EIP Authors              &                   &                   &    0.3070\sym{***}&    0.3162\sym{***}&                   &                   &                   &                   \\
-                                   &                   &                   &    (3.34)         &    (3.62)         &                   &                   &                   &                   \\
+Number of EIP Authors              &                     &      1.5087\sym{***}&                     &                     \\
+                                   &                     &      (3.99)         &                     &                     \\
 [1em]
-EIP Contributors                   &                   &                   &    0.5721\sym{***}&    0.2182\sym{*}  &                   &                   &                   &                   \\
-                                   &                   &                   &    (5.11)         &    (1.73)         &                   &                   &                   &                   \\
+EIP Contributors                   &                     &      2.2534\sym{***}&                     &                     \\
+                                   &                     &      (5.35)         &                     &                     \\
 [1em]
-Betweenness Centrality             &                   &                   &                   &                   &   44.7921\sym{***}&   -3.9508         &                   &                   \\
-                                   &                   &                   &                   &                   &    (2.97)         &   (-0.22)         &                   &                   \\
+Betweenness Centrality             &                     &                     &  7.3040e+19\sym{**} &                     \\
+                                   &                     &                     &      (2.57)         &                     \\
 [1em]
-EIP Author also Client Dev         &                   &                   &                   &                   &    0.2521         &    0.5106\sym{*}  &                   &                   \\
-                                   &                   &                   &                   &                   &    (0.78)         &    (1.84)         &                   &                   \\
+EIP Author also Client Dev         &                     &                     &      1.1714         &                     \\
+                                   &                     &                     &      (0.40)         &                     \\
 [1em]
-EIP Author Commits                 &                   &                   &                   &                   &    0.1726\sym{***}&   -0.0460         &                   &                   \\
-                                   &                   &                   &                   &                   &    (5.52)         &   (-1.28)         &                   &                   \\
+EIP Author Commits                 &                     &                     &      1.3008\sym{***}&                     \\
+                                   &                     &                     &      (4.73)         &                     \\
 [1em]
-Social Influence Index (PCA)       &                   &                   &                   &                   &                   &                   &    0.4185\sym{***}&    0.4572\sym{***}\\
-                                   &                   &                   &                   &                   &                   &                   &    (3.05)         &    (3.94)         \\
+Social Influence Index (PCA)       &                     &                     &                     &      1.2170         \\
+                                   &                     &                     &                     &      (1.04)         \\
 [1em]
-Engagement Index (PCA)             &                   &                   &                   &                   &                   &                   &    0.6435\sym{***}&    0.2486\sym{*}  \\
-                                   &                   &                   &                   &                   &                   &                   &    (5.30)         &    (1.77)         \\
+Engagement Index (PCA)             &                     &                     &                     &      3.2905\sym{***}\\
+                                   &                     &                     &                     &      (5.86)         \\
 [1em]
-Skill Index (PCA)                  &                   &                   &                   &                   &                   &                   &    0.2618\sym{*}  &   -0.3767\sym{**} \\
-                                   &                   &                   &                   &                   &                   &                   &    (1.65)         &   (-2.47)         \\
+Skill Index (PCA)                  &                     &                     &                     &      1.6019\sym{**} \\
+                                   &                     &                     &                     &      (2.03)         \\
 [1em]
-Category FE                        &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         \\
+Category FE                        &         Yes         &         Yes         &         Yes         &         Yes         \\
 [1em]
-Company FE                         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         &       Yes         \\
+Company FE                         &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+Year FE                            &         Yes         &         Yes         &         Yes         &         Yes         \\
 \hline
-Observations                       &       637         &                   &       637         &                   &       633         &                   &       633         &                   \\
-Adjusted \(R^{2}\)                 &                   &                   &                   &                   &                   &                   &                   &                   \\
+Observations                       &         426         &         426         &         426         &         426         \\
+Adjusted \(R^{2}\)                 &                     &                     &                     &                     \\
 \hline\hline
 \end{tabular}
 }
