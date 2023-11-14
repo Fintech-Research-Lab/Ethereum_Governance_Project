@@ -274,7 +274,7 @@ foreach var of varlist(besu_commits-nethermind_commits){
 }
 save "Ethereum_Cross-sectional_Data.dta", replace
 
-//outsheet using "Ethereum_Cross-sectional_Data_output.csv", comma nolabel
+outsheet using "Ethereum_Cross-sectional_Data_output.csv", comma nolabel
 
  
 
