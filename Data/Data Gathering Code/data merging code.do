@@ -34,7 +34,7 @@ rename following author`id'_following
 // create max twitter follower variable
 
 egen tw_follower = rowmax(author1_follower author2_follower author3_follower author4_follower author5_follower author6_follower author7_follower author8_follower author9_follower author10_follower author11_follower author12_follower author13_follower author14_follower author15_follower)
-
+erase "twitter_data.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 // merge github 
@@ -58,7 +58,7 @@ rename github_follower author`id'_gh_follower
 
 // create a maximum github following variable
 egen gh_follower = rowmax(author1_gh_follower author2_gh_follower author3_gh_follower author4_gh_follower author5_gh_follower author6_gh_follower author7_gh_follower author8_gh_follower author9_gh_follower author10_gh_follower author11_gh_follower author12_gh_follower author13_gh_follower author14_gh_follower author15_gh_follower)
-
+erase "GitHub_Data.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 
@@ -120,6 +120,7 @@ forvalues i = 2/15{
 replace n_authors = n_authors + 1 if author`i' != ""	
 }
 
+erase "linkedin_data.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 // add number of total commits and eip_contributors 
@@ -136,10 +137,11 @@ merge 1:1 eip_number using "total_commit.dta"
 drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
 drop _merge
 
+erase "total_commit.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 
-// Add betweenness_centrality measure for each EIPs
+// Add centrality measure for each EIPs
 
 clear
 cd "C:\Users\khojama\Box\Fintech Research Lab\\Ethereum_Governance_Project\Analysis\Centrality Analysis\"
@@ -166,6 +168,7 @@ egen closeness_centrality = rowmax(author1_closeness author2_closeness author3_c
 
 egen eigen_value_centrality = rowmax(author1_eigen_value_centrality author2_eigen_value_centrality author3_eigen_value_centrality author4_eigen_value_centrality author5_eigen_value_centrality author6_eigen_value_centrality author7_eigen_value_centrality author8_eigen_value_centrality author9_eigen_value_centrality author10_eigen_value_centrality author11_eigen_value_centrality author12_eigen_value_centrality author13_eigen_value_centrality author14_eigen_value_centrality author15_eigen_value_centrality)
 
+erase "centrality.dta"
 save "Ethereum_Cross-sectional_Data.dta",replace
 
 // add end dates of all EIPs that have been finalized
@@ -180,6 +183,7 @@ use "Ethereum_Cross-sectional_Data" , clear
 merge 1:1 eip_number using "finaleip_enddates.dta", keepusing(edate)
 drop if _merge == 2
 drop _merge
+erase "finaleip_enddates.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 // add start dates for all eips
@@ -194,6 +198,7 @@ use "Ethereum_Cross-sectional_Data" , clear
 merge 1:1 eip_number using "eip_startdates.dta", keepusing(sdate)
 drop if _merge == 2
 drop _merge
+erase "eip_startdates.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace
 
 
@@ -206,6 +211,7 @@ use "Ethereum_Cross-sectional_Data" , clear
 merge 1:1 eip_number using "eip_implementation.dta"
 drop if _merge == 2
 drop _merge
+erase "eip_implementation.dta"
 save "Ethereum_Cross-sectional_Data.dta", replace 
 
 
@@ -231,6 +237,11 @@ save "Ethereum_Cross-sectional_Data.dta", replace
 
 
 // add client repository commits by author 
+
+cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
+import delimited "unique_author_names_with_id", clear
+  save "author.dta", replace
+
 local path "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\client_commit\"
 cd "`path'"
 local files : dir "`path'" files "*.dta" // Get the list of .dta files in the directory
@@ -266,8 +277,9 @@ foreach file in `files' {
   }
   egen `file'_commits = rowmax(author1_`file'_commits author2_`file'_commits author3_`file'_commits author4_`file'_commits author5_`file'_commits author6_`file'_commits author7_`file'_commits author8_`file'_commits author9_`file'_commits author10_`file'_commits author11_`file'_commits)
   move `file'_commits author1
+  erase "commits`file'.dta_author_commits.dta"
 }
-
+  erase "author.dta"
 // create 0 for missing client commits`file
 foreach var of varlist(besu_commits-nethermind_commits){
 	replace `var' = 0 if `var' == .
