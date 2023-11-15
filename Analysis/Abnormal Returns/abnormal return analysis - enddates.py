@@ -114,35 +114,6 @@ mark = (day_differences > -41) & (day_differences < 11)
 columns_to_update = dat.columns[6:] 
 dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 
-# generate abnormal return matrix from -40 to +10 for all forks
-ret = pd.DataFrame()
-for e in dat.columns[6:]:
-    conditions = [(dat[e] == i) for i in range(-40, 11)]
-    ret = pd.concat([ret, pd.DataFrame({col: np.where(cond, dat['AR'], np.nan) for col, cond in zip(columns, conditions)})], axis=1)
-
-             
-
-# take average abnormal returns for all forks
-
-mean_ret = pd.DataFrame(ret.mean()).transpose()
-
-
-for e in eip['eip_number'][1:]:
-    e_str = str(e)
-    columns = mean_ret[mean_ret.columns[mean_ret.columns.astype(str).str.contains(e_str)]].iloc[0].dropna()
-    columns = columns.index
-    if not mean_ret.loc[0, columns].isnull().all():
-        cumulative_returns = (1 + mean_ret.loc[0, columns]).cumprod() - 1
-        mean_ret.loc[1, columns] = cumulative_returns.values
-
-
-
-    
-# remove null
-mean_ret_notnull = mean_ret.iloc[:2].dropna(how = 'all', axis = 1)
-
-# summary stats 
-describe = mean_ret_notnull.iloc[1].filter(like="-40").describe()
 
 # Use the following to plot aggregate mean cumulative returns plot of all finalized eips
 
@@ -168,6 +139,42 @@ labels = [column.replace('AR','') for column in mean_ret.columns]
 plt.xticks(range(len(labels)), labels, rotation=0, fontsize = 4)
 plt.axvline(x=mean_ret.columns.get_loc('AR0'), color='red', linestyle='--', label='Start Date')
 plt.show()
+
+
+
+
+# generate abnormal return matrix from -40 to +10 for eips
+ret = pd.DataFrame()
+for e in dat.columns[6:]:
+    conditions = [(dat[e] == i) for i in range(-40, 11)]
+    columns = [f'AR{i}_{e}' for i in range(-40,11)]
+    ret = pd.concat([ret, pd.DataFrame({col: np.where(cond, dat['AR'], np.nan) for col, cond in zip(columns, conditions)})], axis=1)
+
+             
+
+# take average abnormal returns for individual eips
+
+mean_ret = pd.DataFrame(ret.mean()).transpose()
+
+
+for e in eip['eip_number'][1:]:
+    e_str = str(e)
+    columns = mean_ret[mean_ret.columns[mean_ret.columns.astype(str).str.contains(e_str)]].iloc[0].dropna()
+    columns = columns.index
+    if not mean_ret.loc[0, columns].isnull().all():
+        cumulative_returns = (1 + mean_ret.loc[0, columns]).cumprod() - 1
+        mean_ret.loc[1, columns] = cumulative_returns.values
+
+
+
+    
+# remove null
+mean_ret_notnull = mean_ret.iloc[:2].dropna(how = 'all', axis = 1)
+
+# summary stats 
+describe = mean_ret_notnull.iloc[1].filter(like="-40").describe()
+
+
 
 
 
