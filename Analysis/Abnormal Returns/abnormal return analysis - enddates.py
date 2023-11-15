@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 # get eth price data
 
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
 eth_prices = pd.read_csv("eth_prices.csv")
@@ -59,7 +59,7 @@ eth = eth.sort_values('date')
 
 
 # create event_dates  from finalized eips
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 eip = pd.read_csv("finaleip_enddates.csv", encoding = 'latin1')
 eip = eip[eip['Status']=='Final'][['Number','End']]
 eip = eip.rename(columns = {'Number':'eip_number','End':'ann_date'})
@@ -118,7 +118,6 @@ dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 ret = pd.DataFrame()
 for e in dat.columns[6:]:
     conditions = [(dat[e] == i) for i in range(-40, 11)]
-    columns = [f'AR{i}_{e}' for i in range(-40, 11)]
     ret = pd.concat([ret, pd.DataFrame({col: np.where(cond, dat['AR'], np.nan) for col, cond in zip(columns, conditions)})], axis=1)
 
              
@@ -145,13 +144,32 @@ mean_ret_notnull = mean_ret.iloc[:2].dropna(how = 'all', axis = 1)
 # summary stats 
 describe = mean_ret_notnull.iloc[1].filter(like="-40").describe()
 
-# plot the mean of all 
+# Use the following to plot aggregate mean cumulative returns plot of all finalized eips
 
 ret = pd.DataFrame()
 for i in range(-40,11):
     condition = dat.iloc[:,6:] == i
-    ret.loc[:,f'day{i}] = np.where(conditions,1,0)
-    ret = pd.concat([ret, pd.DataFrame({col: np.where(cond, dat['AR'], np.nan) for col, cond in zip(columns, conditions)})], axis=1)
+    ret[f'AR{i}'] = dat.loc[np.where(np.any(condition, axis = 1))[0],'AR']
+
+mean_ret = pd.DataFrame(ret.mean()).transpose()  
+cumulative_returns = (1+mean_ret.iloc[0,:]).cumprod() -1
+mean_ret = mean_ret.append(cumulative_returns, ignore_index=True)
+
+# plot for aggregate cumulative return
+
+row = mean_ret.iloc[1]
+plt.plot(row, marker = 'o', label = "Mean")
+#plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
+#plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
+plt.xlabel('Days to Start Date')
+plt.ylabel('Abnormal Returns')
+plt.title("Abnormal Returns End Dates for All Finalized EIPs")
+labels = [column.replace('AR','') for column in mean_ret.columns]
+plt.xticks(range(len(labels)), labels, rotation=0, fontsize = 4)
+plt.axvline(x=mean_ret.columns.get_loc('AR0'), color='red', linestyle='--', label='Start Date')
+plt.show()
+
+
 
 
 ## grid view
