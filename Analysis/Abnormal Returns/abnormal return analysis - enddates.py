@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 # get eth price data
 
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
 eth_prices = pd.read_csv("eth_prices.csv")
@@ -96,10 +96,10 @@ ann_dates = ann_dates.sort_values()
 # Find indices in dates where ann_dates and dates are common
 indices = np.full((len(ann_dates),), fill_value=np.nan, dtype=np.float64)
 # common_dates_mask = np.isin(ann_dates, dates)
-common_dates_mask = ann_dates.apply(lambda x: dates[dates < x].index[-1] - 1 if len(dates[dates < x]) > 0 else False)
+common_dates_mask = ann_dates.apply(lambda x: dates[dates < x].index[-1] if len(dates[dates < x]) > 0 else False)
 common_dates_mask = common_dates_mask.where(common_dates_mask >= 0, True).astype(bool)
 indices[common_dates_mask] = np.searchsorted(dates, ann_dates[common_dates_mask], side='right')
-common_dates_mark = np.where(np.isin(ann_dates,dates)|np.isin(ann_dates,(ann_dates-dates).min))
+
 
 # Create a 1877x 15 matrix of days difference between announcement date and trading dates
 day_differences = np.arange(len(dates)) - indices[:, None]
@@ -120,12 +120,11 @@ dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 # Use the following to plot aggregate mean cumulative returns plot of all finalized eips
 
 ret = pd.DataFrame()
+
 for i in range(-40, 11):
-    mask = dat.iloc[:, 6:].apply(lambda row: i in row.values, axis=1)
-    ar_values = dat.loc[mask, 'AR']
+    index = np.where(dat.iloc[:, 6:] == i)[0]
+    ar_values = dat.loc[index, 'AR']
     ret[f'AR{i}'] = ar_values.reset_index(drop=True)
-
-
 # create mean returns
 
 mean_ret = pd.DataFrame(ret.mean()).transpose()  
