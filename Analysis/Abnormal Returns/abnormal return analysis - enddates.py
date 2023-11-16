@@ -150,7 +150,13 @@ plt.xticks(range(len(labels)), labels, rotation=0, fontsize = 4)
 plt.axvline(x=mean_ret.columns.get_loc('AR0'), color='red', linestyle='--', label='Start Date')
 plt.show()
 
+# check significant difference
 
+plus = mean_ret.loc[0,'AR1':'AR10'].mean()
+minus = mean_ret.loc[0,'AR-10':'AR-1'].mean()
+plus_SE = mean_ret.loc[0,'AR1':'AR10'].std()/np.sqrt(10)
+minus_SE = mean_ret.loc[0,'AR-10':'AR-1'].std()/np.sqrt(10)
+T = (plus-minus)/np.sqrt(np.square(plus_SE) + np.square(minus_SE))
 
 
 # generate abnormal return matrix from -40 to +10 for each individualized  eips
