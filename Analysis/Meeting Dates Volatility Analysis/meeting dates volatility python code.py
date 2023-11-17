@@ -26,7 +26,7 @@ eth_vols = eth_prices.groupby('START_DATE')['return'].std()
 eth_vols = pd.DataFrame(eth_vols)
 eth_vols['Date'] = eth_vols.index
 eth_vols['Date'] = pd.to_datetime(eth_vols['Date']).dt.strftime('%Y-%m-%d')
-eth_vols = eth_vols.rename(columns = {'CLOSE':'Intra_day_vol'})
+eth_vols = eth_vols.rename(columns = {'return':'intra_day_vol'})
 
 eth_vols['Meeting'] = np.where(eth_vols['Date'].isin(meeting_dates['Date']),1,0)
 
