@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 
 # get eth price data
 
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Abnormal Returns/")
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
 eth_prices = pd.read_csv("eth_prices.csv")
@@ -50,7 +50,7 @@ eth_dates_list = eth_prices['START_DATE'].tolist()
 fill = eth_prices[eth_prices['START_DATE'].isin(missing_dates_list)]
 fill['START_DATE'] = pd.to_datetime(fill['START_DATE'])
 fill = fill.sort_values('START')
-close = fill[fill['START'].dt.hour < 13].groupby('START_DATE').agg({'START': 'last', 'CLOSE': 'last'}).reset_index()
+close = fill[fill['START'].dt.hour < 15].groupby('START_DATE').agg({'START': 'last', 'CLOSE': 'last'}).reset_index()
 close = close[['START_DATE','CLOSE']]
 close = close.rename(columns = {'START_DATE' : 'date','CLOSE' : 'close'})
 eth = eth.append(close)
@@ -95,7 +95,9 @@ ann_dates = ann_dates.sort_values()
 
 # Find indices in dates where ann_dates and dates are common
 indices = np.full((len(ann_dates),), fill_value=np.nan, dtype=np.float64)
-common_dates_mask = np.isin(ann_dates, dates)
+# common_dates_mask = np.isin(ann_dates, dates)
+common_dates_mask = ann_dates.apply(lambda x: dates[dates < x].index[-1] if len(dates[dates < x]) > 0 else False)
+common_dates_mask = common_dates_mask.where(common_dates_mask >= 0, True).astype(bool)
 indices[common_dates_mask] = np.searchsorted(dates, ann_dates[common_dates_mask], side='right')
 
 
@@ -118,13 +120,20 @@ dat[columns_to_update] = np.where(mark, day_differences, np.nan)
 # Use the following to plot aggregate mean cumulative returns plot of all finalized eips
 
 ret = pd.DataFrame()
-for i in range(-40,11):
-    condition = dat.iloc[:,6:] == i
-    ret[f'AR{i}'] = dat.loc[np.where(np.any(condition, axis = 1))[0],'AR']
+
+for i in range(-40, 11):
+    index = np.where(dat.iloc[:, 6:] == i)[0]
+    ar_values = dat.loc[index, 'AR']
+    ret[f'AR{i}'] = ar_values.reset_index(drop=True)
+# create mean returns
 
 mean_ret = pd.DataFrame(ret.mean()).transpose()  
 cumulative_returns = (1+mean_ret.iloc[0,:]).cumprod() -1
 mean_ret = mean_ret.append(cumulative_returns, ignore_index=True)
+
+describe_ret = ret.iloc[:,0:].describe()
+describe = mean_ret.iloc[0].describe()
+describe2 = mean_ret.iloc[1].describe()
 
 # plot for aggregate cumulative return
 
@@ -140,10 +149,17 @@ plt.xticks(range(len(labels)), labels, rotation=0, fontsize = 4)
 plt.axvline(x=mean_ret.columns.get_loc('AR0'), color='red', linestyle='--', label='Start Date')
 plt.show()
 
+# check significant difference
+
+plus = mean_ret.loc[0,'AR1':'AR10'].mean()
+minus = mean_ret.loc[0,'AR-10':'AR-1'].mean()
+plus_SE = mean_ret.loc[0,'AR1':'AR10'].std()/np.sqrt(10)
+minus_SE = mean_ret.loc[0,'AR-10':'AR-1'].std()/np.sqrt(10)
+T = (plus-minus)/np.sqrt(np.square(plus_SE) + np.square(minus_SE))
 
 
+# generate abnormal return matrix from -40 to +10 for each individualized  eips
 
-# generate abnormal return matrix from -40 to +10 for eips
 ret = pd.DataFrame()
 for e in dat.columns[6:]:
     conditions = [(dat[e] == i) for i in range(-40, 11)]
