@@ -1,4 +1,8 @@
 python:
+
+import pandas as pd
+import os as os
+
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Dates Volatility Analysis/")
 meeting = pd.read_csv("calls_updated_standardized.csv")
 meeting_dates = pd.DataFrame(meeting['Date'], columns = ['Date'])
