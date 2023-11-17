@@ -29,7 +29,7 @@ os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/
 eth_vols.to_csv("eth_vols.csv")
 end
 
-cd "C:\Users\khojama/Box\Fintech Research Lab\Ethereum_Governance_Project\Analysis\Meeting Dates Volatility Analysis\"
+cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum_Governance_Project\Analysis\Meeting Dates Volatility Analysis\"
 clear
 import delimited "eth_vols.csv"
 rename date date1
@@ -39,4 +39,4 @@ gen dow = dow(date)
 gen month = month(date)
 gen year = year(date)
 
-reg intra_day_vol meeting i.dow i.month i.year
+reg intra_day_vol meeting i.dow i.month i.year, robust
