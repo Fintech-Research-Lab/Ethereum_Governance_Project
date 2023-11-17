@@ -5,7 +5,7 @@ import os as os
 import numpy as np
 
 # get meeting dates
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/")
 meeting = pd.read_csv("Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
 meeting_dates = pd.DataFrame(meeting['Date'], columns = ['Date'])
 meeting_dates['Date'].replace('Missing', pd.NaT, inplace=True)
@@ -25,7 +25,7 @@ eth_vols = eth_vols.rename(columns = {'return':'intra_day_vol'})
 
 eth_vols['Meeting'] = np.where(eth_vols['Date'].isin(meeting_dates['Date']),1,0)
 
-eth_vols.to_csv("eth_vols.csv")
+eth_vols.to_csv("Analysis/Meeting Dates Volatility Analysis/eth_vols.csv")
 end
 
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Analysis\Meeting Dates Volatility Analysis\"
@@ -37,5 +37,9 @@ format date %td
 gen dow = dow(date)
 gen month = month(date)
 gen year = year(date)
+
+erase "eth_vols.csv"
+
+save "intraday volatility analysis.dta"
 
 reg intra_day_vol meeting i.dow i.month i.year, robust
