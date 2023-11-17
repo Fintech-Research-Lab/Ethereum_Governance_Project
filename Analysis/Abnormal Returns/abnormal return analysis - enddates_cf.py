@@ -17,8 +17,8 @@ from datetime import datetime
 # ETH PRICES
 # get eth price data
 
-#os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
-os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
+os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
+# os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
 
           
 
