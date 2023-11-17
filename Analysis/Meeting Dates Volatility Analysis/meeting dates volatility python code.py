@@ -11,15 +11,14 @@ import numpy as np
 
 # get meeting dates
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
-meeting = pd.read_csv("/Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
+meeting = pd.read_csv("Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
 meeting_dates = pd.DataFrame(meeting['Date'], columns = ['Date'])
 meeting_dates['Date'].replace('Missing', pd.NaT, inplace=True)
 meeting_dates['Date'] = pd.to_datetime(meeting_dates['Date']).dt.strftime('%Y-%m-%d')
 
 
 # get Eth prices and generate daily hourly volatility
-os.chdir ("Data/Raw Data/")
-eth_prices = pd.read_csv("eth_prices.csv")
+eth_prices = pd.read_csv("Data/Raw Data/eth_prices.csv")
 eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
 eth_prices = eth_prices.sort_values('START')
 eth_prices['return'] = eth_prices['CLOSE'].pct_change()
