@@ -92,4 +92,4 @@ dat.loc[dat['eip_number']==1283,'Status'] = 'Stagnant'
  
 # save the Cross Sectional and Author files
 dat.to_csv("Ethereum_Cross-sectional_Data_beg.csv", encoding='utf-8', index = False)
-new_author_in_author.to_csv("unique_author_names_with_id.csv") # saving new author list after modifications
+new_author_in_author.to_csv("unique_author_names_with_id.csv", index = False) # saving new author list after modifications
