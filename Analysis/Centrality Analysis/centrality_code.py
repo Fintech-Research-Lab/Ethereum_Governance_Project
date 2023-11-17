@@ -354,88 +354,46 @@ eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/central
 
 G_all = nx.Graph()
 
-data['sdate_d'] = pd.to_datetime(data['sdate'], format = '%d%b%Y %H:%M:%S' ) 
+#data['sdate_d'] = pd.to_datetime(data['sdate'], format = '%d%b%Y %H:%M:%S' ) 
+data['sdate_d'] = pd.to_datetime(data['sdate'], format = '%d%b%Y' ) 
 
-data.sort_values(by = 'sdate_d', inplace = True)
+data.sort_values(by = [ 'sdate_d', 'eip_number'], inplace = True)
 
-for i in range(len(data))
-# Iterate through each row in the dataset to construct the co-authorship graph using authorid
-for _, row in data.iterrows():
-    authors = [author for author in row['author'].split(', ')]
-    authorids = [author for author in row['allid'].split(',')]
-
-    for author in authorids:
-        if author not in G_all:
-            G_all.add_node(author)
-    for i in range(len(authorids)):
-        for j in range(i+1, len(authorids)):
-            if G_all.has_edge(authorids[i], authorids[j]):
-                G_all[authorids[i]][authorids[j]]['weight'] += 1
-            else:
-                G_all.add_edge(authorids[i], authorids[j], weight=1)
-
-# Remove self-loops from the graph
-G_all.remove_edges_from(nx.selfloop_edges(G_all))
-
-
-# Compute betweenness centrality for each author
-betweenness = nx.betweenness_centrality(G_all, weight='weight')
-
-# Compute eigenvector centrality for each author
-eigen = nx.eigenvector_centrality(G_all, weight='weight') 
-
-# Compute eigenvector centrality for each author
-close = nx.closeness_centrality(G_all) 
-
-
-
-# Plot the graph
-plot_bc_graph(data, G_all, betweenness, 'between_all')
-
-
-# Plot the graph
-plot_bc_graph(data, G_all, close, 'close_all')
-
-
-# Plot the graph
-plot_bc_graph(data, G_all, eigen, 'eigen_all')
-
-# Count the number of EIPs each author has co-authored
-
-  
-# Create a list of author id and name
-
-aut_id_names = {}
-
-for i in range(1,15):
-    for _, row in data.iterrows():
-        if np.isnan(row['author' + str(i) + '_id']) == False :
-            aut_id_names['{:.0f}'.format(row['author' + str(i) + '_id'])] \
-            = row['author' + str(i) ]
- 
-
-aut_id_eip = {}
-
-for i in range(1,15):
-    for _, row in data.iterrows():
-        if np.isnan(row['author' + str(i) + '_id']) == False :
-            if str('{:.0f}'.format(row['author' + str(i) + '_id'])) in aut_id_eip:
-                aut_id_eip['{:.0f}'.format(row['author' + str(i) + '_id'])] \
-                = aut_id_eip['{:.0f}'.format(row['author' + str(i) + '_id'])] +1
-            else:
-                aut_id_eip['{:.0f}'.format(row['author' + str(i) + '_id'])] = 1
-
-
-eip_bc_df = pd.DataFrame.from_dict(aut_id_names, orient = 'index').rename(columns = {0 : 'name'})
-eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(aut_id_eip, orient = 'index').rename(columns = {0 : 'n_eip'}), left_index = True, right_index = True)
-eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(betweenness, orient = 'index').rename(columns = {0 : 'between'}), left_index = True, right_index = True)
-eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(close, orient = 'index').rename(columns = {0 : 'close'}), left_index = True, right_index = True)
-eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rename(columns = {0 : 'eigen'}), left_index = True, right_index = True)
-
-
-# Create and save a DataFrame for betweenness centrality scores
-eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_all.csv", index = False)
-
+for x in range(100,len(data.index)):
+    # Iterate through each row in the dataset to construct the co-authorship graph using authorid
+    datax = data[0:x]
+    for _, row in datax.iterrows():
+        authors = [author for author in row['author'].split(', ')]
+        authorids = [author for author in row['allid'].split(',')]
+    
+        for author in authorids:
+            if author not in G_all:
+                G_all.add_node(author)
+        for i in range(len(authorids)):
+            for j in range(i+1, len(authorids)):
+                if G_all.has_edge(authorids[i], authorids[j]):
+                    G_all[authorids[i]][authorids[j]]['weight'] += 1
+                else:
+                    G_all.add_edge(authorids[i], authorids[j], weight=1)
+    
+    # Remove self-loops from the graph
+    G_all.remove_edges_from(nx.selfloop_edges(G_all))
+    
+    
+    # Compute betweenness centrality for each author
+    betweenness = nx.betweenness_centrality(G_all, weight='weight')
+    
+    # Compute eigenvector centrality for each author
+    eigen = nx.eigenvector_centrality(G_all, weight='weight') 
+    
+    # Compute eigenvector centrality for each author
+    close = nx.closeness_centrality(G_all) 
+    
+    
+    
+    # Plot the graph
+    plot_bc_graph(datax, G_all, betweenness, 'between_' + str(x))
+    
 
 
 
