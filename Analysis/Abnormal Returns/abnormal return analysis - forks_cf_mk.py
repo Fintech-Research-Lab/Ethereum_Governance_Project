@@ -9,9 +9,8 @@ import pandas as pd
 import os as os
 import yfinance as yf
 import numpy as np
-import math
 import matplotlib.pyplot as plt
-from datetime import datetime 
+
 
 ###############################################################################
 # ETH PRICES
@@ -23,7 +22,7 @@ os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
           
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
-eth_prices = pd.read_csv("Analysis/Abnormal Returns/eth_prices.csv")
+eth_prices = pd.read_csv("Data/Raw Data/eth_prices.csv")
 eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
 
 # Fix missing dates 
@@ -46,7 +45,7 @@ eth = eod_eth[['date','eth_close']]
 # get btc price data
 
 # convert btc hourly prices to daily price based on 4:00 PM EST close
-btc_prices = pd.read_csv("Analysis/Abnormal Returns/btc_prices.csv")
+btc_prices = pd.read_csv("Data/Raw Data/btc_prices.csv")
 btc_prices['START'] = pd.to_datetime(btc_prices['START']).dt.tz_convert('US/Eastern')
 
 # Fix missing dates 
@@ -95,32 +94,30 @@ dat['AR_btc'] = dat['eth_ret'] - dat['btc_ret']
 # EVENT LIST
 
 # create event_dates from finalized eips
-eip = pd.read_csv("Data/Raw Data/finaleip_enddates.csv", encoding = 'latin1')
-eip = eip[eip['Status']=='Final'][['Number','End']]
-eip = eip.rename(columns = {'Number':'eip_number','End':'ann_date'})
-eip['ann_date'] = pd.to_datetime(eip['ann_date']).dt.tz_localize('US/Eastern')  + pd.DateOffset(hours=15)
-eip.sort_values('ann_date', inplace = True)
+fork = pd.read_csv("Data/Raw Data/Fork_announcement.csv", encoding = 'latin1')
+fork['ann_date'] = pd.to_datetime(fork['ann_date']).dt.tz_localize('US/Eastern')  + pd.DateOffset(hours=15)
+fork.sort_values('ann_date', inplace = True)
 # adjust event dates if they occur during non trading days. 
-eip = pd.merge_asof(left = eip, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
-eip = eip.loc[eip['date'] > minp_eth][['eip_number', 'ann_date', 'date']].dropna().reset_index(drop = True)
+fork = pd.merge_asof(left = fork, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
+fork = fork.loc[fork['date'] > minp_eth][['release', 'ann_date', 'date']].dropna().reset_index(drop = True)
     
 # generate a dataframe with -40 to +10 days around each announcement
 
 df = pd.DataFrame()
-for i in range(len(eip.index)):
+for i in range(len(fork.index)):
     dat_temp = dat.dropna()
     dat_temp.sort_values('date', inplace = True)
     dat_temp.reset_index(drop = True, inplace = True) 
     dat_temp['N'] =  dat_temp.index
-    dat_temp = dat_temp.merge(eip[eip.index == i], on = 'date', how = 'left')
-    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[dat_temp['eip_number']>0 , 'N'].values[0])
-    dat_temp['eip'] = eip.iloc[i]['eip_number']
+    dat_temp = dat_temp.merge(fork[fork.index == i], on = 'date', how = 'left')
+    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
+    dat_temp['release'] = fork.iloc[i]['release']
     dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<11)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
     df = df.append(dat_temp)
 
-df.sort_values(['eip','diff'])
+df.sort_values(['release','diff'])
 df['diff'].value_counts()
 
 
