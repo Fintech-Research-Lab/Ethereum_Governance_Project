@@ -45,7 +45,7 @@ save temp, replace
 gen one = 1
 drop if company =="."
 collapse (sum) one, by(company)
-gsort -one
+gsort -one company
 graph hbar one if _n<11, ytitle("N. EIP-Authors") over(company, sort((sum) one) descending) ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\company_neip1.png", as(png) replace
@@ -57,7 +57,7 @@ duplicates drop
 gen one = 1
 drop if company =="."
 collapse (sum) one, by(company)
-gsort -one
+gsort -one company
 graph hbar one if _n<11, ytitle("N. Authors") over(company, sort((sum) one) descending) ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\company_neip2.png", as(png) replace
@@ -74,34 +74,18 @@ levelsof company, local(top10)
 use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
 
 	
-foreach comp of local `top10' {
-	di "``comp''"
-	gen cdummy_`comp' = 0
+foreach comp in `top10' {
+	di "`comp'"
+	local comp2 = subinstr("`comp'"," ","_",.)
+	gen cdummy_`comp2' = 0
 	forvalues x = 1 / 15 {
 		forvalues c = 1/5{
-			replace cdummy_`comp' = 1 if author`x'_company`c' == "`comp'"
+			replace cdummy_`comp2' = 1 if author`x'_company`c' == "`comp'"
 			}
 		}
 	}
 
-	
-	sysuse auto, clear
 
-     levelsof rep78
-     display "`r(levels)'"
-
-     levelsof rep78, miss local(mylevs)
-     display "`mylevs'"
-
-     levelsof rep78, sep(,)
-     display "`r(levels)'"
-
-     levelsof make, local(levels)
-     foreach l of local levels {
-            di "-> make = `: label (make) `l''"
-			}
-
-	
 	
 	
 ********************************************************************************
@@ -111,7 +95,7 @@ pca log_gh log_tw
 predict pca_social, score 
 label var pca_social "Social Influence Index (PCA)"
 
-pca n_author eip_contributors total_commit
+pca n_author n_contributors_eip total_eip_commit
 predict pca_author, score 
 label var pca_author "Engagement Index (PCA)"
 
@@ -126,7 +110,7 @@ label var implemented "Implemented"
 
 gen time_start_today = date("june 21, 2023", "MDY") - dofc(sdate)
 
-gen year = year(dofc(sdate))
+gen year = year(sdate)
 
 gen success2 = "Finalized" if status =="Final"
 replace success2 = "In Progress" if status =="Draft" | status =="Review" |  status =="Last Call" 
@@ -138,7 +122,7 @@ encode success2 , gen (success2_enc)
 * Summary Statistics
 
 
-local summary_list = "success implemented time_to_final n_author tf_scale gh_follower total_commit author_commit eip_contributors besu_commits erigon_commits geth_commits nethermind_commits client_commits betweenness"
+local summary_list = "success implemented time_to_final n_author tf_scale gh_follower total_eip_commit author_commit n_contributors_eip besu_commits erigon_commits geth_commits nethermind_commits client_commits betweenness"
 
 eststo clear	
 eststo: estpost summarize `summary_list', detail	
@@ -172,19 +156,19 @@ graph export "analysis\results\Figures\success.png", as(png) replace
 
 *success
 eststo clear
-eststo : logit success log_gh log_tw  i.category_encoded *_dummy i.year , robust or
-eststo : logit success n_author eip_contributors  i.category_encoded *_dummy  i.year, robust or
-eststo : logit success between client_commits_dum author_commit  i.category_encoded *_dummy  i.year, robust or
-eststo : logit success pca_social pca_author pca_skill i.category_encoded *_dummy i.year, robust or
+eststo : logit success log_gh log_tw  i.category_encoded cdummy_* i.year , robust or
+eststo : logit success n_author n_contributors_eip  i.category_encoded cdummy_*  i.year, robust or
+eststo : logit success between client_commits_dum author_commit  i.category_encoded cdummy_*  i.year, robust or
+eststo : logit success pca_social pca_author pca_skill i.category_encoded cdummy_* i.year, robust or
 esttab using analysis\Results\Tables\final_all.tex , eform unstack varwidth(35)  ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy" "Year FE = *year") 
+	indicate("Category FE = *.category_encoded" "Company FE = cdummy_*" "Year FE = *year") 
 
 eststo clear
 eststo res: logit success pca_social pca_author pca_skill i.category_encoded  i.year,  or
-eststo full: logit success pca_social pca_author pca_skill i.category_encoded *_dummy i.year,  or
-test ConsenSys_dummy StarkWare_dummy Nethermind_dummy Coinbase_dummy BraveSoftware_dummy SpruceSystemsInc_dummy ChainSafeSystems_dummy EthereumNameService_dummy Polytrade_dummy Google_dummy	
+eststo full: logit success pca_social pca_author pca_skill i.category_encoded cdummy_* i.year,  or
+*test cdummy_*
 lrtest full res
 
 	
@@ -193,20 +177,20 @@ lrtest full res
 
 *success
 eststo clear
-eststo : logit success log_gh log_tw  i.category_encoded *_dummy  i.year if implementation ==., robust or
-eststo : logit success n_author eip_contributors  i.category_encoded *_dummy   i.year if implementation ==., robust or
-eststo : logit success between client_commits_dum author_commit  i.category_encoded *_dummy  i.year  if implementation ==., robust or
-eststo : logit success pca_social pca_author pca_skill i.category_encoded *_dummy  i.year if implementation ==., robust or
-eststo : logit implemented log_gh log_tw *_dummy  i.year , robust or
-eststo : logit implemented  n_author eip_contributors  *_dummy  i.year , robust or
-eststo : logit implemented between  client_commits_dum author_commit   *_dummy i.year , robust 
-eststo : logit implemented  pca_social pca_author pca_skill  *_dummy i.year , robust or
+eststo : logit success log_gh log_tw  i.category_encoded cdummy_*  i.year if implementation ==., robust or
+eststo : logit success n_author n_contributors_eip  i.category_encoded cdummy_*   i.year if implementation ==., robust or
+eststo : logit success between client_commits_dum author_commit  i.category_encoded cdummy_*  i.year  if implementation ==., robust or
+eststo : logit success pca_social pca_author pca_skill i.category_encoded cdummy_*  i.year if implementation ==., robust or
+eststo : logit implemented log_gh log_tw cdummy_*  i.year , robust or
+eststo : logit implemented  n_author n_contributors_eip  cdummy_*  i.year , robust or
+eststo : logit implemented between  client_commits_dum author_commit   cdummy_* i.year , robust 
+eststo : logit implemented  pca_social pca_author pca_skill  cdummy_* i.year , robust or
 
 
 esttab using analysis\Results\Tables\final_noimpl_impl.tex ,  eform unstack varwidth(35)  ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = *_dummy" "Year FE = *year") ///
+	indicate("Category FE = *.category_encoded" "Company FE = cdummy_*" "Year FE = *year") ///
 	mgroups("Finalized ERC EIP" "Implemented Core EIP", pattern(1 0 0 0 1 0 0 0 ) prefix(\multicolumn{@span}{c}{) ///
 	suffix(}) span erepeat(\cmidrule(lr){@span})) 
 	
@@ -215,14 +199,14 @@ esttab using analysis\Results\Tables\final_noimpl_impl.tex ,  eform unstack varw
 * implemented EIP
 
 eststo clear
-eststo : logit implemented log_gh log_tw *_dummy , robust or
-eststo : logit implemented  n_author eip_contributors  *_dummy , robust or
-eststo : logit implemented between  client_commits_dum author_commit   *_dummy, robust 
-eststo : logit implemented  pca_social pca_author pca_skill  *_dummy, robust or
+eststo : logit implemented log_gh log_tw cdummy_* , robust or
+eststo : logit implemented  n_author n_contributors_eip  cdummy_* , robust or
+eststo : logit implemented between  client_commits_dum author_commit   cdummy_*, robust 
+eststo : logit implemented  pca_social pca_author pca_skill  cdummy_*, robust or
 esttab using analysis\Results\Tables\implemented.tex ,  varwidth(35) modelwidth(10) ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles nonotes noconstant  eform ///
-	indicate("Company FE = *_dummy") 
+	indicate("Company FE = cdummy_*") 
 
 	
 	
