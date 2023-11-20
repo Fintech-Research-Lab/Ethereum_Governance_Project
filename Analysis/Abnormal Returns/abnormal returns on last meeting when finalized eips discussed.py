@@ -1,21 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov  6 13:41:38 2023
+Created on Mon Nov 20 09:11:23 2023
 
 @author: moazz
 """
 
 import pandas as pd
 import os as os
-import yfinance as yf
 import numpy as np
-import math
+import yfinance as yf
 import matplotlib.pyplot as plt
-from datetime import datetime 
 
-###############################################################################
-# ETH PRICES
-# get eth price data
+# EVENT DATES get eip list and meeting dates of last time eip was discussed #####################################
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+meeting = pd.read_csv("Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
+eip = meeting.loc[:,['Date','EIP','Meeting']]
+eip_list = eip['EIP'].str.split(',')
+eip_list = eip_list.explode()
+eip_list = eip_list.str.replace("EIP-","")
+eip_list = eip_list.dropna().astype(int)
+eip = pd.merge(eip[['Date','Meeting']],eip_list,left_index = True, right_index = True, how = 'outer',indicator = "True")
+cs = pd.read_stata("Data/Raw Data/Ethereum_Cross-sectional_Data.dta")
+final = cs.loc[cs['status'] == "Final"]
+final = final[['eip_number','status','edate','Category']]
+final = final[(final['Category'] != "Informational") & (final['Category'] != "Meta")]
+
+eip = pd.merge(eip,final,left_on = "EIP", right_on = 'eip_number', how = 'inner')
+eip['Date'] = pd.to_datetime(eip['Date'])  # Ensure 'Date' is in datetime format
+eip_max_date = eip.loc[eip.groupby('eip_number')['Date'].idxmax()]
+
+
+## GET PRICES
 
 os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
 # os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
@@ -23,7 +38,7 @@ os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
           
 
 # convert eth hourly prices to daily price based on 4:00 PM EST close
-eth_prices = pd.read_csv("Analysis/Abnormal Returns/eth_prices.csv")
+eth_prices = pd.read_csv("Data/Raw Data/eth_prices.csv")
 eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
 
 # Fix missing dates 
@@ -46,7 +61,7 @@ eth = eod_eth[['date','eth_close']]
 # get btc price data
 
 # convert btc hourly prices to daily price based on 4:00 PM EST close
-btc_prices = pd.read_csv("Analysis/Abnormal Returns/btc_prices.csv")
+btc_prices = pd.read_csv("Data/Raw Data/btc_prices.csv")
 btc_prices['START'] = pd.to_datetime(btc_prices['START']).dt.tz_convert('US/Eastern')
 
 # Fix missing dates 
@@ -92,44 +107,43 @@ dat['AR_btc'] = dat['eth_ret'] - dat['btc_ret']
 
 
 ###############################################################################
-# EVENT LIST
+# create event cumulative returns
 
-# create event_dates from finalized eips
-eip = pd.read_csv("Data/Raw Data/finaleip_enddates.csv", encoding = 'latin1')
-cs = pd.read_stata("Data/Raw Data/Ethereum_Cross-sectional_Data.dta")
-eip = pd.merge(eip,cs[['eip_number','Category']], left_on = 'Number', right_on = 'eip_number', how = 'inner')
-eip = eip[eip['Status']=='Final'][['Number','End','Category']]
-eip = eip.rename(columns = {'Number':'eip_number','End':'ann_date'})
-eip['ann_date'] = pd.to_datetime(eip['ann_date']).dt.tz_localize('US/Eastern')  + pd.DateOffset(hours=15)
-eip.sort_values('ann_date', inplace = True)
-# adjust event dates if they occur during non trading days. 
-eip = pd.merge_asof(left = eip, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
-eip = eip.loc[eip['date'] > minp_eth][['eip_number', 'ann_date', 'date','Category']].dropna().reset_index(drop = True)
+
+# adjust event dates if they occur during non trading days.
+eip_max_date['Date'] = pd.to_datetime(eip_max_date['Date']).dt.tz_localize('US/Eastern')  + pd.DateOffset(hours=15)
+eip_max_date.sort_values('Date', inplace = True)
+
+ 
+eip_meeting = pd.merge_asof(left = eip_max_date, right = dat, left_on = 'Date', right_on = 'date', direction = 'backward')
+eip_meeting = eip_meeting.loc[eip_meeting['Date'] > minp_eth][['Date', 'EIP', 'Meeting','date','Category']].dropna().reset_index(drop = True)
     
 # generate a dataframe with -40 to +10 days around each announcement
 
 df = pd.DataFrame()
-for i in range(len(eip.index)):
+for i in range(len(eip_meeting.index)):
     dat_temp = dat.dropna()
     dat_temp.sort_values('date', inplace = True)
     dat_temp.reset_index(drop = True, inplace = True) 
     dat_temp['N'] =  dat_temp.index
-    dat_temp = dat_temp.merge(eip[eip.index == i], on = 'date', how = 'left')
-    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[dat_temp['eip_number']>0 , 'N'].values[0])
-    dat_temp['eip'] = eip.iloc[i]['eip_number']
-    dat_temp['Category'] = eip.iloc[i]['Category']
-    dat_temp['Category'] = eip.iloc[i]['Category']
+    dat_temp = dat_temp.merge(eip_meeting[eip_meeting.index == i], on = 'date', how = 'left')
+    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['EIP']) , 'N'].values[0])
+    dat_temp['EIP'] = eip_meeting.iloc[i]['EIP']
+    dat_temp['Category'] = eip_meeting.iloc[i]['Category']
     dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<11)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
     df = df.append(dat_temp)
 
-df.sort_values(['eip','diff'])
+df.sort_values(['EIP','diff'])
 df['diff'].value_counts()
-
 
 ###############################################################################
 # PLOT
+
+# Filter plots by category
+
+
 
 #SPY BENCHMARK
 plt.figure()
@@ -139,11 +153,10 @@ df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')[
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
-plt.title("Cumulative Abnormal Returns (SPY) by Finalization Date of Core/Networking EIPs")
+plt.title("Cumulative Abnormal Returns (SPY) by Last Meeting when Core/Networking EIPs were Discussed")
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
-
 
 #BTC BENCHMARK
 plt.figure()
@@ -152,13 +165,9 @@ df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')[
 
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
-plt.title("Cumulative Abnormal Returns (BTC) by Finalization Date of Core/Networking EIPs")
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
+plt.title("Cumulative Abnormal Returns (BTC) by last Meeting when Core/Networking EIPs were Discussed")
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
-
-
-
-
 
