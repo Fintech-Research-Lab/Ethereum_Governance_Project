@@ -22,49 +22,89 @@ graph set window fontface "Times New Roman"
 use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
 
 
-drop if Category =="Meta" | Category == "Informational" 
+********************************************************************************
+* ADD TOP10 COMPANY DUMMIES AND PLOT EMPLOYMENT OF EIP AUTHORS
 
-// Create labels
-label var log_tw "Twitter Followers (log)"
-label var log_gh "GitHub Followers (log)"
-label var tw_follower "N. Twitter Followers"
-label var tf_scale "N. Twitter Followers (K)"
-label var gh_follower "N. Github Followers"
-label var n_author "Number of EIP Authors"
-label var betweenness "Betweenness Centrality"
-label var author_commit "EIP Author Commits"
-label var total_commit "Total EIP Commits"
-label var eip_contributors "EIP Contributors"
-label var besu_commits "Besu Commits"
-label var erigon_commits "Erigon Commits"
-label var geth_commits "Geth Commits"
-label var nethermind_commits "Nethermind Commits"
-label var ConsenSys_dummy "ConsenSys"
-label var StarkWare_dummy "StarkWare"
-label var EthereumNameService_dummy "Ethereum Name Service"
-label var Nethermind_dummy "Nethermind"
-label var Coinbase_dummy "Coinbase"
-label var BraveSoftware_dummy "Brave Software"
-label var SpruceSystemsInc_dummy "Spruce Systems"
-label var ChainSafeSystems_dummy "Chain Safe Systems"
-label var Polytrade_dummy "Polytrade"
-label var Google_dummy "Google"
-label var success "Finalized"
-label var implementation "Implemented EIP"
-label var time_to_final "Time from EIP Start to Finalization"
+keep eip_number author*id *company*
+drop *pastcompany* *jobtitle*
+
+tostring author*_company*, replace
+
+reshape long author@_id author@_company1 author@_company2 author@_company3 author@_company4 author@_company5, i(eip_number) j(id) string
+drop if author_id==.
+drop id
+duplicates drop
+reshape long author_company, i(eip_number author_id) j(c) string
+rename author_company company
+drop if company ==""
+drop c
+
+* raw count of companies-eip
+
+save temp, replace
+gen one = 1
+drop if company =="."
+collapse (sum) one, by(company)
+gsort -one
+graph hbar one if _n<11, ytitle("N. EIP-Authors") over(company, sort((sum) one) descending) ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\company_neip1.png", as(png) replace
+
+use temp, clear
+
+drop eip_number
+duplicates drop
+gen one = 1
+drop if company =="."
+collapse (sum) one, by(company)
+gsort -one
+graph hbar one if _n<11, ytitle("N. Authors") over(company, sort((sum) one) descending) ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\company_neip2.png", as(png) replace
+
+erase temp.dta
+
+gsort -one
+keep if _n<11
+keep company
+save "Data\Raw Data\temp_top10" , replace
+
+levelsof company, local(top10) 
+
+use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
+
 	
-gen client_commits = besu_commits + erigon_commits + geth_commits + nethermind_commits
-label var client_commits "EIP Authors Client Commits"
-gen client_commits_log = log(1+client_commits)
-label var client_commits_log "EIP Authors Client Commits (log)" 
-gen client_commits_dum = (client_commits>0)
-label var client_commits_dum "EIP Author also Client Dev"
+foreach comp of local `top10' {
+	di "``comp''"
+	gen cdummy_`comp' = 0
+	forvalues x = 1 / 15 {
+		forvalues c = 1/5{
+			replace cdummy_`comp' = 1 if author`x'_company`c' == "`comp'"
+			}
+		}
+	}
 
-encode Category , gen(category_encoded)
+	
+	sysuse auto, clear
 
+     levelsof rep78
+     display "`r(levels)'"
 
-replace eip_contributors = 0 if eip_contributors ==.
+     levelsof rep78, miss local(mylevs)
+     display "`mylevs'"
 
+     levelsof rep78, sep(,)
+     display "`r(levels)'"
+
+     levelsof make, local(levels)
+     foreach l of local levels {
+            di "-> make = `: label (make) `l''"
+			}
+
+	
+	
+	
+********************************************************************************
 * Principal Component Analysis
 
 pca log_gh log_tw 
@@ -119,7 +159,9 @@ replace order = 2 if status=="Review"
 replace order = 3 if status=="Last Call"
 
 
-graph pie, over(status) sort(order) plabel(_all percent , format(%9.1f) color(black))  pie(4, explode) plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph pie, over(status) sort(order) plabel(_all percent , format(%9.1f) ///
+	color(black))  pie(4, explode) plotregion(fcolor(white)) ///
+	graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\success.png", as(png) replace
 
 
@@ -145,8 +187,6 @@ eststo full: logit success pca_social pca_author pca_skill i.category_encoded *_
 test ConsenSys_dummy StarkWare_dummy Nethermind_dummy Coinbase_dummy BraveSoftware_dummy SpruceSystemsInc_dummy ChainSafeSystems_dummy EthereumNameService_dummy Polytrade_dummy Google_dummy	
 lrtest full res
 
-
-	eststo : logit success log_gh log_tw n_author eip_contributors between client_commits_dum author_commit  i.category_encoded *_dummy  i.year, robust or
 	
 * EIP SUCCESS NO IMPL/ IMPL
 	
@@ -507,12 +547,6 @@ di cum_n_imp[10]
 
 
 restore
-  
-// Individual Factors
-// following are ols results probit specifications are in the end
-
-
-
 
 	
 	

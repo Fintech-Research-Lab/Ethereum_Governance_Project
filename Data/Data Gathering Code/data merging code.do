@@ -2,217 +2,281 @@
 
 // Import EIP data
 
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
+*cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\"
+
+cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project\"
+
+
+********************************************************************************
+* IMPORT FILES INTO STATA
+
+//////////////////////
+// import twitter and Github data and create a stata file
+
+insheet using "Data\Raw Data\twitter_data.csv", comma clear 
+save "Data\Raw Data\twitter_data.dta", replace
+
+
+//////////////////////
+// import github following data and save it as a stata file
+insheet using "Data\Raw Data\GitHub_Data.csv", comma clear 
+save "Data\Raw Data\Github_data.dta", replace
+
+
+//////////////////////
+//import linkedin data and save it as a stata file
+insheet using "Data\Raw Data\linkedin_data.csv", clear comma
+save "Data\Raw Data\linkedin_data.dta",replace
+
+
+//////////////////////
+// import EIP commit data
+insheet using "Data\Raw Data\unique_author_names_with_id.csv", clear comma
+drop if github_username ==""
+replace github_username = lower(github_username)
+save "Data\Raw Data\author_git.dta", replace
+
+import excel "Data\Commit Data\Eip Commit Data\eip_commit_beg.xlsx", sheet("Sheet1") firstrow clear
+rename Username github_username
+rename EIP eip_number
+
+replace github_username = lower(github_username)
+merge m:1 github_username using "Data\Raw Data\author_git.dta" , keep(1 3)
+erase "Data\Raw Data\author_git.dta"
+
+drop if github_username == "eth-bot"
+
+gen eip_author_flag = (_merge==3)
+drop _merge
+
+* Count number of contributors
+bys eip_number: egen n_contributors_eip = nvals(github_username) if eip_author_flag ==0 
+
+* create a variable that identifies the total number of commits for each EIPs
+bysort eip_number : gen total_eip_commit = _N 
+
+* author commit is the number of commits made by authors
+egen author_commit = total(eip_author_flag), by(eip_number)
+
+* number of authors that are committing. 
+bys eip_number: egen n_committing_authors = nvals(github_username) if eip_author_flag ==1
+
+collapse (max) n_contributors_eip total_eip_commit author_commit n_committing_authors, by(eip_number)
+
+foreach var of varlist n_contributors_eip total_eip_commit author_commit n_committing_authors {
+	replace `var' =0 if `var' ==.
+	}
+	
+* WE USE THIS FILE TO MERGE INTO THE CROSS-SECTIONAL DATA THE TOTAL N. OF COMMITS, THE COMMITS MADE BY AUTHORS, AND THE N. OF CONTRIBUTORS (EXCLUDING AUTHORS)
+
+save "Data\Commit Data\Eip Commit Data\eip_commit_data.dta", replace
+
+
+//////////////////////
+// Centrality Data
+
 clear
-import delimited "Ethereum_Cross-Sectional_Data_beg.csv"
+import delimited "Analysis\Centrality Analysis\centrality_all.csv", clear
+rename id author_id
+save "Data\Raw Data\centrality.dta", replace
 
 
-// save this imported file as a stata file
+//////////////////////
+// add start date for all eips, end dates of all EIPs that have been finalized
 
-save "Ethereum_Cross-sectional_Data.dta", replace
+import delimited "Data\Raw Data\eip_startdates.csv", clear
+gen sdate = date(date, "MDY")
+format sdate %td
+rename eipnumber eip_number
+save "Data\Raw Data\eip_startdates.dta", replace
 
-// import twitter data and create a stata file
 
-import delimited "twitter_data.csv", numericcols(5) clear 
-save "twitter_data.dta", replace
+import delimited "Data\Raw Data\finaleip_enddates.csv", clear
+rename number eip_number
+gen edate = date(end, "MDY")
+format edate %td
+save "Data\Raw Data\finaleip_enddates.dta", replace
+
+
+//////////////////////
+// add implementation column in the data
+
+import excel "Data\Raw Data\eip_implementation.xlsx", sheet("EIP Summary") firstrow clear
+save "Data\Raw Data\eip_implementation.dta", replace
+
+//////////////////////
+// ADD CLIENT COMMMITS
+import delimited "Data\Raw Data\unique_author_names_with_id", clear
+replace github_username = lower(github_username)
+drop if github_username ==""
+save "Data\Raw Data\temp_author.dta", replace
+
+foreach file in besu erigon geth nethermind {
+	use "Data\Commit Data\client_commit\commits`file'", clear
+	// remove dependabot[bot] and github-actions[bot]
+	drop if login == "dependabot[bot]"|login == "github-actions[bot]"
+    collapse (count) date, by(login)
+	rename date `file'_commits
+    rename login github_username
+	replace github_username = lower(github_username)
+    drop if github_username == "" 
+    merge m:1 github_username using "Data\Raw Data\temp_author", keepusing(author_id)
+    keep if _merge == 3
+    drop _merge
+    save "Data\Raw Data\author_commits_`file'.dta", replace
+	}
+
+erase "Data\Raw Data\temp_author.dta"
+
+
+********************************************************************************
+* MERGE IN TWITTER AND GITHUB DATA
 
 // Merge the data by author_id one author at a time
 
-clear
-use "Ethereum_Cross-sectional_Data.dta"
+insheet using "Data\Raw Data\Ethereum_Cross-sectional_Data_beg.csv", clear comma
 
+* Merge in Twitter
 forvalues id = 1/15{
-rename author`id'_id author_id
-merge m:1 author_id using "twitter_data.dta",keepusing(follower following)
-drop if _merge == 2
-drop _merge
-rename author_id author`id'_id
-rename follower author`id'_follower
-rename following author`id'_following
-}
+	rename author`id'_id author_id
+	merge m:1 author_id using "Data\Raw Data\twitter_data.dta", keepusing(follower following)
+	destring(follower), replace force
+	drop if _merge == 2 
+	drop _merge
+	rename author_id author`id'_id
+	rename follower author`id'_follower
+	rename following author`id'_following
+	}
 
 // create max twitter follower variable
 
 egen tw_follower = rowmax(author1_follower author2_follower author3_follower author4_follower author5_follower author6_follower author7_follower author8_follower author9_follower author10_follower author11_follower author12_follower author13_follower author14_follower author15_follower)
-erase "twitter_data.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
+erase "Data\Raw Data\twitter_data.dta"
 
-// merge github 
-
-// import github following data and save it as a stata file
-import delimited "GitHub_Data.csv", numericcols(6) clear 
-save "Github_data.dta", replace
-
-// merge with ethereum data
-clear
-use "Ethereum_Cross-sectional_Data.dta"
+* Merge in Github 
 
 forvalues id = 1/15{
-rename author`id'_id author_id
-merge m:1 author_id using "Github_data.dta",keepusing(github_followers)
-drop if _merge == 2
-drop _merge
-rename author_id author`id'_id
-rename github_follower author`id'_gh_follower
-}
+	rename author`id'_id author_id
+	merge m:1 author_id using "Data\Raw Data\Github_data.dta",keepusing(github_followers)
+	drop if _merge == 2
+	drop _merge
+	rename author_id author`id'_id
+	rename github_follower author`id'_gh_follower
+	}
 
 // create a maximum github following variable
 egen gh_follower = rowmax(author1_gh_follower author2_gh_follower author3_gh_follower author4_gh_follower author5_gh_follower author6_gh_follower author7_gh_follower author8_gh_follower author9_gh_follower author10_gh_follower author11_gh_follower author12_gh_follower author13_gh_follower author14_gh_follower author15_gh_follower)
-erase "GitHub_Data.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
+erase "Data\Raw Data\GitHub_Data.dta"
 
 
-// merge LinkedIn Data
+********************************************************************************
+* MERGE IN LINKEDIN DATA
 
-//import linkedin data and save it as a stata file
-import delimited "linkedin_data.csv", clear
-save "linkedin_data.dta",replace
 
-// merge linkedin data
-clear
-use "Ethereum_Cross-sectional_Data.dta"
-
-forvalues id = 1/15{
-rename author`id'_id author_id
-merge m:1 author_id using "linkedin_data.dta",keepusing(company1 company2 company3 company4 company5 pastcompany1 pastcompany2 pastcompany3 pastcompany4 pastcompany5 pastcompany6 pastcompany7 pastcompany8 pastcompany9 pastcompany10 jobtitle1_company1 jobtitle2_company1 jobtitle3_company1 jobtitle1_company2 jobtitle1_company3 jobtitle1_company4 jobtitle1_company5 jobtitle1_pastcompany1 jobtitle1_pastcompany2 jobtitle1_pastcompany3 jobtitle1_pastcompany4 jobtitle1_pastcompany5 jobtitle1_pastcompany6 jobtitle1_pastcompany7 jobtitle1_pastcompany8 jobtitle1_pastcompany9 jobtitle1_pastcompany10)
-drop if _merge == 2
-drop _merge
-rename author_id author`id'_id
-rename company1 author`id'_company1
-rename company2 author`id'_company2
-rename company3 author`id'_company3
-rename company4 author`id'_company4
-rename company5 author`id'_company5
-rename pastcompany1 author`id'_pastcompany1
-rename pastcompany2 author`id'_pastcompany2
-rename pastcompany3 author`id'_pastcompany3
-rename pastcompany4 author`id'_pastcompany4
-rename pastcompany5 author`id'_pastcompany5
-rename pastcompany6 author`id'_pastcompany6
-rename pastcompany7 author`id'_pastcompany7
-rename pastcompany8 author`id'_pastcompany8
-rename pastcompany9 author`id'_pastcompany9
-rename pastcompany10 author`id'_pastcompany10
-rename jobtitle1_company1 author`id'_jobtitle1_company1
-rename jobtitle2_company1 author`id'_jobtitle2_company1
-rename jobtitle3_company1 author`id'_jobtitle3_company1
-rename jobtitle1_company2 author`id'_jobtitle1_company2
-rename jobtitle1_company3 author`id'_jobtitle1_company3
-rename jobtitle1_company4 author`id'_jobtitle1_company4
-rename jobtitle1_company5 author`id'_jobtitle1_company5
-rename jobtitle1_pastcompany1 author`id'_jobtitle1_pastcompany1
-rename jobtitle1_pastcompany2 author`id'_jobtitle1_pastcompany2
-rename jobtitle1_pastcompany3 author`id'_jobtitle1_pastcompany3
-rename jobtitle1_pastcompany4 author`id'_jobtitle1_pastcompany4
-rename jobtitle1_pastcompany5 author`id'_jobtitle1_pastcompany5
-rename jobtitle1_pastcompany6 author`id'_jobtitle1_pastcompany6
-rename jobtitle1_pastcompany7 author`id'_jobtitle1_pastcompany7
-rename jobtitle1_pastcompany8 author`id'_jobtitle1_pastcompany8
-rename jobtitle1_pastcompany9 author`id'_jobtitle1_pastcompany9
-rename jobtitle1_pastcompany10 author`id'_jobtitle1_pastcompany10
-}
+forvalues id = 1/15 {
+	rename author`id'_id author_id
+	merge m:1 author_id using "Data\Raw Data\linkedin_data.dta",keepusing(company* ///
+		pastcompany*  jobtitle*company*)
+	drop if _merge == 2
+	drop _merge
+	rename author_id author`id'_id
+	rename company1 author`id'_company1
+	rename company2 author`id'_company2
+	rename company3 author`id'_company3
+	rename company4 author`id'_company4
+	rename company5 author`id'_company5
+	rename pastcompany1 author`id'_pastcompany1
+	rename pastcompany2 author`id'_pastcompany2
+	rename pastcompany3 author`id'_pastcompany3
+	rename pastcompany4 author`id'_pastcompany4
+	rename pastcompany5 author`id'_pastcompany5
+	rename pastcompany6 author`id'_pastcompany6
+	rename pastcompany7 author`id'_pastcompany7
+	rename pastcompany8 author`id'_pastcompany8
+	rename pastcompany9 author`id'_pastcompany9
+	rename pastcompany10 author`id'_pastcompany10
+	rename jobtitle1_company1 author`id'_jobtitle1_company1
+	rename jobtitle2_company1 author`id'_jobtitle2_company1
+	rename jobtitle3_company1 author`id'_jobtitle3_company1
+	rename jobtitle1_company2 author`id'_jobtitle1_company2
+	rename jobtitle1_company3 author`id'_jobtitle1_company3
+	rename jobtitle1_company4 author`id'_jobtitle1_company4
+	rename jobtitle1_company5 author`id'_jobtitle1_company5
+	rename jobtitle1_pastcompany1 author`id'_jobtitle1_pastcompany1
+	rename jobtitle1_pastcompany2 author`id'_jobtitle1_pastcompany2
+	rename jobtitle1_pastcompany3 author`id'_jobtitle1_pastcompany3
+	rename jobtitle1_pastcompany4 author`id'_jobtitle1_pastcompany4
+	rename jobtitle1_pastcompany5 author`id'_jobtitle1_pastcompany5
+	rename jobtitle1_pastcompany6 author`id'_jobtitle1_pastcompany6
+	rename jobtitle1_pastcompany7 author`id'_jobtitle1_pastcompany7
+	rename jobtitle1_pastcompany8 author`id'_jobtitle1_pastcompany8
+	rename jobtitle1_pastcompany9 author`id'_jobtitle1_pastcompany9
+	rename jobtitle1_pastcompany10 author`id'_jobtitle1_pastcompany10
+	}
 
 // create number of authors
 
 gen n_authors = 1 if author1 != ""
 
 forvalues i = 2/15{
-replace n_authors = n_authors + 1 if author`i' != ""	
-}
+	replace n_authors = n_authors + 1 if author`i' != ""	
+	}
 
-erase "linkedin_data.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
+erase "Data\Raw Data\linkedin_data.dta"
 
-// add number of total commits and eip_contributors 
-clear 
-use "eip_commit.dta"
-collapse (mean) total_commit eip_contributors author_commit, by (eip_number)
-replace eip_contributors = 0 if eip_contributors ==.
-save "total_commit.dta", replace
 
-// merge
-use "Ethereum_Cross-sectional_Data.dta", clear
 
-merge 1:1 eip_number using "total_commit.dta"
-drop if _merge ==2 // remove one additional EIP that is in commit data but not in cross-sectional
+********************************************************************************
+* MERGE IN EIP COMMIT DATA
+
+merge 1:1 eip_number using "Data\Commit Data\Eip Commit Data\eip_commit_data", keep(1 3) 
 drop _merge
+erase "Data\Commit Data\Eip Commit Data\eip_commit_data.dta"
 
-erase "total_commit.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
 
+
+********************************************************************************
+* MERGE IN CENTRALITY DATA
 
 // Add centrality measure for each EIPs
-
-clear
-cd "C:\Users\khojama\Box\Fintech Research Lab\\Ethereum_Governance_Project\Analysis\Centrality Analysis\"
-import delimited "centrality_all.csv"
-rename id author_id
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
-save "centrality.dta", replace
-
-use "Ethereum_Cross-sectional_Data.dta"
 forvalues id = 1/15{
-rename author`id'_id author_id
-merge m:1 author_id using "centrality.dta",keepusing(between close eigen)
-drop if _merge == 2
-drop _merge
-rename author_id author`id'_id
-rename between author`id'_betweenness
-rename close author`id'_closeness
-rename eigen author`id'_eigen_value_centrality
-}
+	rename author`id'_id author_id
+	merge m:1 author_id using "Data\Raw Data\centrality",keepusing(between close eigen) keep(1 3)
+	drop _merge
+	rename author_id author`id'_id
+	rename between author`id'_betweenness
+	rename close author`id'_closeness
+	rename eigen author`id'_eigen_value_centrality
+	}
 
 egen betweenness_centrality = rowmax(author1_betweenness author2_betweenness author3_betweenness author4_betweenness author5_betweenness author6_betweenness author7_betweenness author8_betweenness author9_betweenness author10_betweenness author11_betweenness author12_betweenness author13_betweenness author14_betweenness author15_betweenness)
-
 egen closeness_centrality = rowmax(author1_closeness author2_closeness author3_closeness author4_closeness author5_closeness author6_closeness author7_closeness author8_closeness author9_closeness author10_closeness author11_closeness author12_closeness author13_closeness author14_closeness author15_closeness)
-
 egen eigen_value_centrality = rowmax(author1_eigen_value_centrality author2_eigen_value_centrality author3_eigen_value_centrality author4_eigen_value_centrality author5_eigen_value_centrality author6_eigen_value_centrality author7_eigen_value_centrality author8_eigen_value_centrality author9_eigen_value_centrality author10_eigen_value_centrality author11_eigen_value_centrality author12_eigen_value_centrality author13_eigen_value_centrality author14_eigen_value_centrality author15_eigen_value_centrality)
 
-erase "centrality.dta"
-save "Ethereum_Cross-sectional_Data.dta",replace
+erase "Data\Raw Data\centrality.dta"
 
-// add end dates of all EIPs that have been finalized
-clear
-import delimited "finaleip_enddates.csv"
-rename number eip_number
-gen edate = date(end, "MDY")
-format edate %td
-save "finaleip_enddates.dta", replace
 
-use "Ethereum_Cross-sectional_Data" , clear
-merge 1:1 eip_number using "finaleip_enddates.dta", keepusing(edate)
+
+********************************************************************************
+* MERGE IN EIP START DATE AND FINALIZATION DATE DATA
+
+merge 1:1 eip_number using "Data\Raw Data\finaleip_enddates.dta", keepusing(edate) keep(1 3)
+drop _merge
+erase "Data\Raw Data\finaleip_enddates.dta"
+
+merge 1:1 eip_number using "Data\Raw Data\eip_startdates.dta", keepusing(sdate)
 drop if _merge == 2
 drop _merge
-erase "finaleip_enddates.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
+erase "Data\Raw Data\eip_startdates.dta"
 
-// add start dates for all eips
 
-import delimited "eip_startdates.csv", clear
-gen sdate = date(date, "MDY")
-format sdate %td
-rename eipnumber eip_number
-save "eip_startdates.dta", replace
+********************************************************************************
+* MERGE IN IMPLEMENTATION DATA
 
-use "Ethereum_Cross-sectional_Data" , clear
-merge 1:1 eip_number using "eip_startdates.dta", keepusing(sdate)
+merge 1:1 eip_number using "Data\Raw Data\eip_implementation.dta"
 drop if _merge == 2
 drop _merge
-erase "eip_startdates.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace
-
-
-// add implementation column in the data
-
-import excel "eip_implementation.xlsx", sheet("EIP Summary") firstrow clear
-save "eip_implementation.dta", replace
-
-use "Ethereum_Cross-sectional_Data" , clear
-merge 1:1 eip_number using "eip_implementation.dta"
-drop if _merge == 2
-drop _merge
-erase "eip_implementation.dta"
-save "Ethereum_Cross-sectional_Data.dta", replace 
+erase "Data\Raw Data\eip_implementation.dta"
 
 
 // move variables
@@ -224,52 +288,24 @@ move inFork author1
 move n_authors author1
 move tw_follower author1
 move gh_follower author1 
-move total_commit author1
+move total_eip_commit author1
 move author_commit author1
-move eip_contributors author1
+move n_contributors_eip author1
 move betweenness_centrality author1
 move closeness_centrality author1
 move eigen_value_centrality author1
 
-save "Ethereum_Cross-sectional_Data.dta", replace
 
-// prepare files collapsing client commits and matching them with eip authors
-
+********************************************************************************
+* MERGE IN CLIENT DATA
 
 // add client repository commits by author 
 
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
-import delimited "unique_author_names_with_id", clear
-  save "author.dta", replace
-
-local path "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Commit Data\client_commit\"
-cd "`path'"
-local files : dir "`path'" files "*.dta" // Get the list of .dta files in the directory
-di `files'
-foreach file of local files {
-    use "`file'", clear
-	// remove dependabot[bot] and github-actions[bot]
-	drop if login == "dependabot[bot]"|login == "github-actions[bot]"
-	local newvar = substr("`file'", 8, strlen("`file'")-11)
-	di "`newvar'"
-    collapse (count) date, by(login)
-	rename date `newvar'_commits
-    rename login github_username
-    drop if github_username == "" 
-    cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
-    merge 1:m github_username using "author", keepusing(author_id)
-    keep if _merge == 3
-    drop _merge
-     save "`file'_author_commits.dta", replace
-	cd "`path'"
-}
-cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Data\Raw Data\"
-use "Ethereum_Cross-sectional_Data.dta", clear
 local files = "besu erigon geth nethermind"
 foreach file in `files' {
   forvalues id = 1/15{
     rename author`id'_id author_id
-    merge m:1 author_id using "commits`file'.dta_author_commits.dta",keepusing(`file'_commits)
+    merge m:1 author_id using "Data\Raw Data\author_commits_`file'", keepusing(`file'_commits)
     drop if _merge == 2
     drop _merge
     rename author_id author`id'_id
@@ -277,17 +313,95 @@ foreach file in `files' {
   }
   egen `file'_commits = rowmax(author1_`file'_commits author2_`file'_commits author3_`file'_commits author4_`file'_commits author5_`file'_commits author6_`file'_commits author7_`file'_commits author8_`file'_commits author9_`file'_commits author10_`file'_commits author11_`file'_commits)
   move `file'_commits author1
-  erase "commits`file'.dta_author_commits.dta"
+  erase "Data\Raw Data\author_commits_`file'.dta"
 }
-  erase "author.dta"
+
+
 // create 0 for missing client commits`file
 foreach var of varlist(besu_commits-nethermind_commits){
 	replace `var' = 0 if `var' == .
 }
-save "Ethereum_Cross-sectional_Data.dta", replace
 
 
-outsheet using "Ethereum_Cross-sectional_Data_output.csv", comma nolabel replace
+********************************************************************************
+* FINAL CLEANUP
+
+gen client_commits = besu_commits + erigon_commits + geth_commits + nethermind_commits
+label var client_commits "EIP Authors Client Commits"
+gen client_commits_log = log(1+client_commits)
+label var client_commits_log "EIP Authors Client Commits (log)" 
+gen client_commits_dum = (client_commits>0)
+label var client_commits_dum "EIP Author also Client Dev"
+
+encode Category , gen(category_encoded)
+
+replace n_contributors_eip = 0 if n_contributors_eip ==.
+
+* OTHER VARIABLES
+
+gen success = 0
+replace success = 1 if status == "Final"
+replace success =. if status == "Last Call"|status == "Living"|status == "Review" | status == "Draft"
+move success status
+
+gen implementation = 1 if inFork != ""
+replace implementation = 0 if Implementable == 1 & implementation != 1
+replace implementation = . if Implementable ==0
+move implementation status
+
+// replace tw_follower/ gh_follower to 0
+
+replace tw_follower = 0 if tw_follower ==.
+replace gh_follower = 0 if gh_follower ==.
+
+// create time to finalization
+
+gen time_to_final = (edate - sdate) /86400000
+move time_to_final Category
+
+format title %20s
+format author %20s
+
+// create log measures for regressions
+
+gen log_tw = log(1+tw_follower)
+gen log_gh = log(1+gh_follower)
+
  
+// create scaling variables 
+
+gen tf_scale = tw_follower/1000 
+
+
+// Create labels
+label var log_tw "Twitter Followers (log)"
+label var log_gh "GitHub Followers (log)"
+label var tw_follower "N. Twitter Followers"
+label var tf_scale "N. Twitter Followers (K)"
+label var gh_follower "N. Github Followers"
+label var n_author "Number of EIP Authors"
+label var betweenness "Betweenness Centrality"
+label var author_commit "EIP Author Commits"
+label var total_eip_commit "Total EIP Commits"
+label var n_contributors_eip "EIP Contributors"
+label var besu_commits "Besu Commits"
+label var erigon_commits "Erigon Commits"
+label var geth_commits "Geth Commits"
+label var nethermind_commits "Nethermind Commits"
+label var success "Finalized"
+label var implementation "Implemented EIP"
+label var time_to_final "Time from EIP Start to Finalization"
+	
+
+// fix living
+replace status = "Living" if status == "Living "
+
+drop if Category =="Meta" | Category == "Informational" 
+
+save "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", replace
+
+outsheet using "Data\Raw Data\Ethereum_Cross-sectional_Data_output.csv", comma nolabel replace
+
+
 
 
