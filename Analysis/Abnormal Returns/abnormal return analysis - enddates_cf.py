@@ -96,13 +96,15 @@ dat['AR_btc'] = dat['eth_ret'] - dat['btc_ret']
 
 # create event_dates from finalized eips
 eip = pd.read_csv("Data/Raw Data/finaleip_enddates.csv", encoding = 'latin1')
-eip = eip[eip['Status']=='Final'][['Number','End']]
+cs = pd.read_stata("Data/Raw Data/Ethereum_Cross-sectional_Data.dta")
+eip = pd.merge(eip,cs[['eip_number','Category']], left_on = 'Number', right_on = 'eip_number', how = 'inner')
+eip = eip[eip['Status']=='Final'][['Number','End','Category']]
 eip = eip.rename(columns = {'Number':'eip_number','End':'ann_date'})
 eip['ann_date'] = pd.to_datetime(eip['ann_date']).dt.tz_localize('US/Eastern')  + pd.DateOffset(hours=15)
 eip.sort_values('ann_date', inplace = True)
 # adjust event dates if they occur during non trading days. 
 eip = pd.merge_asof(left = eip, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
-eip = eip.loc[eip['date'] > minp_eth][['eip_number', 'ann_date', 'date']].dropna().reset_index(drop = True)
+eip = eip.loc[eip['date'] > minp_eth][['eip_number', 'ann_date', 'date','Category']].dropna().reset_index(drop = True)
     
 # generate a dataframe with -40 to +10 days around each announcement
 
@@ -115,6 +117,8 @@ for i in range(len(eip.index)):
     dat_temp = dat_temp.merge(eip[eip.index == i], on = 'date', how = 'left')
     dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[dat_temp['eip_number']>0 , 'N'].values[0])
     dat_temp['eip'] = eip.iloc[i]['eip_number']
+    dat_temp['Category'] = eip.iloc[i]['Category']
+    dat_temp['Category'] = eip.iloc[i]['Category']
     dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<11)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
@@ -129,11 +133,13 @@ df['diff'].value_counts()
 
 #SPY BENCHMARK
 plt.figure()
-df.groupby('diff')['CAR'].mean().plot()
+#df.groupby('diff')['CAR'].mean().plot()
+df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR'].mean().plot()
 
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
+plt.title("Cumulative Abnormal Returns (SPY) by Finalization Date of Core/Networking EIPs")
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
@@ -141,10 +147,12 @@ plt.show()
 
 #BTC BENCHMARK
 plt.figure()
-df.groupby('diff')['CAR_btc'].mean().plot()
+#df.groupby('diff')['CAR_btc'].mean().plot()
+df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR_btc'].mean().plot()
 
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
+plt.title("Cumulative Abnormal Returns (BTC) by Finalization Date of Core/Networking EIPs")
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
