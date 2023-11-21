@@ -5,41 +5,48 @@ import os as os
 import numpy as np
 
 # get meeting dates
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+#os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+os.chdir("C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/")
+
 meeting = pd.read_csv("Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
 meeting_dates = pd.DataFrame(meeting['Date'], columns = ['Date'])
 meeting_dates['Date'].replace('Missing', pd.NaT, inplace=True)
 meeting_dates['Date'] = pd.to_datetime(meeting_dates['Date']).dt.strftime('%Y-%m-%d')
+meeting_dates['begin'] = pd.to_datetime(meeting_dates['Date']) + pd.to_timedelta('14h')
+meeting_dates['end'] = pd.to_datetime(meeting_dates['Date']) + pd.to_timedelta("15h")
+meeting_dates['begin'] = meeting_dates['begin'].dt.tz_localize('UTC')
+meeting_dates['end'] = meeting_dates['end'].dt.tz_localize('UTC')
 
 
 # get Eth prices and generate daily hourly volatility
 eth_prices = pd.read_csv("Data/Raw Data/eth_prices.csv")
-eth_prices['START'] = pd.to_datetime(eth_prices['START']).dt.tz_convert('US/Eastern')
+eth_prices['START'] = pd.to_datetime(eth_prices['START'], format='%Y-%m-%d %H:%M:%S') 
+# Fix missing dates 
+maxp_eth = max(eth_prices['START']).to_pydatetime()
+minp_eth = min(eth_prices['START']).to_pydatetime()
+eth_prices2 = pd.DataFrame(pd.date_range(start=minp_eth, end=maxp_eth, freq = 'H', name = 'START'))
+eth_prices2 = pd.merge(eth_prices2,eth_prices, on = 'START', how = 'left')
+eth_prices = eth_prices2.ffill()
 eth_prices = eth_prices.sort_values('START')
 eth_prices['return'] = eth_prices['CLOSE'].pct_change()
-eth_vols = eth_prices.groupby('START_DATE')['return'].std()
-eth_vols = pd.DataFrame(eth_vols)
-eth_vols['Date'] = eth_vols.index
-eth_vols['Date'] = pd.to_datetime(eth_vols['Date']).dt.strftime('%Y-%m-%d')
-eth_vols = eth_vols.rename(columns = {'return':'intra_day_vol'})
+eth_prices['vol_rol'] = eth_prices['return'].rolling(12).std()
+eth_prices['Meeting'] = np.where(eth_prices['START'].isin(meeting_dates['begin']),1,0)
+eth_prices['Meeting'] = eth_prices['Meeting'] + np.where(eth_prices['START'].isin(meeting_dates['end']),1,0)
 
-eth_vols['Meeting'] = np.where(eth_vols['Date'].isin(meeting_dates['Date']),1,0)
+eth_prices.to_csv("Analysis/Meeting Dates Volatility Analysis/eth_vols2.csv")
 
-eth_vols.to_csv("Analysis/Meeting Dates Volatility Analysis/eth_vols.csv")
 end
 
 cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\Analysis\Meeting Dates Volatility Analysis\"
-clear
-import delimited "eth_vols.csv"
-rename date date1
-gen date = date(date1,"YMD")
-format date %td
-gen dow = dow(date)
-gen month = month(date)
-gen year = year(date)
 
-erase "eth_vols.csv"
+import delimited "eth_vols2.csv", clear
+rename start date1
+gen double date = clock(substr(date1,1,19), "YMDhms")
+format date %tc
+gen hour = hh(date)
+gen dow = dow(dofc(date))
+gen month = month(dofc(date))
+gen year = year(dofc(date))
 
-save "intraday volatility analysis.dta"
+reg vol_rol meeting i.hour i.dow i.month i.year, robust
 
-reg intra_day_vol meeting i.dow i.month i.year, robust

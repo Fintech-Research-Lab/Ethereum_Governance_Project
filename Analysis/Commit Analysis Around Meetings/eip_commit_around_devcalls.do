@@ -65,14 +65,14 @@ keep if distance > -183 & distance < 189
 
 tostring eip_n, replace
 gen id = meeting + eip_n
-encode id, generate(i)
-xtset i distance
+encode id, generate(eip_meeting)
+xtset eip_meeting distance
 tsfill, full
 replace one = 0 if one ==. 
-keep i one distance
+keep eip_meeting one distance
 gen dw = floor(distance/7)
 
-collapse(sum) one, by(dw i)
+collapse(sum) one, by(dw eip_meeting)
 tabulate dw, generate(week)
 
 foreach v of varlist week* {
@@ -81,9 +81,15 @@ foreach v of varlist week* {
 	label var `v' "`y'"
 	}
 
-xtreg one week2-week53, i(i) fe cluster(i)
+eststo clear
+xtreg one week2-week53 i.eip_meeting, cluster(eip_meeting)
+esttab using analysis\Results\Tables\commit_call.tex , eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("EIP FE = *.eip_meeting") 
 
-coefplot, vertical drop(_cons) xline(26) levels(90) xlabel(, angle(45) ///
+
+coefplot, vertical drop(_cons *eip_meet*) xline(26) levels(90) xlabel(, angle(45) ///
 	labsize(small)) ytitle("Number of Commits") xtitle("Weeks from Dev Call") ///
 	omitted plotregion(fcolor(white)) ///
 	graphregion(fcolor(white) lcolor(white) ilcolor(white))
