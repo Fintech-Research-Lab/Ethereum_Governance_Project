@@ -150,7 +150,7 @@ esttab using "analysis\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.
 
 	
 ********************************************************************************
-* Stats on Success
+* Stats on Success and category
 
 generate order =4 if status=="Final"
 replace order = 5 if status=="Withdrawn"
@@ -166,6 +166,12 @@ graph pie, over(status) sort(order) plabel(_all percent , format(%9.1f) ///
 graph export "analysis\results\Figures\success.png", as(png) replace
 
 
+graph pie, over(Category) sort(order) plabel(_all percent , format(%9.1f) ///
+	color(black))  plotregion(fcolor(white)) ///
+	graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\eip_by_category.png", as(png) replace
+
+
 
 
 ********************************************************************************
@@ -173,14 +179,13 @@ graph export "analysis\results\Figures\success.png", as(png) replace
 
 *success
 eststo clear
-eststo : reg success log_gh log_tw  i.category_encoded cdum_* i.year , robust 
-eststo : reg success n_author n_contributors_eip  i.category_encoded cdum_*  i.year, robust 
-eststo : reg success between client_commits_dum author_commit  i.category_encoded cdum_*  i.year, robust 
-eststo : reg success pca_social pca_author pca_skill i.category_encoded cdum_* i.year, robust 
-esttab using analysis\Results\Tables\final_all.tex , eform unstack varwidth(35)  ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
+eststo one : reg success log_gh log_tw  i.category_encoded cdum_* i.year , robust 
+eststo two : reg success n_author n_contributors_eip  i.category_encoded cdum_*  i.year, robust 
+eststo three: reg success between client_commits_dum author_commit  i.category_encoded cdum_*  i.year, robust 
+eststo four: reg success pca_social  i.category_encoded cdum_* i.year, robust 
+eststo five: reg success pca_author  i.category_encoded cdum_* i.year, robust 
+eststo six: reg success pca_skill i.category_encoded cdum_* i.year, robust 
+eststo seven: reg success pca_social pca_author pca_skill i.category_encoded cdum_* i.year, robust 
 
 unab varlist : cdum_*
 foreach cd in `varlist'{
@@ -194,6 +199,29 @@ coefplot, drop(_cons) yline(0) vertical keep(cdum_*) xlabel(, angle(45) ///
 	plotregion(fcolor(white)) 	graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\cdum_coef.png", as(png) replace
 
+
+eststo eight: reg success pca_social pca_author pca_skill i.category_encoded cdum_*  i.year if implementation ==., robust 
+eststo nine: reg implemented  pca_social pca_author pca_skill  cdum_* i.year , robust 
+
+esttab one two three seven using analysis\Results\Tables\final_all.tex , eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
+
+	
+	
+esttab one two three using analysis\Results\Tables\final_all_alt1.tex , eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
+
+esttab four five six seven eight nine using analysis\Results\Tables\final_all_alt2.tex , eform unstack varwidth(35)  ///
+	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
+	
+	
+	
 	
 * EIP SUCCESS NO IMPL/ IMPL
 	

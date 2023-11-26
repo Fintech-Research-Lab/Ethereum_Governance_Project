@@ -1,0 +1,26 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{6}{c}}
+\hline\hline
+                                   &\multicolumn{1}{c}{(1)}         &\multicolumn{1}{c}{(2)}         &\multicolumn{1}{c}{(3)}         &\multicolumn{1}{c}{(4)}         &\multicolumn{1}{c}{(5)}         &\multicolumn{1}{c}{(6)}         \\
+\hline
+Social Influence Index (PCA)       &      1.1021\sym{***}&                     &                     &      1.0231         &      0.9831         &      1.0665\sym{*}  \\
+                                   &      (5.31)         &                     &                     &      (1.11)         &     (-0.62)         &      (1.88)         \\
+[1em]
+Engagement Index (PCA)             &                     &      1.1603\sym{***}&                     &      1.1216\sym{***}&      1.1498\sym{***}&      1.1098\sym{***}\\
+                                   &                     &      (9.68)         &                     &      (7.42)         &      (6.43)         &      (3.08)         \\
+[1em]
+Skill Index (PCA)                  &                     &                     &      1.2093\sym{***}&      1.1167\sym{***}&      1.1898\sym{***}&      1.0448         \\
+                                   &                     &                     &      (8.83)         &      (3.98)         &      (4.78)         &      (0.91)         \\
+[1em]
+Category FE                        &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &          No         \\
+[1em]
+Company FE                         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
+[1em]
+Year FE                            &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         &         Yes         \\
+\hline
+Observations                       &         431         &         431         &         431         &         431         &         249         &         178         \\
+Adjusted \(R^{2}\)                 &        0.31         &        0.41         &        0.38         &        0.45         &        0.57         &        0.27         \\
+\hline\hline
+\end{tabular}
+}

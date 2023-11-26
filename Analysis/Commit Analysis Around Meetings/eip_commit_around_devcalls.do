@@ -5,6 +5,80 @@
 
 cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project\"
 
+********************************************************************************
+* NUMBER OF COMMITS BY EIP, BROKEN DOWN BY AUTHORS AND CONTRIBUTORS
+
+// first we import updated commit file which contains the raw data of commitment and convert it into an stata file
+import excel "Data\Commit Data\Eip Commit Data\eip_commit_beg.xlsx", sheet("Sheet1") firstrow clear
+rename Username github_username
+rename EIP eip_n
+
+drop if github_username == "eth-bot"
+
+gen author_dum = (Author_Id ~=.)
+
+gen ncommit = 1
+collapse (count) ncommit , by(eip_n author_dum)
+reshape wide ncommit, i(eip_n) j(author_dum)
+replace ncommit0 = 0 if ncommit0 ==.
+replace ncommit1 = 0 if ncommit1 ==.
+egen ncommit_tot = rowtotal(ncommit0 ncommit1)
+
+gen frac = ncommit1/ncommit_tot
+
+replace ncommit_tot = 30 if ncommit_tot > 30
+bys ncommit_tot: egen mean_frac = mean(frac)
+collapse (percent) eip_n,  by(ncommit_tot mean_frac)
+gen eip_n1 = eip_n * mean_frac / 100
+gen eip_n0 = eip_n * (1-mean_frac) /100
+
+tostring ncommit_tot, gen(ncom_str)
+replace ncom_str = "30+" if ncom_str =="30"
+graph bar eip_n1 eip_n0 , stack over(ncom_str, sort(ncommit_tot) ///
+	label(labsize(small))) ytitle("% of EIPs") ///
+	 b1title("Number of Commits") legend(label(1 "EIP Authors") label(2 "EIP Contributors" )) plotregion(fcolor(white)) ///
+	graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "Analysis\Commit Analysis Around Meetings\commit_total.png", as(png) replace
+
+
+********************************************************************************
+* ANALYSIS OF DEV CALLS ATTENDEES
+
+
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Mapping_File.csv", names clear
+rename original_name full_name
+replace full_name = "Åukasz Rozmej" if full_name == "ÃÂukasz Rozmej"
+replace full_name = subinstr(full_name,"ÃÂ", "Å",.)
+replace full_name = subinstr(full_name,"ÃÂ³", "Ã³",.)
+replace full_name = subinstr(full_name,"ÃÂ", "Å",.)
+replace full_name = subinstr(full_name,"ÃÂ©", "Ã©",.)
+replace full_name = subinstr(full_name,"ÃÂ¡", "Ã¡",.)
+replace full_name = subinstr(full_name,"ÃÂ¶", "Ã¶",.)
+ 
+drop v1
+duplicates drop
+save temp_names, replace
+
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\flat_list_meeting_attendees.csv", names clear
+merge m:1 full_name using temp_names, 
+
+unique(meeting)
+
+rename replace_name name
+drop full_name _merge
+drop if name ==""
+
+gen one = 1
+collapse (count) one, by(name)
+gsort -one
+
+erase temp_names.dta
+
+
+
+********************************************************************************
+* EVENT STUDY OF N. COMMITS AROUND DEV CALL
+
 
 * Import list of EIPS without living, and meta
 
