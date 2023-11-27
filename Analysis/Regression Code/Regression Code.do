@@ -9,7 +9,7 @@
 cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project"
 
 *Moazzam
-*cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum Governance Project\"
+*cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum_Governance_Project\"
 
 
 
@@ -365,6 +365,7 @@ duplicates drop
 gsort author -n_eip
 bys author: keep if _n==1
 gsort -n_eip
+save "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta"
 graph hbar n_eip if _n<11,  over(author , sort(n_eip) descending) ///
 	ytitle("N. of EIPs") plotregion(fcolor(white)) graphregion(fcolor(white) ///
 	lcolor(white) ilcolor(white)) 
