@@ -272,7 +272,7 @@ graph export "analysis\results\Figures\neip_by_yearstatus.png", as(png) replace
 
 
 *top 10 authors	
-keep eip_number author* status implemented Category
+keep eip_number author* status implemented Category sdate
 drop author author*commit* author*_follo* author*_job* author*comp* author*between* author*close* author*eigen*
 
 
@@ -281,7 +281,7 @@ foreach var of varlist author*id {
    	rename `var' `newname'	
 	}
 	
-reshape long author id_author , i(eip status) j(id) string
+reshape long author id_author , i(eip status sdate) j(id) string
 drop if id_author ==.	
 bys id_author: egen n_eip = count(id) 	
 bys id_author: egen n_eip_final = count(id) if status=="Final" & (Category =="ERC" | Category == "Interface")	
@@ -499,14 +499,6 @@ twoway line cum_n np ,  ytitle("% of EIPs") || line cum_n_final np_final ,  ytit
 graph export "analysis\results\Figures\npeip_by_author.png", as(png) replace
 
 
-
-
-
-erase temp_final.dta
-erase temp3.dta
-erase temp.dta
-erase temp_imp.dta
-
 *% top 10 authors  
 di cum_n[10]
 di cum_n_final[10]
@@ -514,5 +506,56 @@ di cum_n_imp[10]
 
 
 
+* GINI COEFFICIENT BY Rolling 2 year
 	
+use temp, clear
+gen gini = .
+gen year = .
+keep gini year
+drop if year==.
+save gini, replace
+
+forvalues y = 2016/2023 {
+
+	use temp, clear
+	gen year = year(sdate)
+	keep if year == `y' | year == `y'-1
+	bys eip_number: gen frac = 1/_N
+	egen toteip = nvals(eip_number)
+	bys id_author: egen n_eip_frac = total(frac)	
+	replace n_eip_frac = n_eip_frac/toteip 
+
+	keep author id_author n_eip_frac*
+
+	duplicates drop
+	gsort id_author -n_eip_frac
+	bys id_author: keep if _n==1
+	drop if n_eip_frac ==.
+	sort n_eip_frac
+	ineqdec0 n_eip_frac
 	
+	gen gini = r(gini) 
+	keep gini
+	duplicates drop
+	gen year = `y'
+	save temp_gini, replace
+	use gini, clear
+	append using temp_gini
+	save gini, replace
+	erase temp_gini.dta
+	}
+	
+use gini, clear
+
+graph bar gini, over(year) ytitle("Gini Coefficient")  ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1))
+graph export "analysis\results\Figures\gini_by_year.png", as(png) replace
+
+* Compute Gini Coefficient
+	
+erase gini.dta
+erase temp_final.dta
+erase temp3.dta
+erase temp.dta
+erase temp_imp.dta
