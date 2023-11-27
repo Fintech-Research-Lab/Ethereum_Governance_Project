@@ -360,9 +360,9 @@ graph export "analysis\results\Figures\neip_imp_top10author.png", as(png) replac
 
 * All and Finalized EIPs
 use temp, clear
-keep author n_eip* 
+keep author n_eip* id_author 
 duplicates drop
-gsort author -n_eip_final
+gsort author -n_eip
 bys author: keep if _n==1
 gsort -n_eip
 graph hbar n_eip if _n<11,  over(author , sort(n_eip) descending) ///

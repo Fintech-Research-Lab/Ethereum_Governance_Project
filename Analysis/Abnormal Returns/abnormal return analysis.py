@@ -17,8 +17,8 @@ from datetime import datetime
 # ETH PRICES
 # get eth price data
 
-os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
-# os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
+#os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/')
+os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
 
           
 
@@ -115,6 +115,7 @@ fork.sort_values('ann_date', inplace = True)
 # adjust event dates if they occur during non trading days. 
 fork = pd.merge_asof(left = fork, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
 fork = fork.loc[fork['date'] > minp_eth][['release', 'ann_date', 'date']].dropna().reset_index(drop = True)
+fork = fork.loc[~fork['release'].str.contains("Glacier", na=False)]
 
 # generate event dates based on last meeting date when eip was discussed
 
@@ -138,15 +139,17 @@ eip_max_date.sort_values('Date', inplace = True)
 eip_meeting = pd.merge_asof(left = eip_max_date, right = dat, left_on = 'Date', right_on = 'date', direction = 'backward')
 eip_meeting = eip_meeting.loc[eip_meeting['Date'] > minp_eth][['Date', 'EIP', 'Meeting','date','Category']].dropna().reset_index(drop = True)
 
-# create event PICK ONE FOR THE ANALYSIS
 
-event = eip
-#event = eip_meeting
- 
 #################################################################################################################   
 # generate a dataframe with -40 to +10 days around each announcement
 
 # Use this code for eip and eip_meeting
+
+# create event PICK ONE FOR THE ANALYSIS
+
+#event = eip
+event = eip_meeting
+ 
 df = pd.DataFrame()
 for i in range(len(event.index)):
     dat_temp = dat.dropna()
@@ -158,31 +161,12 @@ for i in range(len(event.index)):
     #dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
     dat_temp['eip'] = event.iloc[i]['EIP'] # For EIP Finalization Dates
     dat_temp['Category'] = event.iloc[i]['Category'] # To Add Category
-    dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<11)]
+    dat_temp = dat_temp[(dat_temp['diff']>-61) & (dat_temp['diff']<61)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
     df = df.append(dat_temp)
 
 df.sort_values(['eip','diff'])
-df['diff'].value_counts()
-
-# Use this code for FORK Analysis
-
-df = pd.DataFrame()
-for i in range(len(fork.index)):
-    dat_temp = dat.dropna()
-    dat_temp.sort_values('date', inplace = True)
-    dat_temp.reset_index(drop = True, inplace = True) 
-    dat_temp['N'] =  dat_temp.index
-    dat_temp = dat_temp.merge(fork[fork.index == i], on = 'date', how = 'left')
-    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
-    dat_temp['release'] = fork.iloc[i]['release']
-    dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<11)]
-    dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
-    dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
-    df = df.append(dat_temp)
-
-df.sort_values(['release','diff'])
 df['diff'].value_counts()
 
 ###############################################################################
@@ -214,6 +198,26 @@ plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
+
+###############################################################################
+# Use this code for FORK Analysis
+
+df = pd.DataFrame()
+for i in range(len(fork.index)):
+    dat_temp = dat.dropna()
+    dat_temp.sort_values('date', inplace = True)
+    dat_temp.reset_index(drop = True, inplace = True) 
+    dat_temp['N'] =  dat_temp.index
+    dat_temp = dat_temp.merge(fork[fork.index == i], on = 'date', how = 'left')
+    dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
+    dat_temp['release'] = fork.iloc[i]['release']
+    dat_temp = dat_temp[(dat_temp['diff']>-61) & (dat_temp['diff']<61)]
+    dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
+    dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
+    df = df.append(dat_temp)
+
+df.sort_values(['release','diff'])
+df['diff'].value_counts()
 
 
 # Plot for Fork Analysis
