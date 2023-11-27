@@ -1,7 +1,7 @@
 * THIS CODE CREATES A FILE WITH THE EIP COMMITS AROUND A TIME WHEN THE EIP IS DISCUSSED IN A ALL DEVS CALL. 
 
 
-*cd "C:\Users\khojama\Box\Fintech Research Lab\Ethereum_Governance_Project\"
+*cd "C:\Users\moazz\Box\Fintech Research Lab\Ethereum_Governance_Project\"
 
 cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project\"
 
@@ -62,7 +62,7 @@ save temp_names, replace
 insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\flat_list_meeting_attendees.csv", names clear
 merge m:1 full_name using temp_names, 
 
-unique(meeting)
+*unique(meeting)
 
 rename replace_name name
 drop full_name _merge
@@ -74,7 +74,29 @@ gsort -one
 
 erase temp_names.dta
 
+rename name attendee_name
 
+save attendee_names, replace
+// now bring eip authorship
+import delimited "Analysis\Meeting Attendees and Ethereum Community Analysis\unique_names_allplayers.csv", varnames(1)  clear
+merge m:m attendee_name using attendee_names
+keep if attendee_name !="" & author_name != ""
+drop contributor_name client_name _merge
+rename one meetings_attended
+save attendee_names, replace
+
+use "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta"
+rename author author_name
+merge m:m author_name using attendee_names
+keep if _merge == 3
+gen label = author_name if meetings_attended > 40 | n_eip > 40
+
+
+twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored") ytitle("Meetings Attended") title("Dev Call Attendees and EIP Authorship") mlabel(label) mlabsize(1.5)
+
+graph save "meetings attended and co-authorship graph.png", replace
+
+erase attendee_names.dta
 
 ********************************************************************************
 * EVENT STUDY OF N. COMMITS AROUND DEV CALL
