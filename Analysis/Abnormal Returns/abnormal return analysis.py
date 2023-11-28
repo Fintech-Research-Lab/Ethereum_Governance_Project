@@ -115,7 +115,7 @@ fork.sort_values('ann_date', inplace = True)
 # adjust event dates if they occur during non trading days. 
 fork = pd.merge_asof(left = fork, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
 fork = fork.loc[fork['date'] > minp_eth][['release', 'ann_date', 'date']].dropna().reset_index(drop = True)
-fork = fork.loc[~fork['release'].str.contains("Glacier", na=False)]
+fork = fork.loc[~fork['release'].str.contains("Glacier", na=False)].reset_index(drop = True)
 
 # generate event dates based on last meeting date when eip was discussed
 
@@ -173,30 +173,32 @@ df['diff'].value_counts()
 # PLOT for EIP and EIP_Meeting
 
 #SPY BENCHMARK
-plt.figure()
+plt.figure(figsize=(8,6))
 #df.groupby('diff')['CAR'].mean().plot()
 df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR'].mean().plot()
 
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
-plt.title("Cumulative Abnormal Returns (SPY) by Finalization Date of Core/Networking EIPs")
-plt.xlabel('Days to Finalization Announcement Date')
+#plt.title("Cumulative Abnormal Returns (SPY) by Last AllDevCore Meeting Date of Core/Networking EIPs")
+plt.xlabel('Days to AllDevCore Meeting Date')
 plt.ylabel('Cumulative Abnormal Returns')
+plt.savefig('Analysis/Abnormal Returns/CAR_SPY.png', bbox_inches="tight")
 plt.show()
 
 
 #BTC BENCHMARK
-plt.figure()
+plt.figure(figsize=(8,6))
 #df.groupby('diff')['CAR_btc'].mean().plot()
 df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR_btc'].mean().plot()
 
 #plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
-plt.title("Cumulative Abnormal Returns (BTC) by Finalization Date of Core/Networking EIPs")
+#plt.title("Cumulative Abnormal Returns (BTC) by Finalization Date of Core/Networking EIPs")
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
-plt.xlabel('Days to Finalization Announcement Date')
+plt.xlabel('Days to AllDevCore Date')
 plt.ylabel('Cumulative Abnormal Returns')
+plt.savefig('Analysis/Abnormal Returns/CAR_BTC.png', bbox_inches="tight")
 plt.show()
 
 ###############################################################################

@@ -49,4 +49,57 @@ graph export "analysis\adoption analysis\oracle.png", as(png) replace
 
 
 
+
+********************************************************************************
+* STABLECOIN
+
+	
+foreach var in "Analysis\Adoption Analysis\USDC" "Analysis\Adoption Analysis\USDT" "Analysis\Adoption Analysis\DAI" {
+	insheet using "`var'April.csv", comma clear names
+	capture drop total 
+	ds
+	local varlist `r(varlist)'	
+	gen total = 0 
+	foreach v in `varlist' { 
+		capture egen temptotal = rowtotal(total `v')
+		capture replace total = temptotal
+		capture drop temptotal
+	} 
+	local var2  = substr("`var'",28,.)
+	gen stable = "`var2'"
+	save "`var'_temp", replace
+	}
+clear all
+foreach var in "Analysis\Adoption Analysis\USDC" "Analysis\Adoption Analysis\USDT" "Analysis\Adoption Analysis\DAI" {
+	append using "`var'_temp"
+	erase "`var'_temp.dta"
+	}
+
+keep evt_date total stable	
+reshape wide total, i(evt_date) j(stable) string
+rename totalDAI DAI
+rename totalUSDC USDC
+rename totalUSDT USDT
+egen total = rowtotal(DAI USDC USDT)
+replace DAI =  DAI/total
+replace USDC =  USDC/total
+replace USDT =  USDT/total
+
+gen two = USDC + USDT
+gen three = two + DAI
+
+
+gen date = dofc(clock(evt_date, "YMD hm"))
+format date %td
+
+keep if date > date("01-05-2021", "MDY")
+
+twoway area three two USDC date,  ///
+	yscale(range(0, 1 )) ylabel(#5)  legend( label(1 "DAI") ///
+	label(2 "USDT") label(3 "USDC") ) ///
+	xtitle("Date") ytitle("Stablecoin TVL Market Share") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) legend(ring(1) position(6) cols(3))
+graph export "analysis\adoption analysis\stable.png", as(png) replace
+
 	

@@ -76,25 +76,27 @@ erase temp_names.dta
 
 rename name attendee_name
 
-save attendee_names, replace
+save temp_attendee_names, replace
 // now bring eip authorship
 import delimited "Analysis\Meeting Attendees and Ethereum Community Analysis\unique_names_allplayers.csv", varnames(1)  clear
-merge m:m attendee_name using attendee_names
+merge m:m attendee_name using temp_attendee_names
 keep if attendee_name !="" & author_name != ""
 drop contributor_name client_name _merge
 rename one meetings_attended
 save attendee_names, replace
+erase temp_attendee_names.dta
 
 use "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta"
 rename author author_name
 merge m:m author_name using attendee_names
 keep if _merge == 3
-gen label = author_name if meetings_attended > 40 | n_eip > 40
+gen label = author_name if meetings_attended > 40 | n_eip > 20
 
 
-twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored") ytitle("Meetings Attended") title("Dev Call Attendees and EIP Authorship") mlabel(label) mlabsize(1.5)
-
-graph save "meetings attended and co-authorship graph.png", replace
+twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored") ///
+	ytitle("Meetings Attended") mlabel(label) mlabsize(1.5) ytitle("Number of Commits") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "Analysis\Commit Analysis Around Meetings\attended_eip.png", replace as(png)
 
 erase attendee_names.dta
 

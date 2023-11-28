@@ -104,7 +104,53 @@ foreach comp in `top10' {
 
 erase "Data\Raw Data\temp_top10.dta"
 	
+********************************************************************************
+* ETHEREUM FOUNDATION TIME TRENDS
+
+gen year = year(sdate)
+
+save temp_ef, replace
+
+forvalues y = 2015/2023 {
+	use temp_ef, clear
+	keep if year == `y' | year == `y'-1
+	gen tot = _N
+	egen EF = count(eip_number) if cdum_Ethereum_Foundation ==1
+	egen tot_erc = count(eip_number) if Category =="ERC" | Category =="Interface"
+	egen EF_erc = count(eip_number) if cdum_Ethereum_Foundation ==1 & (Category =="ERC" | Category =="Interface")
+	egen tot_core = count(eip_number) if Category =="Core" | Category =="Networking"
+	egen EF_core = count(eip_number) if cdum_Ethereum_Foundation ==1 & (Category =="Core" | Category =="Networking")
+	gen frac = EF / tot
+	gen frac_erc = EF_erc / tot_erc
+	gen frac_core = EF_core / tot_core
+	keep frac*
+	gen year = `y'
+	duplicates drop
+	save temp_frac`y', replace
+	}
+
+clear all
+forvalues y = 2015/2023 {
+	append using temp_frac`y'
+	erase temp_frac`y'.dta
+	}
+
+collapse (max) frac*, by(year)	
+
+label var frac "All EIPs"
+label var frac_erc "ERCs EIPs"
+label var frac_core "Core EIPs"
+
+twoway line frac year  || line frac_erc year || line frac_core year ,  ///
+	xtitle("Year") ytitle("% EIPs Co-Authored by Ethereum Foundation") ///
+	xla(2015(1)2023) xtick(2015(1)2023) legend(ring(0) position(2) cols(1))  ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\eip_ef_by_year.png", as(png) replace
+
 	
+use temp_ef, clear
+erase temp_ef.dta
+
 ********************************************************************************
 * Principal Component Analysis
 
@@ -127,7 +173,6 @@ label var implemented "Implemented"
 
 gen time_start_today = date("june 21, 2023", "MDY") - dofc(sdate)
 
-gen year = year(sdate)
 
 gen success2 = "Finalized" if status =="Final"
 replace success2 = "In Progress" if status =="Draft" | status =="Review" |  status =="Last Call" 
