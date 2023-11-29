@@ -372,7 +372,6 @@ gen log_gh = log(1+gh_follower)
 
 gen tf_scale = tw_follower/1000 
 
-
 // Create labels
 label var log_tw "Twitter Followers (log)"
 label var log_gh "GitHub Followers (log)"
