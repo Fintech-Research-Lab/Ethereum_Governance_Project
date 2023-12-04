@@ -22,14 +22,37 @@ foreach file in `files' {
 	erase "Data\Commit Data\client_commit\temp_`file'"
 	}
 
+* get summary stats
 	
-* produce lorenz curve for each client
-
 drop if login ==""
 
 gen ncomm = 1
+bys client login: egen ncomm2 = count(ncomm)
+bys client login: keep if _n==1
 collapse (count) ncomm , by(client login) 
 
+unique(login), by(client)
+preserve
+collapse (sum) ncomm, by(login)
+sum , d
+restore
+
+
+* Compute gini coefficient
+
+gen gini_av = 0
+foreach var in besu erigon geth nethermind {
+	di "`var'"
+	gsort -ncomm
+	ineqdec0 ncomm if client =="`var'"
+	replace gini_av = gini_av + r(gini)
+	}
+
+replace gini_av = gini_av /4
+sum gini_av	
+* produce lorenz curve for each client
+	
+	
 gsort client -ncomm login
 by client: egen N = total(ncomm) 
 by client: gen client_cont = _n 
@@ -45,7 +68,6 @@ foreach var in besu erigon geth nethermind {
 	replace client_cont =0 if client_cont ==.
 	replace client_cont_perc =0 if client_cont_perc ==.
 	replace client = "`var'" if client ==""
-	label 
 	}
 
 
@@ -59,6 +81,29 @@ twoway line ncomm_cum client_cont if client == "besu" & client_cont<100,  ytitle
 	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1) label(1 "Besu") label(2 "Erigon") label(3 "Geth") label(4 "Nethermind"))
 graph export "Analysis\Client Analysis\lorenz_commits.png", as(png) replace
 
+
+********************************************************************************
+* CLIENT EMPLOYMENT ANALYSIS
+
+insheet using "Data\Raw Data\Client_Employment.csv", clear names
+
+
+egen found = count(Name) if company ~=""
+replace found = found / _N
+sum found
+
+drop if company ==""
+gen one = 1
+
+collapse (count) one, by(company client)
+
+gsort -one
+
+gen company2 = company
+replace company2 = "Others" if one <6
+graph bar one , over(company2) over(client) asyvars stack percentages ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) ytitle("% of Client Developers")
+graph export "Analysis\Client Analysis\client_company.png", as(png) replace
 	
-	
-	
+

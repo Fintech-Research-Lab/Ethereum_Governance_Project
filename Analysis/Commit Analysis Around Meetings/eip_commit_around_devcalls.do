@@ -54,8 +54,9 @@ graph export "Analysis\Commit Analysis Around Meetings\commit_total.png", as(png
 insheet using "Data\Commit Data\Eip Commit Data\Calls_Updated_standardized.csv", clear comma names
 keep meeting date
 gen date2 = date(date,"MDY")
-gen datem = mofd(date2)
-keep datem meeting
+gen datem = year(date2)
+keep datem meeting date2 date
+drop if datem < 2015
 save temp_meetdate, replace
 
 insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Mapping_File.csv", names clear
@@ -73,7 +74,7 @@ duplicates drop
 save temp_names, replace
 
 insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\flat_list_meeting_attendees.csv", names clear
-drop if meeting = "Meeting Template"
+drop if meeting == "Meeting Template"
 merge m:1 full_name using temp_names, 
 tab _merge
 drop if _merge==2
@@ -85,17 +86,25 @@ merge m:1 meeting using temp_meetdate
 tab _merge
 drop if _merge==2
 erase temp_meetdate.dta
-
+drop _merge
 
 
 * SUMMARY STATS 
 unique(meeting)
 
-* define number of attendees per meeting
+* find number of attendees per meeting
 bys meeting: egen n_attendees = nvals(name)
 preserve
-duplicates drop meeting, force
+duplicates drop meeting datem date date2, force
 sum 
+bys datem: egen n_attendees_year = mean(n_attendees)
+keep datem n_attendees_year
+duplicates drop
+sort datem
+graph bar n_attendees_year, over(datem) ytitle("Number of Attendees per Meeting (avg)") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "Analysis\Commit Analysis Around Meetings\attendees_year.png", replace as(png)
+
 restore
 drop n_attendees
 
@@ -131,9 +140,10 @@ gen label = author_name if meetings_attended > 40 | n_eip > 20
 
 
 twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored") ///
-	ytitle("Meetings Attended") mlabel(label) mlabsize(1.5) ytitle("Number of Commits") ///
-	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
-graph export "Analysis\Commit Analysis Around Meetings\attended_eip.png", replace as(png)
+	|| lfit meetings_attended n_eip ,    ytitle("Meetings Attended") mlabel(label) mlabsize(1.5)  ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white)) ///
+	legend(off)
+graph export "Analysis\Commit Analysis Around Meetings\attended_eip.png", replace as(png) 
 
 erase attendee_names.dta
 
@@ -204,10 +214,10 @@ encode id, generate(eip_meeting)
 xtset eip_meeting distance
 tsfill, full
 replace one = 0 if one ==. 
-keep eip_meeting one distance
+keep eip_meeting one distance eip_n meeting
 gen dw = floor(distance/7)
 
-collapse(sum) one, by(dw eip_meeting)
+collapse(sum) one, by(dw eip_meeting eip_n meeting)
 tabulate dw, generate(week)
 
 foreach v of varlist week* {
@@ -217,7 +227,8 @@ foreach v of varlist week* {
 	}
 
 eststo clear
-xtreg one week2-week53 i.eip_meeting, cluster(eip_meeting)
+reg one week2-week53 i.eip_meeting, cluster(eip_meeting)
+
 esttab using analysis\Results\Tables\commit_call.tex , eform unstack varwidth(35)  ///
 	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
 	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
@@ -229,6 +240,8 @@ coefplot, vertical drop(_cons *eip_meet*) xline(26) levels(90) xlabel(, angle(45
 	omitted plotregion(fcolor(white)) ///
 	graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "Analysis\Commit Analysis Around Meetings\commit_call.png", as(png) replace
+
+sum
 
 
 erase temp_call_eip.dta
