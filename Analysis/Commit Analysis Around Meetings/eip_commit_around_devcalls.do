@@ -132,15 +132,16 @@ rename one meetings_attended
 save attendee_names, replace
 erase temp_attendee_names.dta
 
-use "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta"
+use "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta", clear
 rename author author_name
 merge m:m author_name using attendee_names
 keep if _merge == 3
 gen label = author_name if meetings_attended > 40 | n_eip > 20
 
 
-twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored") ///
-	|| lfit meetings_attended n_eip ,    ytitle("Meetings Attended") mlabel(label) mlabsize(1.5)  ///
+twoway scatter meetings_attended n_eip, xtitle("EIPs Co-Authored")  ///
+	ytitle("Meetings Attended") mlabel(label) mlabsize(1.5)  mlabposition(12) ///
+	|| lfit meetings_attended n_eip ,    ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white)) ///
 	legend(off)
 graph export "Analysis\Commit Analysis Around Meetings\attended_eip.png", replace as(png) 

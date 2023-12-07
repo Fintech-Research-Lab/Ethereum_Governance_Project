@@ -114,7 +114,15 @@ fork['ann_date'] = pd.to_datetime(fork['ann_date']).dt.tz_localize('US/Eastern')
 fork.sort_values('ann_date', inplace = True)
 # adjust event dates if they occur during non trading days. 
 fork = pd.merge_asof(left = fork, right = dat, left_on = 'ann_date', right_on = 'date', direction = 'backward')
-fork = fork.loc[fork['date'] > minp_eth][['release', 'ann_date', 'date']].dropna().reset_index(drop = True)
+fork = fork.rename(columns = {'date' : 'ann_date2'})
+
+fork['block_date'] = pd.to_datetime(fork['block_date'], format='%b-%d-%Y %I:%M:%S %p +UTC').dt.tz_localize('UTC').dt.tz_convert('US/Eastern') 
+fork.sort_values('block_date', inplace = True)
+# adjust event dates if they occur during non trading days. 
+fork = pd.merge_asof(left = fork, right = dat, left_on = 'block_date', right_on = 'date', direction = 'backward')
+fork = fork.rename(columns = {'date' : 'block_date2'})
+fork = fork.loc[fork['ann_date'] > minp_eth][['release', 'ann_date', 'block_date', 'ann_date2', 'block_date2']].dropna().reset_index(drop = True)
+
 fork = fork.loc[~fork['release'].str.contains("Glacier", na=False)].reset_index(drop = True)
 
 # generate event dates based on last meeting date when eip was discussed
@@ -164,7 +172,7 @@ for i in range(len(event.index)):
     dat_temp = dat_temp[(dat_temp['diff']>-61) & (dat_temp['diff']<61)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
-    df = df.append(dat_temp)
+    df = pd.concat([df,dat_temp], axis = 0)
 
 df.sort_values(['eip','diff'])
 df['diff'].value_counts()
@@ -173,13 +181,25 @@ df['diff'].value_counts()
 # PLOT for EIP and EIP_Meeting
 
 #SPY BENCHMARK
-plt.figure(figsize=(8,6))
-#df.groupby('diff')['CAR'].mean().plot()
-df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR'].mean().plot()
+fig, ax = plt.subplots(figsize=(8,6))
 
-#plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
-#plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
-plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
+df1 = df[(df['Category'] == "Core")|(df['Category'] == "Networking")]
+df1_grouped = df1.groupby('diff')['CAR'].mean().rename('mean')
+df1_grouped = pd.concat([df1_grouped, (1.645 * df1.groupby('diff')['CAR'].std() / np.sqrt(  df1.groupby('diff')['CAR'].count())).rename('ci') ], axis = 1)
+df1_grouped['ci_lower'] = df1_grouped['mean'] - df1_grouped['ci']
+df1_grouped['ci_upper'] = df1_grouped['mean'] + df1_grouped['ci']
+
+df1_grouped['mean'].plot(ax = ax)
+
+
+
+x = df1_grouped.index
+ax.plot(x, df1_grouped['mean'])
+ax.fill_between(
+    x, df1_grouped['ci_lower'], df1_grouped['ci_upper'], color='b', alpha=.15)
+fig.autofmt_xdate(rotation=45)
+plt.gca().yaxis.grid(True)
+plt.axvline(x=0, color='red', linestyle='--', label='Final Discussion Date')
 #plt.title("Cumulative Abnormal Returns (SPY) by Last AllDevCore Meeting Date of Core/Networking EIPs")
 plt.xlabel('Days to AllDevCore Meeting Date')
 plt.ylabel('Cumulative Abnormal Returns')
@@ -188,18 +208,31 @@ plt.show()
 
 
 #BTC BENCHMARK
-plt.figure(figsize=(8,6))
-#df.groupby('diff')['CAR_btc'].mean().plot()
-df[(df['Category'] == "Core")|(df['Category'] == "Networking")].groupby('diff')['CAR_btc'].mean().plot()
+fig, ax = plt.subplots(figsize=(8,6))
 
-#plt.plot(lower_5, color = 'red', label = '5th Percentile CI')
-#plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
-#plt.title("Cumulative Abnormal Returns (BTC) by Finalization Date of Core/Networking EIPs")
-plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
-plt.xlabel('Days to AllDevCore Date')
+df1 = df[(df['Category'] == "Core")|(df['Category'] == "Networking")]
+df1_grouped = df1.groupby('diff')['CAR_btc'].mean().rename('mean')
+df1_grouped = pd.concat([df1_grouped, (1.645 * df1.groupby('diff')['CAR_btc'].std() / np.sqrt(  df1.groupby('diff')['CAR_btc'].count())).rename('ci') ], axis = 1)
+df1_grouped['ci_lower'] = df1_grouped['mean'] - df1_grouped['ci']
+df1_grouped['ci_upper'] = df1_grouped['mean'] + df1_grouped['ci']
+
+df1_grouped['mean'].plot(ax = ax)
+
+
+
+x = df1_grouped.index
+ax.plot(x, df1_grouped['mean'])
+ax.fill_between(
+    x, df1_grouped['ci_lower'], df1_grouped['ci_upper'], color='b', alpha=.15)
+fig.autofmt_xdate(rotation=45)
+plt.gca().yaxis.grid(True)
+plt.axvline(x=0, color='red', linestyle='--', label='Final Discussion Date')
+#plt.title("Cumulative Abnormal Returns (SPY) by Last AllDevCore Meeting Date of Core/Networking EIPs")
+plt.xlabel('Days to AllDevCore Meeting Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.savefig('Analysis/Abnormal Returns/CAR_BTC.png', bbox_inches="tight")
 plt.show()
+
 
 ###############################################################################
 # Use this code for FORK Analysis
@@ -210,13 +243,13 @@ for i in range(len(fork.index)):
     dat_temp.sort_values('date', inplace = True)
     dat_temp.reset_index(drop = True, inplace = True) 
     dat_temp['N'] =  dat_temp.index
-    dat_temp = dat_temp.merge(fork[fork.index == i], on = 'date', how = 'left')
+    dat_temp = dat_temp.merge(fork[fork.index == i], left_on = 'date', right_on = 'block_date2', how = 'left')
     dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
     dat_temp['release'] = fork.iloc[i]['release']
     dat_temp = dat_temp[(dat_temp['diff']>-61) & (dat_temp['diff']<61)]
     dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
-    df = df.append(dat_temp)
+    df = pd.concat([df,dat_temp], axis = 0)
 
 df.sort_values(['release','diff'])
 df['diff'].value_counts()
@@ -233,7 +266,7 @@ df.groupby('diff')['CAR'].mean().plot()
 #plt.plot(upper_95, color = 'red', label = '5th Percentile CI')
 plt.axvline(x=0, color='red', linestyle='--', label='Final Date')
 plt.title("Cumulative Abnormal Returns (SPY) by Fork Release")
-plt.xlabel('Days to Finalization Announcement Date')
+plt.xlabel('Days to Fork Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
 
