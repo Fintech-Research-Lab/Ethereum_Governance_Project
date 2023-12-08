@@ -4,12 +4,16 @@ This document describes how to replicate the data and the results of the paper "
 
 ## EIP DATA
 1. *EIP List*: The data collection process begins with scraping the list of EIPs and related authors from the [Ethereum EIP page](https://eips.ethereum.org/all). This website contains information of all EIPs, their status and their authors. This data is collected using a web-scrapping code as of **06/21/2023**. The code *EIP list generating code.py* scrapes EIP Number, Authors, Status, and Title, and stores it into the file allEIPsandAuthorsv2.csv. (Note that the code was run on 6/21/2023. Rerunnign the code now would produce a different set of EIPs, as new EIPS have been added since then). 
-2. *EIP Author ID*: The same EIP author name is sometime spelled differently in the EIP list. We thus take the EIP author list, and manually assign a unique author identidier (*Author id*) to each author and the related github handle. The file *unique_author_names_with_id.csv* includes the list of authors and id.   
-3. *EIP List and Standardized Authors*: The python code *pythoncode to prepare data merging* takes the EIP list, and adds the author id to each author, saving the file as *Ethereum_Cross-sectional_Data.csv*.
-4. *EIP Implementation*. We manually went throguh all EIPs, and classified them on whether Whether an EIP requires a client implementation or not, and in which fork it was implemented. The information is saved in *eip_implementation.csv*
-5. *EIP Start Date*: *startdate_scraping.py* collect start date of all eips and stores it into *eip_startdates.csv*  
-6. *EIP End Date*: end date of all EIPs that have reached final stage stored in file *finaleip_enddates.csv*
-7. *EIP Authorship betweenness*. we use python code *??????.py* to create a betweenness centrality measure amongs all co-authors of EIPs. The code takes file *Ethereum_Cross-Sectional_Data.csv* and create a betweenness centrality measure for each EIP based on author_ids. We merge the betweenness_centrality measure in the Ethereum_Cross-sectional_Date.dta using eip_number.
+2. *EIP Author ID*: The same EIP author name is sometime spelled differently in the EIP list. We thus take the EIP author list, and manually assign a unique author identifier (*Author id*) to each author and the related github handle. The file *unique_author_names_with_id.csv* includes the list of authors and id.   
+3. *EIP List and Standardized Authors*: The python code *pythoncode to prepare data merging* takes the EIP list (*allEIPsandAuthorsv2.csv*) does the following:
+   -replace repeated names to standardize names
+   - adds the author id to each author
+   - modify the file *unique_author_names_with_id.csv*
+   - save the file as *Ethereum_Cross-sectional_Data_beg.csv*.
+5. *EIP Implementation*. We manually went throguh all EIPs, and classified them on whether Whether an EIP requires a client implementation or not, and in which fork it was implemented. The information is saved in *eip_implementation.csv*
+6. *EIP Start Date*: *startdate_scraping.py* collect start date of all eips and stores it into *eip_startdates.csv*  
+7. *EIP End Date*: end date of all EIPs that have reached final stage stored in file *finaleip_enddates.csv*
+8. *EIP Authorship betweenness*. we use python code *??????.py* to create a betweenness centrality measure amongs all co-authors of EIPs. The code takes file *Ethereum_Cross-Sectional_Data.csv* and create a betweenness centrality measure for each EIP based on author_ids. We merge the betweenness_centrality measure in the Ethereum_Cross-sectional_Date.dta using eip_number.
 
 ## SOCIAL DATA
 8. *Github Followers*: *Github Follower Extract.py* scrapes the github followers for each EIP authors with a github handle. The code generates an interim file which is stored in *author_github_following_raw.csv*. We apply python code *github data reconciliation* to reconcile an older version of this data and match it with author_ids in this code to create a final github data stored in *GitHub_Data.csv*  
