@@ -46,7 +46,7 @@ def plot_bc_graph(df, G, centrality, typ):
         
     
     plt.figure(figsize=(20, 20))
-    pos = nx.spring_layout(G, k=0.5, iterations=100)
+    pos = nx.spring_layout(G, k=0.6, iterations=100,  seed = 10)
     nx.draw_networkx_nodes(G, pos, node_size=node_size, node_color='skyblue', edgecolors='black')
     nx.draw_networkx_edges(G, pos, alpha=0.3)
     nx.draw_networkx_labels(G,  pos , aut_id_names, font_size=10, font_weight='bold')
@@ -166,6 +166,73 @@ eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rena
 
 # Create and save a DataFrame for betweenness centrality scores
 eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_all.csv", index = False)
+
+# CLUSTERING COEFFICIENT
+
+clus = nx.average_clustering(G_all)
+
+data['year'] = pd.to_datetime(data['sdate']).dt.year
+
+clus_year = pd.DataFrame(columns = ['year', 'clustering', 'nodes'])
+
+for y in range(2016,2024):
+    # Iterate through each year 
+    G_year = nx.Graph()
+    datax = data[(data['year']==y) | (data['year']==y-1)]
+    n_aut = []
+    for _, row in datax.iterrows():
+        authors = [author for author in row['author'].split(', ')]
+        authorids = [author for author in row['allid'].split(',')]
+        n_aut.append(len(authorids))
+        for author in authorids:
+            if author not in G_year:
+                G_year.add_node(author)
+        for i in range(len(authorids)):
+            for j in range(i+1, len(authorids)):
+                if G_year.has_edge(authorids[i], authorids[j]):
+                    G_year[authorids[i]][authorids[j]]['weight'] += 1
+                else:
+                    G_year.add_edge(authorids[i], authorids[j], weight=1)
+    
+    # Remove self-loops from the graph
+    G_year.remove_edges_from(nx.selfloop_edges(G_year))
+    
+    new_row = pd.DataFrame.from_dict({'year': [y] , 'clustering': [nx.average_clustering(G_year)], 'nodes': [sum(n_aut) / len(n_aut)]}, orient = 'columns')
+    
+    clus_year = pd.concat([clus_year, new_row], axis = 0)
+
+    
+    # Compute betweenness centrality for each author
+    betweenness = nx.betweenness_centrality(G_year, weight='weight')
+    
+    # Compute eigenvector centrality for each author
+    #eigen = nx.eigenvector_centrality(G_year, weight='weight') 
+    
+    # Compute eigenvector centrality for each author
+    close = nx.closeness_centrality(G_year) 
+ 
+clus_year['year'] = clus_year['year'].map('{:.0f}'.format)
+clus_year.set_index('year', inplace = True)
+
+fig = plt.figure() # Create matplotlib figure
+
+ax = fig.add_subplot(111) # Create matplotlib axes
+ax2 = ax.twinx() # Create another axes that shares the same x-axis as ax.
+
+width = 0.4
+ln1 = clus_year['clustering'].plot(kind='bar', color='red', ax=ax, width=width, position=1, label = 'Clustering Coefficient')
+ln2 = clus_year['nodes'].plot(kind='bar', color='blue', ax=ax2, width=width, position=0, label = 'Avg Number of Co-authors')
+
+ax.set_ylabel('Clustering Coefficient')
+ax2.set_ylabel('Avg. N. of Authors per EIP')
+ax.set_xlabel('Year')
+ax.set_ylim(ymin=0.4)
+fig.legend(loc='upper center', ncols = 2)
+plt.box(False)
+plt.savefig('Analysis/Centrality Analysis/clustering_trends.png', bbox_inches="tight")
+plt.show()
+
+ 
 
 
 
@@ -384,7 +451,7 @@ for x in range(100,len(data.index)):
     betweenness = nx.betweenness_centrality(G_all, weight='weight')
     
     # Compute eigenvector centrality for each author
-    eigen = nx.eigenvector_centrality(G_all, weight='weight') 
+    #eigen = nx.eigenvector_centrality(G_all, weight='weight') 
     
     # Compute eigenvector centrality for each author
     close = nx.closeness_centrality(G_all) 
@@ -392,8 +459,49 @@ for x in range(100,len(data.index)):
     
     
     # Plot the graph
-    plot_bc_graph(datax, G_all, betweenness, 'between_' + str(x))
+    df = datax
+    G = G_all
+    typ = 'between_' + str(x)
+    # Create a list of author id and name
     
+    aut_id_names = {}
+    
+    m95 = np.percentile(list(betweenness.values()),95)
+    
+    for i in range(1,15):
+        for _, row in df.iterrows():
+            if np.isnan(row['author' + str(i) + '_id']) == False and \
+                betweenness[str(int(row['author' + str(i) + '_id']))] > m95 :
+                aut_id_names['{:.0f}'.format(row['author' + str(i) + '_id'])] \
+                = get_last_name(row['author' + str(i) ])
+      
+            
+    # Create Node Size standardized to max of 1000 and min of 10
+    
+    node_size_min = np.min(list(betweenness.values()))
+    node_size_max = np.max(list(betweenness.values()))
+    node_size = ( (list(betweenness.values()) - node_size_min)* 990 / (node_size_max-node_size_min)) +10
+        
+    init_pos = {}
+    for li, l in enumerate(list(G.nodes)):
+        #dist = (1 - ((li + 1) / len(list(G_all.nodes)))) ** 2
+        dist = 1
+        theta = (li * 1231769/ 413443) * 2 * np.pi 
+        init_pos[li] = (dist * np.cos(theta), dist * np.sin(theta))
+    
+    plt.figure(figsize=(20, 20))
+    pos = nx.spring_layout(G, pos = init_pos, k=0.2, iterations=100)
+    nx.draw_networkx_nodes(G, pos = pos, node_size=node_size, node_color='skyblue', edgecolors='black')
+    nx.draw_networkx_edges(G, pos = pos, alpha=0.3)
+    nx.draw_networkx_labels(G,  pos , aut_id_names, font_size=10, font_weight='bold')
+#    plt.title('Betweenness betweenness of Ethereum EIP Co-authorship Graph', fontsize=25, fontweight='bold')
+    plt.axis('off')
+    
+    #We remove the surrounding box.
+    plt.box(False)
+    plt.savefig('Analysis/Centrality Analysis/eip_' + typ + '.png', bbox_inches="tight")
+    plt.show()
+
 
 
 

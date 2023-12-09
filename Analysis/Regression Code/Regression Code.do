@@ -295,20 +295,49 @@ esttab using analysis\Results\Tables\final_noimpl_impl.tex ,  eform unstack varw
 ********************************************************************************
 * EVOLUTION OF EIP DEVELOPMENT OVER TIME.
 
-* EIP Over time
 
-graph bar (count) eip_number,  over(Category) over(year) stack asyvars ytitle("N. EIPs") ///
-	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+* N. unique vauthors over time
+preserve
+keep year author*_id eip_number
+reshape long author@_id, i(year eip_number) j(n)
+keep year author_id
+duplicates drop
+bys year: egen n_author=count(year)
+drop author_*id
+duplicates drop
+save temp_year_author, replace
+
+
+* EIP Over time
+restore
+preserve
+
+merge m:1 year using temp_year_author, keep(1 3)
+drop _merge
+erase temp_year_author.dta
+
+bys Category year: egen neip = count(eip_number)
+keep Category year neip n_author
+duplicates drop
+reshape wide neip, i(year n_author) j(Category) string
+
+egen Networking = rowtotal(neipCore neipNetworking)
+egen ERC = rowtotal(Networking neipERC)
+egen Interface = rowtotal(ERC neipInterface) 
+rename neipCore Core
+
+ 
+graph twoway bar Core  year , yaxis(1) barw(0.8) xtitle("Year") ytitle("N. of EIPs") ///
+	|| rbar Core Networking year , yaxis(1)  barw(0.8)|| ///
+	rbar Networking ERC year , yaxis(1)  barw(0.8) || rbar ERC Interface year  , ///
+	yaxis(1)  barw(0.8) || 	scatter  n_author year ,  yaxis(2)  ///
+	ytitle("N. of Unique Authors", axis(2)) msymbol(T) mcolor(black)  || ///
+	line n_author year ,  yaxis(2)  lcolor(black)  xlabel(2015(1)2023) ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white)) legend(order(1 "Core" 2 "Networking" 3 "ERC" 4 "Interface" 5 "N. Unique Authors")) 
 graph export "analysis\results\Figures\neip_by_year.png", as(png) replace
 
 
-* EIP STATUS OVER TIME
-
-graph bar (count) eip_number ,  over(status) over(year) stack asyvars ytitle("% of EIPs") ///
-	percent plotregion(fcolor(white))  graphregion(fcolor(white) lcolor(white) ilcolor(white)) 
-graph export "analysis\results\Figures\neip_by_yearstatus.png", as(png) replace
-
-
+restore 
 
 	
 
