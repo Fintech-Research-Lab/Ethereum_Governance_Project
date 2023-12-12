@@ -19,13 +19,14 @@ attendees = pd.read_csv("flat_list_meeting_attendees.csv", encoding='latin1')
 
 # get author data and remove nan and et al. from the author list
 os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
-cs = pd.read_csv("Ethereum_Cross-sectional_Data.csv")
+cs = pd.read_csv("Ethereum_Cross-sectional_Data_beg.csv")
 author_values = cs.loc[:,'Author1':'Author15'].values.tolist()
 author = set([item for sublist in author_values for item in sublist])
 author = pd.DataFrame(author, columns = ['full_name'])
 author = author[pd.notnull(author['full_name']) & (author['full_name'] != 'et al.')]
 
 # get commit data
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/_commit/")
 eip_commit = pd.read_stata("eip_Commit.dta")
 
 # get client data
@@ -149,6 +150,7 @@ attendee_unique.to_csv("Unique_Attendee_List.csv", index = False)
   
 # merge documents to run cross-table similarity score
 
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 attendee_unique = pd.read_csv("Unique_Attendee_List.csv")
 attendee_unique = attendee_unique.rename(columns = {'attendee_name' : 'full_name'})
 
@@ -296,3 +298,18 @@ Result.loc[len(Result)] = ['People who did everything',
 
 
 Result.to_csv("Name_Results.csv", index = False)
+
+###### THIS CODE BELOW CREATES A 3 WAY VENN DIAGRAM #################
+# ignore contributors
+
+from matplotlib import pyplot as plt
+from matplotlib_venn import venn3
+
+
+unique_attendees = set(attendee_unique['attendee_name'].unique())
+unique_clients = set(client_unique['client_name'].unique())
+unique_authors = set(author_unique['author_name'].unique())
+
+venn3([unique_attendees, unique_clients, unique_authors], ('Attendees', 'Clients', 'Authors'))
+plt.title('Meeting Attendees, Authors, and Clients Combination')
+plt.show()
