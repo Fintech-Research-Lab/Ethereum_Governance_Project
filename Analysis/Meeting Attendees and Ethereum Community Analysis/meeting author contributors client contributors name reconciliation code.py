@@ -18,7 +18,7 @@ attendees = pd.read_csv("flat_list_meeting_attendees.csv", encoding='latin1')
 
 
 # get author data and remove nan and et al. from the author list
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 cs = pd.read_csv("Ethereum_Cross-sectional_Data_beg.csv")
 author_values = cs.loc[:,'Author1':'Author15'].values.tolist()
 author = set([item for sublist in author_values for item in sublist])
@@ -26,11 +26,11 @@ author = pd.DataFrame(author, columns = ['full_name'])
 author = author[pd.notnull(author['full_name']) & (author['full_name'] != 'et al.')]
 
 # get commit data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/_commit/")
-eip_commit = pd.read_stata("eip_Commit.dta")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip commit Data/")
+eip_commit = pd.read_excel("eip_commit_beg.xlsx")
 
 # get client data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
 geth = pd.read_stata("commitsgeth.dta")
 besu = pd.read_stata("commitsbesu.dta")
 erigon = pd.read_stata("commitserigon.dta")
@@ -41,7 +41,7 @@ clients = pd.concat([geth,besu,erigon,nethermind])
 
 # creare an attendee list which we will use to replace names
 
-names = attendees['full_name'].tolist()
+names = attendees['Attendees'].tolist()
 unique_attendees1 = list(set(names))
 
 # Create a unique list of authors, contributors, attendee and clitnts
@@ -79,7 +79,7 @@ name_to_replace_with = [row[2] for row in high_similarity_score1]
 # manually change the list. This process is better done in a spreadsheet manually
 
 names_to_change = pd.concat([pd.DataFrame(name_to_replace_with),pd.DataFrame(name_to_replace)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change.to_csv("names_to_change.csv")
 
 # There was a manual process to map names to replace and names_to_replace_with
@@ -95,7 +95,7 @@ high_similarity_score2 = [score for score in similarity_score if score[4] > 54 a
 name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change2.to_csv("names_to_change2.csv")
 
 # create second replacement based on manually corrected names between the threshold of 55 to 75
