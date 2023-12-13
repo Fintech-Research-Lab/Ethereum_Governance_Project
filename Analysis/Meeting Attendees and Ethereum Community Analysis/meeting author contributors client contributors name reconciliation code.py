@@ -14,11 +14,11 @@ import numpy as np
 # Read Data
 
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-attendees = pd.read_csv("flat_list_meeting_attendees.csv", encoding='latin1')
+attendees_unique = pd.read_csv("Unique_attendee_list.csv", encoding='latin1')
 
 
 # get author data and remove nan and et al. from the author list
-os.chdir ("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
 cs = pd.read_csv("Ethereum_Cross-sectional_Data_beg.csv")
 author_values = cs.loc[:,'Author1':'Author15'].values.tolist()
 author = set([item for sublist in author_values for item in sublist])
@@ -26,11 +26,11 @@ author = pd.DataFrame(author, columns = ['full_name'])
 author = author[pd.notnull(author['full_name']) & (author['full_name'] != 'et al.')]
 
 # get commit data
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip commit Data/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip commit Data/")
 eip_commit = pd.read_excel("eip_commit_beg.xlsx")
 
 # get client data
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
 geth = pd.read_stata("commitsgeth.dta")
 besu = pd.read_stata("commitsbesu.dta")
 erigon = pd.read_stata("commitserigon.dta")
@@ -48,7 +48,10 @@ unique_attendees1 = list(set(names))
 
 author_unique = author['full_name']
 author_unique = pd.DataFrame(author_unique, columns = ['full_name'])
-contributor_unique = pd.unique(eip_commit['Author'])
+
+# get unique contributors who are not authors and commit to eip repositories
+
+contributor_unique = pd.unique(eip_commit['Username'])
 contributor_unique = pd.DataFrame(contributor_unique, columns = ['full_name'])
 # remove eth-bot from contributor_unique
 contributor_unique = contributor_unique[contributor_unique['full_name'] != 'eth-bot']
@@ -95,7 +98,7 @@ high_similarity_score2 = [score for score in similarity_score if score[4] > 54 a
 name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
-os.chdir("C:/Users/khojama/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
 names_to_change2.to_csv("names_to_change2.csv")
 
 # create second replacement based on manually corrected names between the threshold of 55 to 75
@@ -126,7 +129,7 @@ names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 
 unique_attendee3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
 unique_attendee4 = unique_attendee3[(pd.notnull(unique_attendee3['full_name'])) & (unique_attendee3['full_name'] != "NONE")]
-
+#unique_attendee4.to_csv("Attendeelist_before_assigning_firstnames_to_multiple_persons.csv")
 
 # create mapping file
 df1 = pd.DataFrame(names, columns=['Original_Name'])
