@@ -10,25 +10,19 @@ import os as os
 import numpy as np
 from fuzzywuzzy import fuzz
 
-# get attendee list
-
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-attendees_unique = pd.read_csv("Unique_attendee_list.csv", encoding='latin1')
-
 # author list
 
-os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
-author = pd.read_csv("unique_author_names_with_id.csv")
+os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+author = pd.read_csv("/Data/Raw Data/unique_author_names_with_id.csv")
 author_unique = pd.DataFrame(author, columns = ['Full_Name'])
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-author_unique.to_csv("Unique_Authors.csv")
+author_unique.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Authors.csv")
 
 
 # Contributor List
 
 # get commit data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/Eip commit Data/")
-eip_commit = pd.read_excel("eip_commit_beg.xlsx")
+
+eip_commit = pd.read_excel("Data/Commit Data/Eip commit Data/eip_commit_beg.xlsx")
 contributors = pd.merge(eip_commit,author, left_on = 'Username', right_on = "GitHub_Username", how = 'left', indicator = True )
 contributors = contributors[contributors['_merge'] == 'left_only']
 # remove bots
@@ -53,15 +47,15 @@ names2 = [name_dict[name] if name in name_dict else name for name in names]
 names3 = set(names2)
 contributors_unique = pd.DataFrame(names3, columns = ['Full_Name'])
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-contributors_unique.to_csv("Unique_Contributors.csv")
+contributors_unique.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Contributors.csv")
 
 # Client List
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
-geth = pd.read_stata("commitsgeth.dta")
-besu = pd.read_stata("commitsbesu.dta")
-erigon = pd.read_stata("commitserigon.dta")
-nethermind = pd.read_stata("commitsnethermind.dta")
+
+geth = pd.read_stata("Data/Commit Data/client_commit/commitsgeth.dta")
+besu = pd.read_stata("Data/Commit Data/client_commit/commitsbesu.dta")
+erigon = pd.read_stata("Data/Commit Data/client_commit/commitserigon.dta")
+nethermind = pd.read_stata("Data/Commit Data/client_commit/commitsnethermind.dta")
 
 clients = pd.concat([geth,besu,erigon,nethermind])
 client_unique = pd.unique(clients ['author'])
@@ -89,8 +83,7 @@ name_to_replace = [row[3] for row in high_similarity_score1]
 name_to_replace_with = [row[2] for row in high_similarity_score1]
 
 names_to_change = pd.concat([pd.DataFrame(name_to_replace_with),pd.DataFrame(name_to_replace)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-names_to_change.to_csv("clients_name_to_change.csv")
+names_to_change.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/clients_name_to_change.csv")
 
 names_to_change_mod = pd.read_csv("clients_name_to_change_post_manual.csv")
 right_names = names_to_change_mod['Names_to_Keep'].tolist()
@@ -102,8 +95,7 @@ high_similarity_score2 = [score for score in similarity_score if score[4] > 54 a
 name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-names_to_change2.to_csv("client_names_to_change2.csv")
+names_to_change2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change2.csv")
 
 names_to_change2_mod = pd.read_csv("client_names_to_change2_post_manual.csv")
 right_names2 = names_to_change2_mod['Names_to_Keep'].tolist()
@@ -115,7 +107,7 @@ sorted_names3 = sorted(names3, key=lambda x: (isinstance(x, str), x))
 unique_attendees_list = set(names3)
 unique_attendeee2 = pd.DataFrame(unique_attendees_list , columns = ['full_name'])
 # manual check and fixing last time without similarity scores
-unique_attendeee2.to_csv("client_names_to_change3.csv")
+unique_attendeee2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change3.csv")
 
 # manual check last time without fuzzy logic
 
@@ -130,7 +122,7 @@ names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 unique_clients3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
 unique_clients4 = unique_clients3[(pd.notnull(unique_clients3['full_name'])) & (unique_clients3['full_name'] != "NONE")]
 
-unique_clients4.to_csv("Unique_Clients.csv")
+unique_clients4.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Clients.csv")
 
 # create mapping file
 df1 = pd.DataFrame(client_list, columns=['Original_Name'])
@@ -140,4 +132,4 @@ mapping_file = pd.concat([df1, df2], axis=1)
 
 # save mapping file
 
-mapping_file.to_csv("Client_Mapping_File.csv")
+mapping_file.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/Client_Mapping_File.csv")

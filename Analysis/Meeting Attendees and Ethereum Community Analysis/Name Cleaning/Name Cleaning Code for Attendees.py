@@ -11,8 +11,8 @@ from fuzzywuzzy import fuzz
 
 
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-attendees = pd.read_csv("flat_list_meeting_attendees.csv", encoding='latin1')
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+attendees = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/flat_list_meeting_attendees.csv", encoding='latin1')
 
 names = attendees['Attendees'].tolist()
 unique_attendees1 = list(set(names))
@@ -36,12 +36,11 @@ name_to_replace_with = [row[2] for row in high_similarity_score1]
 # manually change the list. This process is better done in a spreadsheet manually
 
 names_to_change = pd.concat([pd.DataFrame(name_to_replace_with),pd.DataFrame(name_to_replace)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-names_to_change.to_csv("names_to_change.csv")
+names_to_change.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change.csv")
 
 # There was a manual process to map names to replace and names_to_replace_with
 
-names_to_change_mod = pd.read_csv("names_to_change_post_manual.csv")
+names_to_change_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change_post_manual.csv")
 right_names = names_to_change_mod['Names_to_Keep'].tolist()
 wrong_names = names_to_change_mod['Names_to_Replace'].tolist()
 name_dict = dict(zip(wrong_names,right_names))
@@ -52,12 +51,11 @@ high_similarity_score2 = [score for score in similarity_score if score[4] > 54 a
 name_to_replace2 = [row[3] for row in high_similarity_score2]
 name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-names_to_change2.to_csv("names_to_change2.csv")
+names_to_change2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change2.csv")
 
 # create second replacement based on manually corrected names between the threshold of 55 to 75
 
-names_to_change2_mod = pd.read_csv("names_to_change2_post_manual.csv")
+names_to_change2_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change2_post_manual.csv")
 right_names2 = names_to_change2_mod['Names_to_Keep'].tolist()
 wrong_names2 = names_to_change2_mod['Names_to_Replace'].tolist()
 name_dict2 = dict(zip(wrong_names2,right_names2))
@@ -69,11 +67,11 @@ sorted_names3 = sorted(names3, key=lambda x: (isinstance(x, str), x))
 unique_attendees_list = set(names3)
 unique_attendeee2 = pd.DataFrame(unique_attendees_list , columns = ['full_name'])
 # manual check and fixing last time without similarity scores
-unique_attendeee2.to_csv("names_to_change3.csv")
+unique_attendeee2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change3.csv")
 
 # last manual check and last corrections that might were missed in similarity scores
 
-names_to_change3_mod = pd.read_csv("names_to_change3_post_manual.csv")
+names_to_change3_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/names_to_change3_post_manual.csv")
 right_names3 = names_to_change3_mod['Names_to_Keep'].tolist()
 wrong_names3 = names_to_change3_mod['Names_to_Replace'].tolist()
 name_dict3 = dict(zip(wrong_names3,right_names3))
@@ -84,7 +82,7 @@ names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 unique_attendee3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
 unique_attendee4 = unique_attendee3[(pd.notnull(unique_attendee3['full_name'])) & (unique_attendee3['full_name'] != "NONE")]
 #unique_attendee4.to_csv("Attendeelist_before_assigning_firstnames_to_multiple_persons.csv")
-unique_attendee4.to_csv("Unique_Attendees.csv")
+unique_attendee4.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Attendees.csv")
 
 
 # create mapping file
@@ -95,4 +93,4 @@ mapping_file = pd.concat([df1, df2], axis=1)
 
 # save mapping file
 
-mapping_file.to_csv("Attendees_Mapping_File.csv")
+mapping_file.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/Attendees_Mapping_File.csv")
