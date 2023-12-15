@@ -45,11 +45,31 @@ save temp, replace
 * THIS COUNTS THE FREQUENCY OF COMPANY COUNT FOR EACH AUTHOR-EIP PAIR
 gen one = 1
 drop if company =="."
+
 collapse (sum) one, by(company)
 gsort -one company
 graph hbar one if _n<11, ytitle("N. EIP-Authors") over(company, sort((sum) one) descending) ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\company_neip1.png", as(png) replace
+
+ineqdec0 one
+
+gsort -one company
+
+gen cum_n_one = sum(one)
+egen tot = total(one)
+replace cum_n_one = cum_n_one / tot
+
+gen n_one = _n
+label var cum_n_one "% EIP-Authors"
+label var n_one "%Companies"
+
+keep n_one cum_n_one
+
+save temp_lor1, replace
+
+
+
 
 * THIS COUNTS THE FREQUENCY OF COMPANY COUNT FOR EACH AUTHOR
 use temp, clear
@@ -63,6 +83,24 @@ graph hbar one if _n<11, ytitle("N. Authors") over(company, sort((sum) one) desc
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\company_neip2.png", as(png) replace
 
+ineqdec0 one
+
+gsort -one company
+
+gen cum_n_one2 = sum(one)
+egen tot = total(one)
+replace cum_n_one2 = cum_n_one / tot
+
+gen n_one = _n
+label var cum_n_one2 "% Authors"
+label var n_one "%Companies"
+
+keep n_one cum_n_one2
+
+save temp_lor2, replace
+
+
+
 
 * THIS COUNTS THE FREQUENCY OF COMPANY COUNT FOR EACH EIP
 use temp, clear
@@ -75,6 +113,52 @@ gsort -one company
 graph hbar one if _n<11, ytitle("N. EIP") over(company, sort((sum) one) descending) ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\company_neip3.png", as(png) replace
+
+
+ineqdec0 one
+
+gsort -one company
+gen cum_n_one3 = sum(one)
+egen tot = total(one)
+replace cum_n_one3 = cum_n_one / tot
+
+gen n_one = _n 
+label var cum_n_one3 "% EIP"
+label var n_one "% Companies"
+
+keep cum_n_one3 n_one 
+
+
+merge m:1 n using temp_lor1
+drop _merge
+erase temp_lor1.dta
+
+merge m:1 n using temp_lor2
+drop _merge
+erase temp_lor2.dta
+
+replace n_one = n_one / _N
+
+* add zero obs
+insobs 1, before(1)
+replace cum_n_one =0 if n==.
+replace cum_n_one2 =0 if n==.
+replace cum_n_one3 =0 if n==.
+replace n_one =0 if n_one==.
+
+
+* plot lorenz curve
+twoway line cum_n_one2 n_one,  ytitle("% of EIPs / Authors") || line cum_n_one3 n_one , ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1))
+graph export "analysis\results\Figures\company_lorenz.png", as(png) replace
+
+	
+	
+	
+	
+
+
 
 
 erase temp.dta
