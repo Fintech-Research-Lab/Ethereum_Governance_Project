@@ -1,0 +1,699 @@
+,Full_Name
+0,Vitalik Buterin
+1,Martin Holst Swende
+2,Joseph Chow
+3,Christian Reitwiessner
+4,Hudson Jameson
+5,Felix Lange
+6,Fabian Vogelsteller
+7,Alex Van de Sande
+8,Ronan Sandford
+9,Nick Johnson
+10,Alex Beregszaszi
+11,Tjaden Hess
+12,Gavin Wood
+13,Maurelian
+14,Nick Mudge
+15,Piper Merriam
+16,Péter Szilágyi
+17,Micah Zoltu
+18,Greg Colvin
+19,Vlad Gluhovsky
+20,Richard Moore
+21,Afri Schoedon
+22,Tobias Oberstein
+23,Daniel A. Nagy
+24,Yoichi Hirai
+25,Isaac Ardis
+26,Cody Burns
+27,Remco Bloemen
+28,William Entriken
+29,Dan Finlay
+30,Jack Peterson
+31,Jacques Dafflon
+32,Casey Detrio
+33,ligi
+34,Jordi Baylina
+35,Kashish Khullar
+36,Carl Larson
+37,Dan Phifer
+38,Weiwu Zhang
+39,Dave Sag
+40,Jorge Izquierdo
+41,Dean Eigenmann
+42,Brooklyn Zelenka
+43,James Ray
+44,Jay Logelin
+45,David Stanfill
+46,Matt Lockyer
+47,Anderson Wesley
+48,Danny Ryan
+49,Nick Savers
+50,Tommy Nicholas
+51,Pelle Braendgaard
+52,Phyrex Tsai
+53,Bradley Leatherwood
+54,Mark Beylin
+55,Paul Bouchon
+56,Antonio Salazar Cardozo
+57,g. nicholas d'andrea
+58,Jan Turk
+59,nitika-goel
+60,Alexey Akhunov
+61,Alan Lu
+62,Witek Radomski
+63,Peter Murray
+64,Jet Lim
+65,Albert Chon
+66,Jim McDonald
+67,Simon Jentzsch
+68,Juliano Rizzo
+69,Zainan Victor Zhou
+70,Jeff Huang
+71,Xiaoyu Wang
+72,SmeargleUsedFly
+73,Chaitanya Potti
+74,Francisco Giordano
+75,EOS Classic
+76,Wei Tang
+77,Ben Kaufman
+78,Brian Venturo
+79,Kevin Owocki
+80,Richard Meissner
+81,Pawel Bylica
+82,Vittorio Minacori
+83,John Shiple
+84,Maxim Kupriianov
+85,Gerhard Wagner
+86,Anurag Angara
+87,trustfarm
+88,Iamnot Chris
+89,Kaidong Wu
+90,Christoph Mussenbrock
+91,Andrea Lanfranchi
+92,Michele Balistreri
+93,Ikmyeong Na
+94,Cyril Lapinte
+95,Yoav Weiss
+96,0age
+97,Paul Berg
+98,Billy Rennekamp
+99,Alex Forshtat
+100,Bruno Barbieri
+101,Lucas Cullen
+102,Vincent Eli
+103,Gabriel Barros
+104,Danno Ferrin
+105,Gregory Markou
+106,Alexandre Belling
+107,Charles Cooper
+108,Loredana Cirstea
+109,Shane Jonas
+110,Michael Connor
+111,Johann Barbie
+112,Alex Vlasov
+113,Santiago Palladino
+114,Lee Raj
+115,Julio Faura
+116,Daniel Lehrner
+117,Pedro Gomes
+118,Fernando Paris
+119,James Hancock
+120,Adrian Sutton
+121,John Adler
+122,Runchao Han
+123,Sean Papanikolas
+124,Martin Lundfall
+125,Dominic Letz
+126,Carl Beekhuizen
+127,Eric Conner
+128,James Choncholas
+129,Ricardo Guilherme Schmidt
+130,Edson Ayllon
+131,Kristijan Sedlak
+132,Christoph Burgdorf
+133,Barry WhiteHat
+134,Filip tamcar
+135,Hadrien Croubois
+136,Kelly Olson
+137,Joseph Stockermans
+138,Hua Zhang
+139,Guillaume Ballet
+140,Kohshi Shiba
+141,Tom Brand
+142,Matt Garnett
+143,Aaron Kendall
+144,Soham Zemse
+145,Joel Thorstensson
+146,Giuseppe Bertone
+147,Jonathan Underwood
+148,Tony Carson
+149,Sina Mahmoodi
+150,William Morriss
+151,Nick Gheorghita
+152,Gianluca Perletti
+153,Zach Burks
+154,Sergio Demian Lerner
+155,Matt
+156,Peter Jihoon Kim
+157,Peter Grassberger
+158,Youssef El Housni
+159,Herman Junge
+160,Abdelhamid Bakhta
+161,Dr. Christopher Gorman
+162,Sam Wilson
+163,Michael Sproul
+164,Erik Marks
+165,Zhenyu Sun
+166,Ben Tinner
+167,Alberto Cuesta Cañada
+168,Weijia Zhang
+169,Victor Porton
+170,Justice Hudson
+171,mineruniter969
+172,Query0x
+173,Philippe Castonguay
+174,Calvin Koder
+175,HexZorro
+176,Nathan Ginnever
+177,pinkiebell
+178,Daniel Streit
+179,Yu Liu
+180,Alex Papageorgiou
+181,Will Wang
+182,Sam Porter
+183,Gajinder Singh
+184,Dankrad Feist
+185,Joachim Lebrun
+186,Mikhail Kalinin
+187,Auryn Macmillan
+188,Simon Tian
+189,Lukas Schor
+190,Anton Bukov
+191,Tim Beiko
+192,Rex Creed
+193,Wayne Chang
+194,Jules Lai
+195,Ansgar Dietrichs
+196,Daniel Ivanov
+197,George Kadianakis
+198,Simon Fremaux
+199,Javier Arcenegui
+200,Brayton Goodall
+201,Ross Campbell
+202,William Schwab
+203,Aaron Chen
+204,Joey Santoro
+205,Omar Aflak
+206,David Kim
+207,Benjamin Chodroff
+208,Peter Davies
+209,Andrei Maiboroda
+210,Alex Stokes
+211,David Buckman
+212,Joshua Tan
+213,Mark Mackey
+214,Andrew B Coathup
+215,Omnus Sunmo
+216,Anders
+217,Andreas Freund
+218,John Peterson
+219,Marius Van Der Wijden
+220,Víctor Muñoz
+221,Ignacio Mazzara
+222,Shu Dong
+223,Tim Daubenschütz
+224,Daniel Tedesco
+225,Devin Conley
+226,Harikrishnan Mulackal
+227,Lance
+228,Green
+229,Jarno Marttila
+230,Alexi
+231,Tyler
+232,Mudit Gupta
+233,Luc van Kampen
+234,Julian Traversa
+235,Vu Nguyen
+236,Wilkins Chung
+237,Tomasz Kajetan Stanczak
+238,Brendan Asselstine
+239,James
+240,Yale ReiSoleil
+241,Christophe Le Bars
+242,DerivStudio
+243,Iván Mañús
+244,James Grimmelmann
+245,Hyungsuk Kang
+246,Yan
+247,Stanley Wu
+248,Samuele Marro
+249,Buzz Cai
+250,IronMan_CH
+251,Jeremy Z
+252,Jan Smra
+253,liszechung
+254,elie222
+255,Lucas Martín Grasso Ramos
+256,Saber Yu
+257,StartfundInc
+258,Philipp Bolte
+259,Roy Osherove
+260,Isaac Patka
+261,Paul Gauvreau
+262,Olivier Fernandez
+263,Toni Wahrstätter
+264,Sean Darcy
+265,Oliver Terbu
+266,Veega Labs
+267,Yan Zhu
+268,Allen Zhou
+269,Gaurang Torvekar
+270,Gavin Fu
+271,Firn Protocol
+272,HonorLabs
+273,Timi
+274,foobar
+275,cygaar
+276,Naim Ashhab
+277,Apeguru
+278,Austin Zhu
+279,Cozy Finance
+280,Kosala Hemachandra
+281,Filipp Makarov
+282,Bruno kvorc
+283,2pmflow
+284,Moody Salem
+285,zlace
+286,Paul Edge
+287,Ernesto García
+288,Nikolai Mushegian
+289,Matt Luongo
+290,Tim Coulter
+291,Leonid Logvinov
+292,Dieter Shirley
+293,Tyler Yasaka
+294,Esteban Mino
+295,James Levy
+296,James Sangalli
+297,Manuel Araoz
+298,Tom Carchrae
+299,Infernal_toast
+300,Chih-Cheng Liang
+301,Matt Russo
+302,Portal Network Team
+303,Zachary Williamson
+304,Andrew Cooke
+305,Nate Welch
+306,Christoph Jentzsch
+307,Ryan Ghods
+308,Evan
+309,Min Zu
+310,Bicong Wang
+311,Partha Bhattacharya
+312,Matt Condon
+313,Adam Levi
+314,Christopher Gewecke
+315,Andrew Redden
+316,Bryant Eisenbach
+317,Jean M. Cyr
+318,Jacques Wagener
+319,Jennifer Cooper
+320,Howard Marks
+321,Julian Svirsky
+322,Andy Chorlian
+323,Chuqiao Ren
+324,Laurent Aapro
+325,Dror Tirosh
+326,Dan Long
+327,Kai Yeung
+328,Raúl Kripalani
+329,Patrick Gallagher
+330,Christian Tzurcanu
+331,Zachary Belford
+332,Chaitanya Konda
+333,Ben Bollen
+334,Qin Jian
+335,Eli Ben Sasson
+336,Haoyu Lin
+337,Eric Dvorsak
+338,Gary Rong
+339,Marta Bellés
+340,Sean Gulley
+341,Yuefei Tan
+342,Louis Guthmann
+343,Juan Blanco
+344,Liraz Siri
+345,Uri Klarman
+346,Mehmet Sabir Kiraz
+347,Alan Scarpellini
+348,James Morgan
+349,Fabien Marino
+350,Kevin Britz
+351,Sacha Saint-Leger
+352,Fiona Kobayashi
+353,Peter Robinson
+354,Mojtaba Tefagh
+355,Varun Deshpande
+356,Mike Meng
+357,Xinqi Yang
+358,Dmitry Khovratovich
+359,Tony Malghem
+360,Hugo De la cruz
+361,Mikhail Melnik
+362,Dane Scarborough
+363,Gregory Rocco
+364,George Spasov
+365,Rosario Arjona
+366,Mihir Faujdar
+367,Sora Lee
+368,t11s
+369,Pol-Malo Le Bris
+370,Isaac Buckman
+371,Chao Pi
+372,Alex
+373,Roberto Bayardo
+374,Josep Lluis de la Rosa
+375,Kei Kreutler
+376,Martin Moravek
+377,Jakob Helgesson
+378,Robert Robbins
+379,Long Vuong
+380,Jalil Wahdatehagh
+381,Eric Marti Haynes
+382,Pierrick Turelier
+383,Weiwu
+384,dRadiant
+385,Edward Amor
+386,Juan Carlos Cantó
+387,Yan Ji
+388,Viktor Pernjek
+389,Mücahit Büyükyılmaz
+390,Luca Donno
+391,David Rábel
+392,Matias Arazi
+393,Qin Wang
+394,Lauritz Leifermann
+395,COALA Licensing Taskforce
+396,Frédéric Le Coidic
+397,Jacob Ward
+398,Sean NG
+399,Brian R. Bondy
+400,Alex Qin
+401,Khemraj Adhawade
+402,Fried L. Trout
+403,0xTriple7
+404,Paul Dworzanski
+405,Marco De Vries
+406,Terry Chen
+407,Matt Stam
+408,Tony Sheng
+409,Cicada
+410,locationtba
+411,zhongfu
+412,Piotr Dyraga
+413,Denis Erfurt
+414,Fan Torchz
+415,Jacob Evans
+416,Thomas Shababi
+417,Reuben Youngblom
+418,Gleb Naumenko
+419,Michael Seiler
+420,Jordan Schalm
+421,John Zettler
+422,Michael Carter
+423,Joe Messerman
+424,Victor Maia
+425,Yin Xu
+426,Scott Burke
+427,David Zhang
+428,Shane Hampton
+429,Ruthia He
+430,Rick Dudley
+431,Leo Arias
+432,Kiryl Yermakou
+433,Anna Crowley
+434,James Therien
+435,Kris Shinn
+436,Lane Rettig
+437,Duncan Westland
+438,Jiangshan Yu
+439,Simon Peffers
+440,Derek Zhou
+441,Suleman Kardas
+442,Roberto Gorini
+443,Blaine Malone
+444,David Knott
+445,Aurore Guillevic
+446,Cedric Ngakam
+447,Yi Cai
+448,Kevin Thizy
+449,Kristof Gazso
+450,Thomas Jay Rush
+451,Brantly Millegan
+452,Roberto Román
+453,Jet Jadeja
+454,Marvin Martin
+455,Ido Gershtein
+456,Diederik Loerakker
+457,Damian Martinelli
+458,Shrug
+459,David Núñez
+460,Andres El-Fakdi
+461,Easy Innova
+462,John
+463,Konrad Feldmeier
+464,Joshua Hendrix
+465,Anton Buenavista
+466,Cry
+467,Josh Klopfenstein
+468,D Wang
+469,Tyler Kell
+470,Muhammed Emin Aydın
+471,Tomas Jansa
+472,Shange Fu
+473,Dennis von der Bey
+474,Julien Béranger
+475,Charles Lehner
+476,Tiger
+477,Andrea Brancaleoni
+478,Nikhil Asrani
+479,ryley-o
+480,Jared Wasinger
+481,Mario
+482,Matt Solomon
+483,Steven Pineda
+484,Cameron Robertson
+485,edison0xyz
+486,Avihu Levy
+487,RJ Catalano
+488,Nastassia Sachs
+489,Brandon Grill
+490,IfDefElse
+491,Marc Garreau
+492,Amir Bandeali
+493,Kevin Seagraves
+494,Noah Zinsmeister
+495,Yun Ma
+496,Matthew Slipper
+497,Alejo Salles
+498,Nate van der Ende
+499,Caroline Marshall
+500,Eric Binet
+501,John Max Skaller
+502,Justin Drake
+503,Ran Xing
+504,Will Villanueva
+505,Manuel Olivi
+506,James Seibel
+507,Austin Williams
+508,Dhruv Malik
+509,Ryan Chow
+510,Luc Falempin
+511,Namra Patel
+512,Iluminada Baturone
+513,Dan Miller
+514,Eyal Eithcowich
+515,blockdev
+516,Nathan
+517,Sillytuna
+518,Abhimanyu Nag
+519,Jan Bure
+520,Shiping Chen
+521,Sam Gbafa
+522,Fred
+523,Kyle Den Hartog
+524,Jake Rockland
+525,DeFiFoFum
+526,David Laprade
+527,Stevan Bogosavljevic
+528,David Levit Gurevich
+529,Iuri Matias
+530,Luka Kacil
+531,Xuanzhe Liu
+532,Ian Norden
+533,Stephane Gosselin
+534,Katrina Donaghy
+535,Ben Hauser
+536,Samuel Gwlanold Edoumou
+537,Zhongxin Wu
+538,Adam Boudjemaa
+539,AndreasGassmann
+540,Michael Zargham
+541,Austin Griffith
+542,Cyberpnk
+543,DOBBYLABS
+544,Sherry Xu
+545,Fov Cao
+546,andy8052
+547,Payom Dousti
+548,Bertrand Masius
+549,Stefan Simec
+550,Toufic Batrice
+551,AlvisDu
+552,Shahaf Nacson
+553,xardass
+554,Sam Furter
+555,Mofi Taiwo
+556,Chad Fleming
+557,Piotr Kosinski
+558,Sachin Tomar
+559,Lixin Liu
+560,Franz Chen
+561,ankit raj
+562,Patrick McCorry
+563,John Griffin
+564,Nicolas Venturo
+565,Nathan Creswell
+566,BerlinP
+567,Zergity
+568,Zahary Karadjov
+569,Yuki Aoki
+570,Yonathan Randyanto
+571,Victor Dusart
+572,Thomas Bergmueller
+573,Sujith Somraaj
+574,Simon Brown
+575,Silvere Heraudeau
+576,Shawn Zheng
+577,RoiV
+578,Renan Rodrigues de Souza
+579,Raymond Huynh
+580,Qiang Zhu
+581,Pooja Ranjan
+582,Pierre Bertet
+583,Peter Chen
+584,Paul Sullivan
+585,Pascal Caversaccio
+586,Otniel Nicola
+587,Nick Zeman
+588,Ngo Quang Anh
+589,Narcis Cotaie
+590,Mihai Onila
+591,Martin McConnell
+592,Lukas Meyer
+593,Leeren
+594,Khanh Pham
+595,Kevin Riedl
+596,KEMP Elia
+597,Keegan Lee
+598,Kay Lin
+599,Kai Yu
+600,Junyi Zhong
+601,Josh Weintraub
+602,Jayden Windle
+603,Jason Cheng
+604,Jake Moxey
+605,Jack Boyuan Xu
+606,Ivo Georgiev
+607,Glitch
+608,George Huang
+609,George
+610,Francesco Sullo
+611,Fangting Liu
+612,5660-eth
+613,Etan Kissling
+614,Erhard Dinhobl
+615,EL MERSHATI Laith
+616,Druzy Downs
+617,Dexaran
+618,David Leung
+619,David Huber
+620,Darryl Yeo
+621,Cristian Espinoza
+622,Christian Fries
+623,Chiro
+624,Boyu Chu
+625,Boxi Li
+626,Bogdan Popa
+627,BOCA Jeabby
+628,Ben Fusek
+629,Ben DiFrancesco
+630,Base Labs
+631,Baptiste Vauthey
+632,Artem Chystiakov
+633,Archie Chang
+634,Arran Schlosberg
+635,Alexandros Korpis
+636,Adam Egyed
+637,Abderrahmen Hanafi
+638,Zihao Chen
+639,Weiji Guo
+640,Gavin John
+641,Chris Whinfrey
+642,Charles Cunningham
+643,Martin Becze
+644,Abu
+645,Wizard Wang
+646,msfew
+647,Kartin
+648,RE:DREAMER Lab
+649,Daniel Fallon-Cyr
+650,Jessica Chang
+651,Agustin Aguilar
+652,Eduard López i Fina
+653,Peter Kohl-Landgraf
+654,Aubay
+655,Tal Be'ery
+656,Benny Giang
+657,Steve Jang
+658,Alanah Lam
+659,Jun
+660,Saitama
+661,Combo
+662,Luigi
+663,Qi Zhou
+664,qdqd
+665,Joshua Trujillo
+666,Mohamad Hammoud
+667,Nawar Hisso
+668,Khawla Hassan
+669,Mohammad Zakeri Rad
+670,Ashish Sood
+671,Yaroslav Sergievsky
+672,Zak Cole
+673,Kartik Patel
+674,Alexe Spataru
+675,Cathie So
+676,Xiaohang Yu
+677,Huaizhe Xu
+678,Carlos Flores
+679,Bofu Chen
+680,Tammy Yang
+681,Antoine Cote
+682,Avir Mahtani
+683,Brian Liang
+684,Gary Liu
+685,Henry Chan
+686,Jeff Leung
+687,Jessica Zheng
+688,Joey Liu
+689,Joyce Li
+690,Lauren Ho
+691,Phillip Pon
+692,Phoebe Kwok
+693,Roy Shang
+694,Seungyong Moon
+695,Yvan Fatal
+696,Zeon Chan
+697,sebastian echeverry
