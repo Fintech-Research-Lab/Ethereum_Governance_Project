@@ -119,9 +119,18 @@ contributors_unique_mod = pd.DataFrame(contributors_mod.unique(), columns = ["Na
 # apply the test for anonymity and create anonymity flag
 
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+authors = authors.drop(columns='Unnamed: 0')
 authors['Anonymity_Flag'] = np.where(authors['Full_Name'].str.contains(" "),0,1)
-authors.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/author_anonymity_flag.csv") 
-authors.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_authors_final.csv") 
+# after manual checkup made the following changes
+
+index_to_0 = [59,253,411,539,551]
+authors.loc[index_to_0,'Anonymity_Flag'] = 0
+index_to_1 = [75,88,395]
+authors.loc[index_to_1,'Anonymity_Flag'] = 1
+
+authors.to_csv("Data/Raw Data/unique_author_names_with_id.csv")
+authors.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_authors_final.csv")
+
 
 contributors_unique_mod['Anonymity_Flag'] = np.where(contributors_unique_mod['Name'].str.contains(" "),0,1)
 # after manual checking
@@ -131,24 +140,26 @@ contributors_unique_mod.loc[229,'Anonymity_Flag'] = 1
 contributors_unique_mod.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributors_final.csv")
 
 clients_unique_mod['Anonymity_Flag'] = np.where(clients_unique_mod['Name'].str.contains(" "),0,1)
-# after manual checking make following changes
-clients_unique_mod.loc[4,'Anonymity_Flag'] = 1
-clients_unique_mod.loc[229,'Anonymity_Flag'] = 1
-clients_unique_mod.loc[509,'Anonymity_Flag'] = 1
-clients_unique_mod.loc[603,'Anonymity_Flag'] = 1
-clients_unique_mod.loc[609,'Anonymity_Flag'] = 1
-clients_unique_mod.loc[361,'Anonymity_Flag'] = 0
-clients_unique_mod.loc[571,'Anonymity_Flag'] = 0
-clients_unique_mod.loc[1047,'Anonymity_Flag'] = 0
+
+# after manual checking made the following changes
+
+index_to_0 = [
+    978, 802, 1079, 463, 825, 208, 686, 187, 613, 784, 347, 921, 181, 507, 512, 62, 939, 935, 182, 769, 835, 553, 486, 446, 476, 464, 947, 1047,
+    224, 988, 1052, 219, 1007, 88, 461, 806, 1095, 775, 416, 93, 370, 659, 431, 1204, 1150, 142, 361, 844, 938, 477, 1138, 1133, 587, 414, 243,
+    74, 778, 402, 284, 989, 567, 1077, 571, 218, 705, 1027, 824, 594, 788
+]
+clients_unique_mod.loc[index_to_0,'Anonymity_Flag'] = 0
+index_to_1 = [4,590,876,307,270,1091,1037,290,781,386,828,229,936]
+clients_unique_mod.loc[index_to_1,'Anonymity_Flag'] = 1
 
 clients_unique_mod.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_clients_final.csv")
 
 attendees_unique_mod['Anonymity_Flag'] = np.where(attendees_unique_mod['Name'].str.contains(" "),0,1)
 
 # after manual checking make following changes
-index_to_0 = [347,361,402,416,431,446,705,769,775,802,806,835,844,848,902,937,938,939,1027,1033,1079,1101]
+index_to_0 = [190,199,141,39,281,33,279]
 attendees_unique_mod.loc[index_to_0,'Anonymity_Flag'] = 0
-index_to_1 = [4,195,229,386,669,936,1091]
+index_to_1 = [275,214]
 attendees_unique_mod.loc[index_to_1,'Anonymity_Flag'] = 1
 
 attendees_unique_mod.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
