@@ -13,7 +13,7 @@ from fuzzywuzzy import fuzz
 # author list
 
 os.chdir ("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
-author = pd.read_csv("/Data/Raw Data/unique_author_names_with_id.csv")
+author = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 author_unique = pd.DataFrame(author, columns = ['Full_Name'])
 author_unique.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Authors.csv")
 
@@ -134,3 +134,4 @@ mapping_file = pd.concat([df1, df2], axis=1)
 # save mapping file
 
 mapping_file.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/Client_Mapping_File.csv")
+
