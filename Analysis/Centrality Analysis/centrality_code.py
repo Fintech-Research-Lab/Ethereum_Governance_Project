@@ -165,7 +165,9 @@ eip_bc_df = eip_bc_df.merge(pd.DataFrame.from_dict(eigen, orient = 'index').rena
 
 
 # Create and save a DataFrame for betweenness centrality scores
-eip_bc_df.reset_index(names = 'id').to_csv("Analysis/Centrality Analysis/centrality_all.csv", index = False)
+eip_bc_df = eip_bc_df.reset_index()
+eip_bc_df.index.names = ['id']
+eip_bc_df.to_csv("Analysis/Centrality Analysis/centrality_all.csv", index = False)
 
 # CLUSTERING COEFFICIENT
 
