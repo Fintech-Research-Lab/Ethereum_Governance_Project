@@ -85,7 +85,7 @@ name_to_replace_with = [row[2] for row in high_similarity_score1]
 names_to_change = pd.concat([pd.DataFrame(name_to_replace_with),pd.DataFrame(name_to_replace)], axis = 1)
 names_to_change.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/clients_name_to_change.csv")
 
-names_to_change_mod = pd.read_csv("clients_name_to_change_post_manual.csv")
+names_to_change_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/clients_name_to_change_post_manual.csv")
 right_names = names_to_change_mod['Names_to_Keep'].tolist()
 wrong_names = names_to_change_mod['Names_to_Replace'].tolist()
 name_dict = dict(zip(wrong_names,right_names))
@@ -97,21 +97,21 @@ name_to_replace_with2 = [row[2] for row in high_similarity_score2]
 names_to_change2 = pd.concat([pd.DataFrame(name_to_replace_with2),pd.DataFrame(name_to_replace2)], axis = 1)
 names_to_change2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change2.csv")
 
-names_to_change2_mod = pd.read_csv("client_names_to_change2_post_manual.csv")
+names_to_change2_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change2_post_manual.csv")
 right_names2 = names_to_change2_mod['Names_to_Keep'].tolist()
 wrong_names2 = names_to_change2_mod['Names_to_Replace'].tolist()
 name_dict2 = dict(zip(wrong_names2,right_names2))
 names3 = [name_dict2[name] if name in name_dict2 else name for name in names2]
 sorted_names3 = sorted(names3, key=lambda x: (isinstance(x, str), x))
 
-unique_attendees_list = set(names3)
-unique_attendeee2 = pd.DataFrame(unique_attendees_list , columns = ['full_name'])
+unique_client_list = set(names3)
+unique_client2 = pd.DataFrame(unique_client_list , columns = ['full_name'])
 # manual check and fixing last time without similarity scores
-unique_attendeee2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change3.csv")
+unique_client2.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change3.csv")
 
 # manual check last time without fuzzy logic
 
-names_to_change3_mod = pd.read_csv("client_names_to_change3_post_manual.csv")
+names_to_change3_mod = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/client_names_to_change3_post_manual.csv")
 right_names3 = names_to_change3_mod['Names_to_Keep'].tolist()
 wrong_names3 = names_to_change3_mod['Names_to_Replace'].tolist()
 name_dict3 = dict(zip(wrong_names3,right_names3))
@@ -119,7 +119,8 @@ names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 
 # create a dataframe
 
-unique_clients3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
+unique_client_list = set(names4)
+unique_clients3 = pd.DataFrame(unique_client_list, columns = ['full_name'])
 unique_clients4 = unique_clients3[(pd.notnull(unique_clients3['full_name'])) & (unique_clients3['full_name'] != "NONE")]
 
 unique_clients4.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Clients.csv")
