@@ -22,39 +22,42 @@ attendees = pd.DataFrame(attendees['Name'])
 attendees = attendees.rename(columns = {"Name":"Attendee_Name"})
 contributors = pd.DataFrame(contributors['Name'])
 contributors = contributors.rename(columns = {"Name":"Contributor_Name"})
+clients = pd.DataFrame(clients['Name'])
+clients = clients.rename(columns = {"Name":"Client_Name"})
+authors = pd.DataFrame(authors['Full_Name'])
+authors = authors.rename(columns = {"Full_Name":"Author_Name"})
 
 
 
 # putting all attendee clasifications together
-attendees_and_author = pd.merge(attendees,authors, left_on = 'Name', 
-                                              right_on = 'Full_Name',how = 'outer', indicator = True)
+attendees_and_author = pd.merge(attendees,authors, left_on = 'Attendee_Name', 
+                                              right_on = 'Author_Name',how = 'outer', indicator = True)
 attendees_and_author = attendees_and_author.sort_values('_merge', ascending=False)
 attendees_and_author = attendees_and_author.rename(columns = {'_merge' : 'merge_att&author'})
 
-attendee_author_and_contributor = pd.merge(attendees_and_author,contributors,left_on = 'Name', 
-                                             right_on = 'Name', how = 'outer', indicator = True)
+attendee_author_and_contributor = pd.merge(attendees_and_author,contributors,left_on = 'Author_Name', 
+                                             right_on = 'Contributor_Name', how = 'outer', indicator = True)
     
 attendee_author_and_contributor = attendee_author_and_contributor.sort_values(['_merge','merge_att&author'], ascending=[False, True])
 attendee_author_and_contributor  = attendee_author_and_contributor.rename(columns = {'_merge' : 'merge_att,author&contributor'})
 
-everyone = pd.merge(attendee_author_and_contributor, clients, left_on = 'Name', right_on = 'Name',
+everyone = pd.merge(attendee_author_and_contributor, clients, left_on = 'Author_Name', right_on = 'Client_Name',
                     how = 'outer', indicator = True)
-everyone = everyone.sort_values(['Name'], na_position = 'last')
+everyone = everyone.sort_values(['Author_Name','Attendee_Name','Contributor_Name','Client_Name'], na_position = 'last')
 everyone_dep = everyone.drop(columns = ['merge_att&author','merge_att,author&contributor','_merge'])
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Analysis/Meeting Attendees and Ethereum Community Analysis/")
-everyone_dep.to_csv ("unique_names_allplayers.csv", index = False)
+everyone_dep.to_csv ("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_names_allplayers.csv", index = False)
 
 # Result of Analysis
 
 
 Result = pd.DataFrame(columns = ['Issue','Result'])
-Result.loc[len(Result)] = ['Unique Attendees', attendee_unique.shape[0]]
-Result.loc[len(Result)] = ['Unique Authors', author_unique.shape[0]]
-Result.loc[len(Result)] = ['Unique Eip Contributors', contributor_unique.shape[0]]
-Result.loc[len(Result)] = ['Unique Client Contributors', client_unique.shape[0]]
-Result.loc[len(Result)] = ['Authors who Attended Meetings', author_attendees.shape[0]] 
-Result.loc[len(Result)] = ['Contributors who Attended Meetings', contributor_attendees.shape[0]]
+Result.loc[len(Result)] = ['Attendees', attendees.shape[0]]
+Result.loc[len(Result)] = ['Authors', authors.shape[0]]
+Result.loc[len(Result)] = ['EIP Contributors', contributors.shape[0]]
+Result.loc[len(Result)] = ['Client Contributors', clients.shape[0]]
+Result.loc[len(Result)] = ['Authors who Attended Meetings', attendees_and_author[attendees_and_author['merge_att&author'] == 'both'].shape[0]] 
+Result.loc[len(Result)] = ['Contributors who Attended Meetings',  contributors['Contributor_Name'].isin()
 Result.loc[len(Result)] = ['Clients who Attended Meetings', client_attendees.shape[0]]
 Result.loc[len(Result)] = ['Authors who are also Contributors', author_unique[author_unique['author_name'].isin(contributor_unique['contributor_name'])].shape[0]]
 Result.loc[len(Result)] = ['Authors who are also Clients', author_unique[author_unique['author_name'].isin(client_unique['client_name'])].shape[0]]
