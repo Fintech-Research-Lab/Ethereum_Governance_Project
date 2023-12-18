@@ -128,7 +128,7 @@ authors.loc[index_to_0,'Anonymity_Flag'] = 0
 index_to_1 = [75,88,395]
 authors.loc[index_to_1,'Anonymity_Flag'] = 1
 
-authors.to_csv("Data/Raw Data/unique_author_names_with_id.csv")
+authors.to_csv("Data/Raw Data/unique_author_names_with_id.csv", index = False)
 authors.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_authors_final.csv")
 
 
@@ -163,3 +163,23 @@ index_to_1 = [275,214]
 attendees_unique_mod.loc[index_to_1,'Anonymity_Flag'] = 1
 
 attendees_unique_mod.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
+
+
+# This last part of the code further find names on contributor file which may be authors. After complete treatment of name cleaning code above
+# this code will see if there are still common names in contribution file that contains authors and remove it. Later on, these will
+# be appended for further analysis to find all members of the community
+
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+contributors = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributors_final.csv") 
+
+author_contributors = pd.merge(authors,contributors, left_on = 'Full_Name', right_on = "Contributor_Name", how = 'outer', indicator = True )
+author_contributors_name = author_contributors['Full_Name']
+
+# create flag of 1 for all authors who happen to be contributors also after this merge above
+authors['contributor_flag'] = np.where(authors['Full_Name'].isin(author_contributors_name),1,0)
+authors.to_csv("Data/Raw Data/unique_author_names_with_id.csv", index = False)
+
+len(np.where(pd.isnull(authors['GitHub_Username']))[0]) #153 usernames with missing github 
+contributors_only = author_contributors[author_contributors['_merge'] == 'right_only']
+contributors_only.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributorsonly_final.csv", index = False)
