@@ -80,9 +80,11 @@ names4 = [name_dict3[name] if name in name_dict3 else name for name in names3]
 # create a dataframe
 
 unique_attendee3 = pd.DataFrame(pd.Series(names4).unique(), columns = ['full_name'])
-unique_attendee4 = unique_attendee3[(pd.notnull(unique_attendee3['full_name'])) & (unique_attendee3['full_name'] != "NONE")]
+unique_attendees3_list= set(names4)
+unique_attendees4 = pd.DataFrame(unique_attendees3_list , columns = ['full_name'])
+unique_attendees4 = unique_attendees4[(pd.notnull(unique_attendees4['full_name'])) & (unique_attendees4['full_name'] != "NONE")]
 #unique_attendee4.to_csv("Attendeelist_before_assigning_firstnames_to_multiple_persons.csv")
-unique_attendee4.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Unique_Attendees.csv")
+unique_attendees4.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/Name Cleaning/Unique_Attendees.csv")
 
 
 # create mapping file
