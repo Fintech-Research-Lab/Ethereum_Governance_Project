@@ -7,6 +7,7 @@ Created on Sat Sep 30 02:08:12 2023
 
 import pandas as pd
 import os as os
+import numpy as np
 
 
 
@@ -26,6 +27,21 @@ clients = pd.DataFrame(clients['Name'])
 clients = clients.rename(columns = {"Name":"Client_Name"})
 authors = pd.DataFrame(authors['Full_Name'])
 authors = authors.rename(columns = {"Full_Name":"Author_Name"})
+
+
+# our contributors file currently misses all contributor-authors, this file only contains non-author contributors
+# the following code will add author-contributors to this list
+
+eip_commit = pd.read_excel("Data/Commit Data/Eip commit Data/eip_commit_beg.xlsx")
+author_contributors = pd.merge(eip_commit,authors, left_on = 'Username', right_on = "GitHub_Username", how = 'outer', indicator = True )
+author_contributors = author_contributors[author_contributors['_merge'] == 'both']
+author_contributors = author_contributors['Full_Name']
+author_contributors = pd.unique(author_contributors)
+author_contributors = pd.DataFrame(author_contributors, columns = ["Contributor_Name"])
+
+# add author_contributors to contributors
+
+contributors = pd.concat([contributors,author_contributors], axis = 0)
 
 
 
@@ -56,29 +72,27 @@ Result.loc[len(Result)] = ['Attendees', attendees.shape[0]]
 Result.loc[len(Result)] = ['Authors', authors.shape[0]]
 Result.loc[len(Result)] = ['EIP Contributors', contributors.shape[0]]
 Result.loc[len(Result)] = ['Client Contributors', clients.shape[0]]
-Result.loc[len(Result)] = ['Authors who Attended Meetings', attendees_and_author[attendees_and_author['merge_att&author'] == 'both'].shape[0]] 
-Result.loc[len(Result)] = ['Contributors who Attended Meetings',  contributors['Contributor_Name'].isin()
-Result.loc[len(Result)] = ['Clients who Attended Meetings', client_attendees.shape[0]]
-Result.loc[len(Result)] = ['Authors who are also Contributors', author_unique[author_unique['author_name'].isin(contributor_unique['contributor_name'])].shape[0]]
-Result.loc[len(Result)] = ['Authors who are also Clients', author_unique[author_unique['author_name'].isin(client_unique['client_name'])].shape[0]]
-Result.loc[len(Result)] = ['Client who are also Contributors', client_unique[client_unique['client_name'].isin(contributor_unique['contributor_name'])].shape[0]]
+Result.loc[len(Result)] = ['Authors who Attended Meetings', len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Attendee_Name']))[0])] 
+Result.loc[len(Result)] = ['Contributors who Attended Meetings',len(np.where(pd.notnull(everyone_dep['Contributor_Name'])&pd.notnull(everyone_dep['Attendee_Name']))[0])]
+Result.loc[len(Result)] = ['Clients who Attended Meetings', len(np.where(pd.notnull(everyone_dep['Client_Name'])&pd.notnull(everyone_dep['Attendee_Name']))[0])]
+Result.loc[len(Result)] = ['Authors who are also Contributors', len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Contributor_Name']))[0])]
+Result.loc[len(Result)] = ['Authors who are also Clients', len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Client_Name']))[0])]
+Result.loc[len(Result)] = ['Client who are also Contributors', len(np.where(pd.notnull(everyone_dep['Client_Name'])&pd.notnull(everyone_dep['Contributor_Name']))[0])]
 Result.loc[len(Result)] = ['Authors who are Clients and also attended meetings', 
-                           author_unique[author_unique['author_name'].isin(client_unique['client_name'])
-                                                                                              & author_unique['author_name'].isin(attendee_unique['attendee_name'])].shape[0]]
+                           len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Client_Name'])
+                                        &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 Result.loc[len(Result)] = ['Authors who are Contributors and also attended meetings', 
-                           author_unique[author_unique['author_name'].isin(contributor_unique['contributor_name'])
-                                                                                              & author_unique['author_name'].isin(attendee_unique['attendee_name'])].shape[0]]
+                           len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Contributor_Name'])
+                                        &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 Result.loc[len(Result)] = ['Authors who are Clients and Contributors', 
-                           author_unique[author_unique['author_name'].isin(client_unique['client_name'])
-                                                                                              & author_unique['author_name'].isin(contributor_unique['contributor_name'])].shape[0]]
-
+                           len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Client_Name'])
+                                        &pd.notnull(everyone_dep['Contributor_Name']))[0])]
 Result.loc[len(Result)] = ['Contributors who are Clients and also attended meetings', 
-                           contributor_unique[contributor_unique['contributor_name'].isin(client_unique['client_name'])
-                                                                                              & contributor_unique['contributor_name'].isin(attendee_unique['attendee_name'])].shape[0]]
+                           len(np.where(pd.notnull(everyone_dep['Contributor_Name'])&pd.notnull(everyone_dep['Client_Name'])
+                                        &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 Result.loc[len(Result)] = ['People who did everything', 
-                           attendee_unique[attendee_unique['attendee_name'].isin(client_unique['client_name'])
-                                                                                              & attendee_unique['attendee_name'].isin(author_unique['author_name'])
-                                                                                              & attendee_unique['attendee_name'].isin(contributor_unique['contributor_name'])].shape[0]]
+                           len(np.where(pd.notnull(everyone_dep['Contributor_Name'])&pd.notnull(everyone_dep['Client_Name'])
+                                        &pd.notnull(everyone_dep['Attendee_Name'])&pd.notnull(everyone_dep['Author_Name']))[0])]
 
 
 Result.to_csv("Name_Results.csv", index = False)
