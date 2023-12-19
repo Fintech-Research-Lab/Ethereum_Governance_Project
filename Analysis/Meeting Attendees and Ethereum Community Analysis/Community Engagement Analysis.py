@@ -16,38 +16,53 @@ import numpy as np
 os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 clients = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_clients_final.csv")
-contributors_only = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributorsonly_final.csv") 
 attendees = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
 
 attendees = pd.DataFrame(attendees['Name'])
 attendees = attendees.rename(columns = {"Name":"Attendee_Name"})
 clients = pd.DataFrame(clients['Name'])
 clients = clients.rename(columns = {"Name":"Client_Name"})
-contributors_only = contributors_only['Contributor_Name']
-contributors_only = pd.DataFrame(contributors_only)
-contributors_only = contributors_only.rename(columns = {'Contributor_Name' : 'Full_Name'})
+
+# This last part of the code further find names on contributor file which may be authors. After complete treatment of name cleaning code above
+# this code will see if there are still common names in contribution file that contains authors and remove it. Later on, these will
+# be appended for further analysis to find all members of the community
+
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+cleaned_contributors = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributors_final.csv") 
+
+# find authors only contributors only and contributors and authors
+
+eip_commit = pd.read_excel("Data/Commit Data/Eip commit Data/eip_commit_beg.xlsx")
+all_contributors = pd.merge(eip_commit,authors, left_on = 'Username', right_on = "GitHub_Username", how = 'left', indicator = True )
+all_contributors = pd.unique(all_contributors['Author'])
+all_contributors = pd.DataFrame(all_contributors, columns = ['Name'])
+
+authors_and_contributors = pd.merge(authors,cleaned_contributors, left_on = 'Full_Name', right_on = "Name", how = 'outer', indicator = True )
+contributors_only = authors_and_contributors[authors_and_contributors['_merge']=='right_only']
+missed_authors_in_github = authors_and_contributors[authors_and_contributors['_merge']=='both']
+
+author_contributors = pd.merge(authors,all_contributors, left_on = "Full_Name", right_on = "Name", how = 'inner')
 
 
-# our contributors file currently misses all contributor-authors, this file only contains non-author contributors
-# the following code will add author-contributors to this list to create one contributor file
-
-authors = pd.DataFrame(authors['Full_Name'])
-contributors= pd.concat([authors,contributors_only], axis = 0)
-
-# renaming
-
-authors = authors.rename(columns = {'Full_Name' : 'Author_Name'})
-contributors = contributors.rename(columns = {'Full_Name' : 'Contributor_Name'})
+len(np.where(pd.isnull(authors['GitHub_Username']))[0]) #153 usernames with missing github 
+contributors_only.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributorsonly_final.csv", index = False)
 
 
 
 # putting all attendee clasifications together
+
+authors = pd.DataFrame(authors['Full_Name'])
+authors = authors.rename(columns = {"Full_Name" : "Author_Name"})
+all_contributors = all_contributors.rename(columns = {"Name" : "Contributor_Name"})
+
+
 attendees_and_author = pd.merge(attendees,authors, left_on = 'Attendee_Name', 
                                               right_on = 'Author_Name',how = 'outer', indicator = True)
 attendees_and_author = attendees_and_author.sort_values('_merge', ascending=False)
 attendees_and_author = attendees_and_author.rename(columns = {'_merge' : 'merge_att&author'})
 
-attendee_author_and_contributor = pd.merge(attendees_and_author,contributors,left_on = 'Author_Name', 
+attendee_author_and_contributor = pd.merge(attendees_and_author,all_contributors,left_on = 'Author_Name', 
                                              right_on = 'Contributor_Name', how = 'outer', indicator = True)
     
 attendee_author_and_contributor = attendee_author_and_contributor.sort_values(['_merge','merge_att&author'], ascending=[False, True])
@@ -71,15 +86,14 @@ everyone_dep.to_csv ("Analysis/Meeting Attendees and Ethereum Community Analysis
 Result = pd.DataFrame(columns = ['Issue','Result'])
 Result.loc[len(Result)] = ['Attendees', attendees.shape[0]]
 Result.loc[len(Result)] = ['Authors', authors.shape[0]]
-Result.loc[len(Result)] = ['EIP Contributors', contributors.shape[0]]
+Result.loc[len(Result)] = ['EIP Contributors', all_contributors.shape[0]]
 Result.loc[len(Result)] = ['Client Contributors', clients.shape[0]]
 
 Result.loc[len(Result)] = ['Authors who Attended Meetings', len(np.where(pd.notnull(everyone_dep['Author_Name'])
                                                                          &pd.notnull(everyone_dep['Attendee_Name']))[0])] 
 
-Result.loc[len(Result)] = ['Contributors only who Attended Meetings',len(np.where((pd.notnull(everyone_dep['Contributor_Name'])
-                                                                                   & pd.isnull(everyone_dep['Author_Name'])) 
-                                                                             & pd.notnull(everyone_dep['Attendee_Name']))[0])]
+Result.loc[len(Result)] = ['Contributors who Attended Meetings',len(np.where(pd.notnull(everyone_dep['Contributor_Name'])
+                                                                         &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 
 Result.loc[len(Result)] = ['Clients who Attended Meetings', len(np.where(pd.notnull(everyone_dep['Client_Name'])
                                                                          &pd.notnull(everyone_dep['Attendee_Name']))[0])]
@@ -90,31 +104,24 @@ Result.loc[len(Result)] = ['Authors who are also Contributors', len(np.where(pd.
 Result.loc[len(Result)] = ['Authors who are also Clients', len(np.where(pd.notnull(everyone_dep['Author_Name'])
                                                                         &pd.notnull(everyone_dep['Client_Name']))[0])]
 
-Result.loc[len(Result)] = ['Client who are also Contributors only', len(np.where((pd.notnull(everyone_dep['Contributor_Name'])
-                                                                                   & pd.isnull(everyone_dep['Author_Name']))
-                                                                            &pd.notnull(everyone_dep['Client_Name']))[0])]
+Result.loc[len(Result)] = ['Client who are also Contributors', len(np.where(pd.notnull(everyone_dep['Contributor_Name'])
+                                                                        &pd.notnull(everyone_dep['Client_Name']))[0])]
 
 Result.loc[len(Result)] = ['Authors who are Clients and also attended meetings', 
                            len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Client_Name'])
                                         &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 
-Result.loc[len(Result)] = ['Authors who are Contributors only and also attended meetings', 
-                           len(np.where(((pd.notnull(everyone_dep['Contributor_Name'])
-                                         & pd.isnull(everyone_dep['Author_Name']))
-                                        &(pd.notnull(everyone_dep['Attendee_Name'])))
-                                       &(pd.notnull(everyone_dep['Author_Name'])))[0])]
+Result.loc[len(Result)] = ['Authors who are Contributors and also attended meetings', 
+                           len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Contributor_Name'])
+                                        &pd.notnull(everyone_dep['Attendee_Name']))[0])]
 
-Result.loc[len(Result)] = ['Authors who are Clients and Contributors only', 
-                           len(np.where(((pd.notnull(everyone_dep['Contributor_Name'])
-                                         & pd.isnull(everyone_dep['Author_Name']))
-                                        &(pd.notnull(everyone_dep['Client_Name'])))
-                                       &(pd.notnull(everyone_dep['Author_Name'])))[0])]
+Result.loc[len(Result)] = ['Authors who are Clients and Contributors', 
+                           len(np.where(pd.notnull(everyone_dep['Author_Name'])&pd.notnull(everyone_dep['Contributor_Name'])
+                                        &pd.notnull(everyone_dep['Client_Name']))[0])]
 
-Result.loc[len(Result)] = ['Contributors only who are Clients and also attended meetings', 
-                           len(np.where(((pd.notnull(everyone_dep['Contributor_Name'])
-                                         & pd.isnull(everyone_dep['Author_Name']))
-                                        &(pd.notnull(everyone_dep['Client_Name'])))
-                                       &(pd.notnull(everyone_dep['Attendee_Name'])))[0])]
+Result.loc[len(Result)] = ['Contributors who are Clients and also attended meetings', 
+                           len(np.where(pd.notnull(everyone_dep['Contributor_Name'])&pd.notnull(everyone_dep['Attendee_Name'])
+                                        &pd.notnull(everyone_dep['Client_Name']))[0])]
 
 Result.loc[len(Result)] = ['People who did everything', 
                            len(np.where(pd.notnull(everyone_dep['Contributor_Name'])&pd.notnull(everyone_dep['Client_Name'])
