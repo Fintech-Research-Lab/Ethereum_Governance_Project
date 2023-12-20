@@ -88,3 +88,39 @@ plt.ylim(0, 100)  # Set y-axis limit from 0 to 100 for percentage
 plt.savefig('Analysis/Anonymity Analysis/Anonymity_Diagram.png')
 plt.show()
 
+## eip author trend analysis
+
+os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project')
+
+cs = pd.read_stata('Data/Raw Data/Ethereum_Cross-sectional_Data.dta')
+cs = cs[['author1','author2','author3','author4','author5',
+         'author6','author7','author8','author9','author10',
+         'author11','author12','author13','author14','author15', 'sdate']]
+
+author_df = cs.melt(id_vars = 'sdate', value_vars = ['author1','author2','author3','author4','author5',
+         'author6','author7','author8','author9','author10',
+         'author11','author12','author13','author14','author15'], var_name = 'number', value_name = 'Author' )
+
+author_df = author_df[author_df['Author'] != ""]
+author_df['year'] = author_df['sdate'].dt.year
+author_df = author_df.drop(columns = ['sdate','number'])
+
+author_df = pd.merge(author_df, authors, left_on = 'Author', right_on = 'Full_Name', how = 'inner')
+
+author_by_year =author_df.groupby(author_df['year'])['Anonymity_Flag'].apply(list)
+
+percentages = []
+for series in author_by_year:
+    ones_count = sum(series)  # Count the number of ones in the list
+    percentage_of_ones = (ones_count / len(series)) * 100  # Calculate the percentage
+    percentages.append(percentage_of_ones)
+    
+labels = ['2015', '2016', '2017', '2018','2019','2020','2021','2022','2023']
+colors = ['blue', 'green', 'red', 'orange', 'magenta', 'cyan', 'yellow']
+
+# Create a bar graph
+plt.bar(labels, percentages, color=colors)
+plt.xlabel('Labels')
+plt.ylabel('Percentages')
+plt.title('Percentage of Anonymous Authors for Each Year')
+plt.show()    
