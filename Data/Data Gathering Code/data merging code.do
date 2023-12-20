@@ -77,7 +77,7 @@ save "Data\Commit Data\Eip Commit Data\eip_commit_data.dta", replace
 
 clear
 import delimited "Analysis\Centrality Analysis\centrality_all.csv", clear
-rename id author_id
+rename index author_id
 save "Data\Raw Data\centrality.dta", replace
 
 
@@ -112,12 +112,13 @@ drop if github_username ==""
 save "Data\Raw Data\temp_author.dta", replace
 
 foreach file in besu erigon geth nethermind {
-	use "Data\Commit Data\client_commit\commits`file'", clear
+	local f = "Data\Commit Data\client_commit\" + "`file'_commits"
+	use "`f'", clear
 	// remove dependabot[bot] and github-actions[bot]
-	drop if login == "dependabot[bot]"|login == "github-actions[bot]"
-    collapse (count) date, by(login)
+	drop if identifier== "dependabot[bot]"|identifier == "github-actions[bot]"
+    collapse (count) date, by(identifier)
 	rename date `file'_commits
-    rename login github_username
+    rename identifier github_username
 	replace github_username = lower(github_username)
     drop if github_username == "" 
     merge m:1 github_username using "Data\Raw Data\temp_author", keepusing(author_id)
