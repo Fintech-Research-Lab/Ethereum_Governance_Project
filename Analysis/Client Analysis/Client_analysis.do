@@ -5,21 +5,22 @@ cd "C:\Users\cf8745\Box\Research\Ethereum Governance\Ethereum_Governance_Project
 
 * Put all client commit together
 
-local files : dir "Data\Commit Data\client_commit" files "comm*.dta"
+local files : dir "Data\Commit Data\client_commit" files "*comm*.dta"
 foreach file in `files' {
 	local cdfile = "Data\Commit Data\client_commit\" + "`file'"
 	use "`cdfile'" , clear
-	local cl = subinstr(substr("`file'",8,.),".dta","",.)
+	local cl = subinstr("`file'","_commits.dta","",.)
 	gen client = "`cl'"
-	save "Data\Commit Data\client_commit\temp_`file'", replace
+	save "Data\Commit Data\client_commit\temp_`cl'", replace
 	}
 
 clear all	
-local files : dir "Data\Commit Data\client_commit" files "comm*.dta"
+local files : dir "Data\Commit Data\client_commit" files "*comm*.dta"
 foreach file in `files' {
-	local cdfile = "Data\Commit Data\client_commit\" + "temp_`file'"
+	local cl = subinstr("`file'","_commits.dta","",.)
+	local cdfile = "Data\Commit Data\client_commit\" + "temp_`cl'"
 	append using "`cdfile'" 
-	erase "Data\Commit Data\client_commit\temp_`file'"
+	erase "Data\Commit Data\client_commit\temp_`cl'.dta"
 	}
 
 * get summary stats

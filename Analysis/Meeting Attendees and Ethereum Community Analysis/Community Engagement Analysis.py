@@ -9,11 +9,12 @@ import pandas as pd
 import os as os
 import numpy as np
 
+#os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project')
 
 
 # Read Data
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 clients = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_clients_final.csv")
 attendees = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
@@ -27,7 +28,6 @@ clients = clients.rename(columns = {"Name":"Client_Name"})
 # this code will see if there are still common names in contribution file that contains authors and remove it. Later on, these will
 # be appended for further analysis to find all members of the community
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 cleaned_contributors = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributors_final.csv") 
 
@@ -141,8 +141,8 @@ unique_attendees = set(attendees['Attendee_Name'].unique())
 unique_clients = set(clients['Client_Name'].unique())
 unique_authors = set(authors['Author_Name'].unique())
 
-venn3([unique_attendees, unique_clients, unique_authors], ('Attendees', 'Clients', 'Authors'))
-plt.title('Meeting Attendees, Authors, and Clients Combination')
+venn3([unique_attendees, unique_clients, unique_authors], ('AllCoreDevs Attendees', 'Client Contributors', 'EIP Authors'))
+#plt.title('Meeting Attendees, Authors, and Clients Combination')
 
 # Save the plot as a PNG file
 plt.savefig('Analysis/Meeting Attendees and Ethereum Community Analysis/venn_diagram.png')
