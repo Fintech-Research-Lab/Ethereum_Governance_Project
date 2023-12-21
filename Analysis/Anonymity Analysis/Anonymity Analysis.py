@@ -20,18 +20,18 @@ contributors_only = pd.read_csv("Analysis/Meeting Attendees and Ethereum Communi
 # get actual author data from cross-sectional file
 
 cs = pd.read_stata('Data/Raw Data/Ethereum_Cross-sectional_Data.dta')
-cs = cs[['author1','author2','author3','author4','author5',
-         'author6','author7','author8','author9','author10',
-         'author11','author12','author13','author14','author15', 'sdate']]
+cs = cs[['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id','sdate']]
 
-author_df = cs.melt(id_vars = 'sdate', value_vars = ['author1','author2','author3','author4','author5',
-         'author6','author7','author8','author9','author10',
-         'author11','author12','author13','author14','author15'], var_name = 'number', value_name = 'Author' )
+author_df = cs.melt(id_vars = 'sdate', value_vars = ['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id'], var_name = 'number', value_name = 'Author_id' )
 
-author_df = author_df[author_df['Author'] != ""]
-author_df = pd.merge(author_df, authors, left_on = 'Author', right_on = 'Full_Name', how = 'outer', indicator = True)
-authors2 = author_df.loc[author_df['_merge'] == 'both', ['Full_Name','Anonymity_Flag']]
-authors = authors2.groupby('Full_Name')['Anonymity_Flag'].mean()
+author_df = author_df[pd.notnull(author_df['Author_id'])]
+author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
+
+authors = author_df.groupby('Author_id')['Anonymity_Flag'].mean()
 
 
 
@@ -87,7 +87,6 @@ client_top20 = pd.DataFrame(client_top20, columns = ['Anonymity_Flag'])
 # create graphs
 
 percentages = []
-ann = [authors, attendees['Anonymity_Flag'], clients['Anonymity_Flag'], contributors_only['Anonymity_Flag']] 
 ann_top20 = [authors, attendees['Anonymity_Flag'], client_top20['Anonymity_Flag'], contributors_only['Anonymity_Flag']] 
 
 for series in ann_top20:
