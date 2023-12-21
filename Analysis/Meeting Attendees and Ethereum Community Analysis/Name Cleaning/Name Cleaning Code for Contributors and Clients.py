@@ -52,10 +52,10 @@ contributors_unique.to_csv("Analysis/Meeting Attendees and Ethereum Community An
 # Client List
 
 
-geth = pd.read_stata("Data/Commit Data/client_commit/commitsgeth.dta")
-besu = pd.read_stata("Data/Commit Data/client_commit/commitsbesu.dta")
-erigon = pd.read_stata("Data/Commit Data/client_commit/commitserigon.dta")
-nethermind = pd.read_stata("Data/Commit Data/client_commit/commitsnethermind.dta")
+geth = pd.read_stata("Data/Commit Data/client_commit/geth_commits.dta")
+besu = pd.read_stata("Data/Commit Data/client_commit/besu_commits.dta")
+erigon = pd.read_stata("Data/Commit Data/client_commit/erigon_commits.dta")
+nethermind = pd.read_stata("Data/Commit Data/client_commit/nethermind_commits.dta")
 
 clients = pd.concat([geth,besu,erigon,nethermind])
 client_unique = pd.unique(clients ['author'])
