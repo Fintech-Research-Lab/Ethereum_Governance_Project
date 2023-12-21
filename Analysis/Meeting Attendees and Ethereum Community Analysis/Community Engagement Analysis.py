@@ -9,13 +9,12 @@ import pandas as pd
 import os as os
 import numpy as np
 
-#os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
-os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project')
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+#os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project')
 
 
-# Read Data
+# read client and Attendee data
 
-authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 clients = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_clients_final.csv")
 attendees = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
 
@@ -24,9 +23,7 @@ attendees = attendees.rename(columns = {"Name":"Attendee_Name"})
 clients = pd.DataFrame(clients['Name'])
 clients = clients.rename(columns = {"Name":"Client_Name"})
 
-# This last part of the code further find names on contributor file which may be authors. After complete treatment of name cleaning code above
-# this code will see if there are still common names in contribution file that contains authors and remove it. Later on, these will
-# be appended for further analysis to find all members of the community
+# To find contributors and authors 
 
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 cleaned_contributors = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributors_final.csv") 
@@ -48,12 +45,29 @@ author_contributors = pd.merge(authors,all_contributors, left_on = "Full_Name", 
 len(np.where(pd.isnull(authors['GitHub_Username']))[0]) #153 usernames with missing github 
 contributors_only.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributorsonly_final.csv", index = False)
 
+# generate author from cross-sectional  data
+
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+
+cs = pd.read_stata('Data/Raw Data/Ethereum_Cross-sectional_Data.dta')
+cs = cs[['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id','sdate']]
+
+author_df = cs.melt(id_vars = 'sdate', value_vars = ['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id'], var_name = 'number', value_name = 'Author_id' )
+
+author_df = author_df[pd.notnull(author_df['Author_id'])]
+author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
+authors = author_df['Full_Name'].unique()
+authors = pd.DataFrame(authors, columns = ['Author_Name'])
+
+
 
 
 # putting all attendee clasifications together
 
-authors = pd.DataFrame(authors['Full_Name'])
-authors = authors.rename(columns = {"Full_Name" : "Author_Name"})
 all_contributors = all_contributors.rename(columns = {"Name" : "Contributor_Name"})
 
 
@@ -72,11 +86,6 @@ everyone = pd.merge(attendee_author_and_contributor, clients, left_on = 'Author_
                     how = 'outer', indicator = True)
 everyone = everyone.sort_values(['Author_Name','Attendee_Name','Contributor_Name','Client_Name'], na_position = 'last')
 everyone_dep = everyone.drop(columns = ['merge_att&author','merge_att,author&contributor','_merge'])
-
-# check for duplicates
-
-dup = everyone_dep[everyone_dep.duplicated(keep = False)]
-everyone_dep = everyone_dep.drop_duplicates()
 
 everyone_dep.to_csv ("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_names_allplayers.csv", index = False)
 
