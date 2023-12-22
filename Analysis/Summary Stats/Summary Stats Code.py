@@ -20,23 +20,67 @@ def hhi(data):
     hhi = (weights ** 2).sum()
     return hhi
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Raw Data/")
+os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
 
 # Load data from Stata into a pandas DataFrame
-cs = pd.read_stata("Ethereum_Cross-sectional_Data.dta")
-eip_commit_data = pd.read_stata("eip_commit.dta")
-author_ref = pd.read_stata("author.dta")
-linkedin = pd.read_stata("linkedIn_data.dta")
+cs = pd.read_stata("Data/Raw Data/Ethereum_Cross-sectional_Data.dta")
+eip_commit_data = pd.read_excel("Data/Commit Data/Eip Commit Data/eip_commit_beg.xlsx")
+contributors_only = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_contributorsonly_final.csv")
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+
+
+cs1 = cs[['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id','eip_number']]
+
+cs2 = cs[[
+         'author1_company1','author2_company1','author2_company1','author3_company1','author4_company1','author5_company1',
+         'author6_company1','author7_company1','author8_company1','author9_company1','author10_company1',
+         'author11_company1','author12_company1','author13_company1','author14_company1','author15_company1','eip_number']]
+
+
+author_df = cs1.melt(id_vars = 'eip_number', value_vars = ['author1_id','author2_id','author3_id','author4_id','author5_id',
+         'author6_id','author7_id','author8_id','author9_id','author10_id',
+         'author11_id','author12_id','author13_id','author14_id','author15_id'], var_name = 'number', value_name = 'Author_id' )
+
+
+company_df = cs2.melt(id_vars = 'eip_number', value_vars = [
+         'author1_company1','author2_company1','author2_company1','author3_company1','author4_company1','author5_company1',
+         'author6_company1','author7_company1','author8_company1','author9_company1','author10_company1',
+         'author11_company1','author12_company1','author13_company1','author14_company1','author15_company1','eip_number'], 
+          var_name = 'number', value_name = 'Company' )
+
+
+linkedin_df = pd.concat([author_df[['eip_number','Author_id']],company_df['Company']], axis = 1)
+linkedin_df = linkedin_df[pd.notnull(linkedin_df['Author_id'])]
+linkedin_df_missing = linkedin_df[linkedin_df['Company'] == ""]
+linkedin_df_missing = linkedin_df_missing['Author_id']
+linkedin_df_missing = linkedin_df_missing.unique()
+linkedin_df_missing = pd.Series(linkedin_df_missing)
+
+linkedin = pd.read_csv("Data/Raw Data/linkedIn_data.csv")
+not_searched = linkedin_df_missing[~linkedin_df_missing.isin(linkedin['author_id'])]
+not_searched = pd.DataFrame(not_searched, columns = ['author_id'])
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+not_searched = pd.merge(not_searched,authors, on = 'author_id', how = 'inner')
+not_searched.to_csv("Names_to_search_linkedin.csv")
+
+author_df = author_df[pd.notnull(author_df['Author_id'])]
+author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
+authors = author_df['Full_Name'].unique()
+authors = pd.DataFrame(authors, columns = ['Author_Name'])
+
+#author_ref = pd.read_stata("author.dta")
+
 
 # remove eth-bot from eip commit Data
 eip_commit_data = eip_commit_data[eip_commit_data['Author'] != 'eth-bot']
 
 # client commit data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/Data/Commit Data/client_commit/")
-geth = pd.read_stata("commitsgeth.dta")
-besu = pd.read_stata("commitsbesu.dta")
-erigon = pd.read_stata("commitserigon.dta")
-nethermind = pd.read_stata("commitsnethermind.dta")
+geth = pd.read_stata("Data/Commit Data/client_commit/geth_commits.dta")
+besu = pd.read_stata("Data/Commit Data/client_commit/besu_commits.dta")
+erigon = pd.read_stata("Data/Commit Data/client_commit/besu_commits.dta")
+nethermind = pd.read_stata("Data/Commit Data/client_commit/nethermind_commits.dta")
 
 clients = pd.concat([geth,besu,erigon,nethermind])
 
@@ -72,10 +116,10 @@ summary_stats.loc[len(summary_stats)] = ['HHI of Authors for Finalized EIPs', hh
                                                                                              .sum(axis =1))]
                
 summary_stats.loc[len(summary_stats)] = ['Number of Unique non-author Contributors to EIP Repository', 
-                                         cs['eip_contributors'].sum()]                 
+                                         cs['n_contributors_eip'].sum()]                 
 
 summary_stats.loc[len(summary_stats)] = ['Average Unique non-author Contributor per EIP', 
-                                         cs['eip_contributors'].sum()/cs['eip_number'].count()]                 
+                                         cs['n_contributors_eip'].sum()/cs['eip_number'].count()]                 
 
 
 summary_stats.loc[len(summary_stats)] = ['Percent of  Commits by Top 10 contributors', eip_commit_data.groupby('Author').size()
@@ -95,7 +139,7 @@ summary_stats.loc[len(summary_stats)] = ['Number of Failed EIPs', cs[(cs['status
 summary_stats.loc[len(summary_stats)] = ['Number of In-Progress EIPs', cs[(cs['status'] == "Review") | 
                                                                             (cs['status'] == "Last Call")].shape[0]]
 
-summary_stats.loc[len(summary_stats)] = ['Number Authors for which we have Company Data', linkedin[linkedin['company1'] != ""].shape[0]]
+summary_stats.loc[len(summary_stats)] = ['Number Authors for which we have Company Data', linkedin[pd.notnull(linkedin['company1'])].shape[0]]
 
 summary_stats.loc[len(summary_stats)] = ['No Company Boasts more than this authors', linkedin[linkedin['company1'] != ""]
                                          .groupby('company1').size().sort_values(ascending = False).head(1).iloc[0]]
@@ -106,16 +150,16 @@ summary_stats.loc[len(summary_stats)] = ['Followed by this many authors', linked
 summary_stats.loc[len(summary_stats)] = ['HHI of Companies', hhi(linkedin[linkedin['company1'] != ""]
                                          .groupby('company1').size())]
 
-summary_stats.loc[len(summary_stats)] = ['HHI of All Clients Contributors', hhi(clients.groupby('login').size().value_counts())]
+summary_stats.loc[len(summary_stats)] = ['HHI of All Clients Contributors', hhi(clients.groupby('identifier').size().value_counts())]
 
 summary_stats.loc[len(summary_stats)] = ['Average Clients Commits per Day', clients.groupby('date').size().mean()]
 
-summary_stats.loc[len(summary_stats)] = ['Top 10 Client Contributors as a Percent of Total', clients.groupby('login')
+summary_stats.loc[len(summary_stats)] = ['Top 10 Client Contributors as a Percent of Total', clients.groupby('identifier')
                                          .size().sort_values(ascending = False).head(10).sum()
                                          /
-                                         clients.groupby('login').size().sort_values(ascending = False).sum()]
+                                         clients.groupby('identifier').size().sort_values(ascending = False).sum()]
 
-summary_stats.loc[len(summary_stats)] = ['HHI of Client Contributors', hhi(clients.groupby('login').size())]
+summary_stats.loc[len(summary_stats)] = ['HHI of Client Contributors', hhi(clients.groupby('identifier').size())]
 
 # use name analysis file to complete the following summary stats
 
