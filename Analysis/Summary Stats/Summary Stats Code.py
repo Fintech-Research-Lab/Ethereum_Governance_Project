@@ -65,6 +65,39 @@ authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 not_searched = pd.merge(not_searched,authors, on = 'author_id', how = 'inner')
 not_searched.to_csv("Names_to_search_linkedin.csv")
 
+# Find not included Twitter
+
+cs3 = cs[[
+         'author1_follower','author2_follower','author3_follower','author4_follower','author5_follower','author6_follower',
+         'author7_follower','author8_follower','author9_follower','author10_follower','author11_follower',
+         'author12_follower','author13_follower','author14_follower','author15_follower','eip_number']]
+
+
+tw_df = cs3.melt(id_vars = 'eip_number', value_vars = [
+         'author1_follower','author2_follower','author3_follower','author4_follower','author5_follower','author6_follower',
+         'author7_follower','author8_follower','author9_follower','author10_follower','author11_follower',
+         'author12_follower','author13_follower','author14_follower','author15_follower','eip_number'], 
+          var_name = 'number', value_name = 'Company' )
+
+
+linkedin_df = pd.concat([author_df[['eip_number','Author_id']],company_df['Company']], axis = 1)
+linkedin_df = linkedin_df[pd.notnull(linkedin_df['Author_id'])]
+linkedin_df_missing = linkedin_df[linkedin_df['Company'] == ""]
+linkedin_df_missing = linkedin_df_missing['Author_id']
+linkedin_df_missing = linkedin_df_missing.unique()
+linkedin_df_missing = pd.Series(linkedin_df_missing)
+
+linkedin = pd.read_csv("Data/Raw Data/linkedIn_data.csv")
+not_searched = linkedin_df_missing[~linkedin_df_missing.isin(linkedin['author_id'])]
+not_searched = pd.DataFrame(not_searched, columns = ['author_id'])
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+not_searched = pd.merge(not_searched,authors, on = 'author_id', how = 'inner')
+not_searched.to_csv("Names_to_search_linkedin.csv")
+
+
+
+# for further analysis of author 
+
 author_df = author_df[pd.notnull(author_df['Author_id'])]
 author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
 authors = author_df['Full_Name'].unique()
