@@ -25,11 +25,12 @@ foreach file in `files' {
 
 * get summary stats
 	
-drop if login ==""
+drop if identifier ==""
+rename identifier login
 
 gen ncomm = 1
-bys client login: egen ncomm2 = count(ncomm)
-bys client login: keep if _n==1
+*bys client login: egen ncomm2 = count(ncomm)
+*bys client login: keep if _n==1
 collapse (count) ncomm , by(client login) 
 
 unique(login), by(client)

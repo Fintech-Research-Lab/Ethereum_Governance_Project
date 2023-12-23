@@ -55,7 +55,7 @@ graph export "analysis\adoption analysis\oracle.png", as(png) replace
 
 	
 foreach var in "Analysis\Adoption Analysis\USDC" "Analysis\Adoption Analysis\USDT" "Analysis\Adoption Analysis\DAI" {
-	insheet using "`var'April.csv", comma clear names
+	insheet using "`var'_MASTER.csv", comma clear names
 	capture drop total 
 	ds
 	local varlist `r(varlist)'	
@@ -85,21 +85,58 @@ replace DAI =  DAI/total
 replace USDC =  USDC/total
 replace USDT =  USDT/total
 
-gen two = USDC + USDT
-gen three = two + DAI
+egen two =  rowtotal(USDC USDT)
+egen three = rowtotal(two DAI)
+
+
 
 
 gen date = dofc(clock(evt_date, "YMD hm"))
 format date %td
 
-keep if date > date("01-05-2021", "MDY")
 
+* MARKETSHARE
+*keep if date > date("01-05-2021", "MDY")
+keep if date < date("11-18-2023", "MDY")
 twoway area three two USDC date,  ///
 	yscale(range(0, 1 )) ylabel(#5)  legend( label(1 "DAI") ///
 	label(2 "USDT") label(3 "USDC") ) ///
-	xtitle("Date") ytitle("Stablecoin TVL Market Share") ///
+	xtitle("Date") ytitle("TVL Market Share") ///
 	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
-	ilcolor(white) ifcolor(white)) legend(ring(1) position(6) cols(3))
+	ilcolor(white) ifcolor(white)) legend(ring(1) position(6) cols(3)) ///
+	tlabel(, format(%dm-CY))
 graph export "analysis\adoption analysis\stable.png", as(png) replace
 
-	
+* TREND IN TOTAL STABLECOIN MARKET VS TOTAL TVL
+
+keep date total
+rename total stable
+save temp, replace
+
+insheet using "Analysis\Adoption Analysis\Total_TVL_ETH.csv", clear names
+
+rename protocol date
+gen date2 = date(date, "DMY")
+drop date
+rename date2 date
+format date %d
+merge 1:1 date using temp, 
+drop if _merge==2
+egen mindate = min(date) if _merge ==3
+drop if date<mindate
+drop mindate _merge
+
+gen perc = stable / total
+
+twoway line perc date,  ///
+	 ylabel(#5)  legend( label(1 "DAI") ///
+	label(2 "USDT") label(3 "USDC") ) ///
+	xtitle("Date") ytitle("Total Stablecoin TVL Market Share") ///
+	plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ///
+	ilcolor(white) ifcolor(white)) legend(ring(1) position(6) cols(3)) ///
+	tlabel(, format(%dm-CY))
+graph export "analysis\adoption analysis\stable_perc.png", as(png) replace
+
+
+
+

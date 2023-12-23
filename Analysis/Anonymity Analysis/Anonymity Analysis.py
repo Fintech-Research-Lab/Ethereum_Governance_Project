@@ -11,7 +11,9 @@ import matplotlib.pyplot as plt
 
 
 # get data
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+#os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project/')
+
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv", encoding='latin-1')
 clients = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_clients_final.csv")
 attendees = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/unique_attendees_final.csv")
@@ -87,44 +89,20 @@ client_top20 = pd.DataFrame(client_top20, columns = ['Anonymity_Flag'])
 # create graphs
 
 percentages = []
-ann_top20 = [authors, attendees['Anonymity_Flag'], client_top20['Anonymity_Flag'], contributors_only['Anonymity_Flag']] 
+ann_top20 = [authors, attendees['Anonymity_Flag'], client_top20['Anonymity_Flag']] 
 
 for series in ann_top20:
-    percentage_of_ones = (series.sum() / len(series)) * 100
+    percentage_of_ones = (1- (series.sum() / len(series))) * 100
     percentages.append(percentage_of_ones)
 
 
-labels = ['Authors', 'Attendees', 'Clients(20)', 'EIP-Contributors-only']
+labels = ['EIP \n Authors', 'AllCoreDevs \n Attendees', 'Top Client \n Developers']
 
 # Create a bar graph
-plt.bar(labels, percentages, color=['blue', 'green', 'red', 'orange'])  # Adjust colors as needed
-plt.xlabel('DataFrames')
-plt.ylabel('Percentage')
-plt.title('Percentage of Anonymous in Different Categories')
+plt.bar(labels, percentages, color=['blue', 'green', 'red'])  # Adjust colors as needed
+#plt.xlabel('DataFrames')
+plt.ylabel('Percentage of People \n Disclosing their Full Names')
+#plt.title('Percentage of Anonymous in Different Categories')
 plt.ylim(0, 100)  # Set y-axis limit from 0 to 100 for percentage
 plt.savefig('Analysis/Anonymity Analysis/Anonymity_Diagram.png')
 plt.show()
-
-## eip author trend analysis not used in the analysis
-
-os.chdir('C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project')
-
-author_df['year'] = author_df['sdate'].dt.year
-author_df = author_df.drop(columns = ['sdate','number'])
-author_by_year =author_df.groupby(author_df['year'])['Anonymity_Flag'].apply(list)
-
-percentages = []
-for series in author_by_year:
-    ones_count = sum(series)  # Count the number of ones in the list
-    percentage_of_ones = (ones_count / len(series)) * 100  # Calculate the percentage
-    percentages.append(percentage_of_ones)
-    
-labels = ['2015', '2016', '2017', '2018','2019','2020','2021','2022','2023']
-colors = ['blue', 'green', 'red', 'orange', 'magenta', 'cyan', 'yellow']
-
-# Create a bar graph
-plt.bar(labels, percentages, color=colors)
-plt.xlabel('Labels')
-plt.ylabel('Percentages')
-plt.title('Percentage of Anonymous Authors for Each Year')
-plt.show()    

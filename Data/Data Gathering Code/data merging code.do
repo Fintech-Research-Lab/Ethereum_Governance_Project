@@ -28,6 +28,11 @@ save "Data\Raw Data\Github_data.dta", replace
 insheet using "Data\Raw Data\linkedin_data.csv", clear comma
 save "Data\Raw Data\linkedin_data.dta",replace
 
+//////////////////////
+//import Ethereum Foundation data and save it as a stata file
+insheet using "Data\Raw Data\author_EF.csv", clear comma
+save "Data\Raw Data\author_EF.dta",replace
+
 
 //////////////////////
 // import EIP commit data
@@ -180,7 +185,6 @@ forvalues id = 1/15 {
 		pastcompany*  jobtitle*company*)
 	drop if _merge == 2
 	drop _merge
-	rename author_id author`id'_id
 	rename company1 author`id'_company1
 	rename company2 author`id'_company2
 	rename company3 author`id'_company3
@@ -213,17 +217,25 @@ forvalues id = 1/15 {
 	rename jobtitle1_pastcompany8 author`id'_jobtitle1_pastcompany8
 	rename jobtitle1_pastcompany9 author`id'_jobtitle1_pastcompany9
 	rename jobtitle1_pastcompany10 author`id'_jobtitle1_pastcompany10
+	
+	merge m:1 author_id using "Data\Raw Data\author_EF.dta", keepusing(from end)
+	drop if _merge==2
+	drop _merge
+	rename author_id author`id'_id
+	rename from author`id'_EF_start
+	rename end author`id'_EF_end
 	}
 
 // create number of authors
 
-gen n_authors = 1 if author1 != ""
+gen n_authors = 1 if author1_id != .
 
 forvalues i = 2/15{
-	replace n_authors = n_authors + 1 if author`i' != ""	
+	replace n_authors = n_authors + 1 if author`i'_id != .	
 	}
 
 erase "Data\Raw Data\linkedin_data.dta"
+erase "Data\Raw Data\author_EF.dta"
 
 
 

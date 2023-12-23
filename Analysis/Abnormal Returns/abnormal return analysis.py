@@ -128,7 +128,7 @@ fork = fork.loc[~fork['release'].str.contains("Glacier", na=False)].reset_index(
 # generate event dates based on last meeting date when eip was discussed
 
 # adjust event dates if they occur during non trading days.
-meeting = pd.read_csv("Analysis/Meeting Dates Volatility Analysis/calls_updated_standardized.csv")
+meeting = pd.read_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/calls_updated_standardized.csv")
 eip2 = meeting.loc[:,['Date','EIP','Meeting']]
 eip_list = eip2['EIP'].str.split(',')
 eip_list = eip_list.explode()
@@ -169,9 +169,9 @@ for i in range(len(event.index)):
     #dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
     dat_temp['eip'] = event.iloc[i]['EIP'] # For EIP Finalization Dates
     dat_temp['Category'] = event.iloc[i]['Category'] # To Add Category
-    dat_temp = dat_temp[(dat_temp['diff']>-61) & (dat_temp['diff']<61)]
-    dat_temp['CAR'] = (dat_temp['AR']+1).cumprod()-1
-    dat_temp['CAR_btc'] = (dat_temp['AR_btc']+1).cumprod()-1
+    dat_temp = dat_temp[(dat_temp['diff']>-301) & (dat_temp['diff']<301)]
+    dat_temp['CAR'] = (dat_temp['AR']).cumsum()
+    dat_temp['CAR_btc'] = (dat_temp['AR_btc']).cumsum()
     df = pd.concat([df,dat_temp], axis = 0)
 
 df.sort_values(['eip','diff'])

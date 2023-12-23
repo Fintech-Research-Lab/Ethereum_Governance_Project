@@ -36,9 +36,18 @@ drop id
 duplicates drop
 reshape long author_company, i(eip_number author_id) j(c) string
 rename author_company company
+unique author_id
+local tot = r(sum)
 drop if company ==""
+unique author_id
+local co = r(sum)
+di `co'/`tot'
+* % of people found on linkedin
+* 419 Authors with company information out of 688. = 63.8%
+
 drop c
 save temp, replace
+
 
 * raw count of companies-eip
 
@@ -153,20 +162,19 @@ twoway line cum_n_one2 n_one,  ytitle("% of EIPs / Authors") || line cum_n_one3 
 	ilcolor(white) ifcolor(white)) legend(ring(0) position(4) cols(1))
 graph export "analysis\results\Figures\company_lorenz.png", as(png) replace
 
-	
-	
-	
-	
 
-
-
-
-erase temp.dta
-
+use temp, clear
+drop author_id
+duplicates drop
+gen one = 1
+drop if company =="."
+collapse (sum) one, by(company)
+gsort -one company
 gsort -one
 keep if _n<11
 keep company
 save "Data\Raw Data\temp_top10" , replace
+erase temp.dta
 
 levelsof company, local(top10) 
 
@@ -185,11 +193,21 @@ foreach comp in `top10' {
 			}
 		}
 	}
+	
+gen cdum_EF2 = 0
+forvalues x = 1 / 15 {
+	forvalues c = 1/5{
+		replace cdum_EF2 = 1 if author`x'_EF_start ~=. & (author`x'_EF_start <= year(sdate) & (author`x'_EF_end ==. | author`x'_EF_end >= year(sdate)))
+		}
+	}
+	
+	
+	
 
 erase "Data\Raw Data\temp_top10.dta"
 	
 ********************************************************************************
-* ETHEREUM FOUNDATION TIME TRENDS
+* ETHEREUM TIME TRENDS
 
 gen year = year(sdate)
 
@@ -197,13 +215,13 @@ save temp_ef, replace
 
 forvalues y = 2015/2023 {
 	use temp_ef, clear
-	keep if year == `y' | year == `y'-1
+	keep if year == `y'
 	gen tot = _N
-	egen EF = count(eip_number) if cdum_Ethereum_Foundation ==1
+	egen EF = count(eip_number) if cdum_EF2 ==1
 	egen tot_erc = count(eip_number) if Category =="ERC" | Category =="Interface"
-	egen EF_erc = count(eip_number) if cdum_Ethereum_Foundation ==1 & (Category =="ERC" | Category =="Interface")
+	egen EF_erc = count(eip_number) if cdum_EF2 ==1 & (Category =="ERC" | Category =="Interface")
 	egen tot_core = count(eip_number) if Category =="Core" | Category =="Networking"
-	egen EF_core = count(eip_number) if cdum_Ethereum_Foundation ==1 & (Category =="Core" | Category =="Networking")
+	egen EF_core = count(eip_number) if cdum_EF2 ==1 & (Category =="Core" | Category =="Networking")
 	gen frac = EF / tot
 	gen frac_erc = EF_erc / tot_erc
 	gen frac_core = EF_core / tot_core
@@ -432,7 +450,7 @@ restore
 *top 10 authors	
 keep eip_number author* status implemented Category sdate
 drop author author*commit* author*_follo* author*_job* author*comp* author*between* author*close* author*eigen*
-
+drop *_EF_*
 
 foreach var of varlist author*id {
 	local newname = "id_" + subinstr("`var'", "_id","", .)
@@ -523,7 +541,7 @@ duplicates drop
 gsort author -n_eip
 bys author: keep if _n==1
 gsort -n_eip
-save "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta"
+save "Analysis\Meeting Attendees and Ethereum Community Analysis\eip_by_authors.dta", replace
 graph hbar n_eip if _n<11,  over(author , sort(n_eip) descending) ///
 	ytitle("N. of EIPs") plotregion(fcolor(white)) graphregion(fcolor(white) ///
 	lcolor(white) ilcolor(white)) 

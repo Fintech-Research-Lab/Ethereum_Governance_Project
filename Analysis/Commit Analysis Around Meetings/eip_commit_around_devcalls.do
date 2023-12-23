@@ -51,7 +51,7 @@ graph export "Analysis\Commit Analysis Around Meetings\commit_total.png", as(png
 * ANALYSIS OF DEV CALLS ATTENDEES
 
 * bring in meeting date
-insheet using "Data\Commit Data\Eip Commit Data\Calls_Updated_standardized.csv", clear comma names
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Calls_Updated_standardized.csv", clear comma names
 keep meeting date
 gen date2 = date(date,"MDY")
 gen datem = year(date2)
@@ -59,7 +59,7 @@ keep datem meeting date2 date
 drop if datem < 2015
 save temp_meetdate, replace
 
-insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Mapping_File.csv", names clear
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Name Cleaning\Mapping_File.csv", names clear
 rename original_name full_name
 replace full_name = "Åukasz Rozmej" if full_name == "ÃÂukasz Rozmej"
 replace full_name = subinstr(full_name,"ÃÂ", "Å",.)
@@ -68,18 +68,18 @@ replace full_name = subinstr(full_name,"ÃÂ", "Å",.)
 replace full_name = subinstr(full_name,"ÃÂ©", "Ã©",.)
 replace full_name = subinstr(full_name,"ÃÂ¡", "Ã¡",.)
 replace full_name = subinstr(full_name,"ÃÂ¶", "Ã¶",.)
- 
+rename full_name attendees
 drop v1
 duplicates drop
 save temp_names, replace
 
-insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\flat_list_meeting_attendees.csv", names clear
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Name Cleaning\flat_list_meeting_attendees.csv", names clear
 drop if meeting == "Meeting Template"
-merge m:1 full_name using temp_names, 
+merge m:1 attendees using temp_names, 
 tab _merge
 drop if _merge==2
 rename replace_name name
-drop full_name _merge
+drop attendees _merge
 drop if name ==""
 
 merge m:1 meeting using temp_meetdate
@@ -91,6 +91,7 @@ drop _merge
 
 * SUMMARY STATS 
 unique(meeting)
+unique(name)
 
 * find number of attendees per meeting
 bys meeting: egen n_attendees = nvals(name)
@@ -161,8 +162,7 @@ rename eip_number eip_n
 save temp_eip, replace
 
 // Import call list with dates EIP are discussed, and clean/reshape it.
-insheet using "Data\Commit Data\Eip Commit Data\Calls_Updated_standardized.csv", clear comma names
-keep if eip_mention == "TRUE"
+insheet using "Analysis\Meeting Attendees and Ethereum Community Analysis\Calls_Updated_standardized.csv", clear comma names
 replace eip = subinstr(eip, "EIP-","",.)
 split eip , parse(,) generate(eip_n)
 
