@@ -34,7 +34,7 @@ cs1 = cs[['author1_id','author2_id','author3_id','author4_id','author5_id',
          'author11_id','author12_id','author13_id','author14_id','author15_id','eip_number']]
 
 cs2 = cs[[
-         'author1_company1','author2_company1','author2_company1','author3_company1','author4_company1','author5_company1',
+         'author1_company1','author2_company1','author3_company1','author4_company1','author5_company1',
          'author6_company1','author7_company1','author8_company1','author9_company1','author10_company1',
          'author11_company1','author12_company1','author13_company1','author14_company1','author15_company1','eip_number']]
 
@@ -58,12 +58,55 @@ linkedin_df_missing = linkedin_df_missing['Author_id']
 linkedin_df_missing = linkedin_df_missing.unique()
 linkedin_df_missing = pd.Series(linkedin_df_missing)
 
-linkedin = pd.read_csv("Data/Raw Data/linkedIn_data.csv")
+linkedin = pd.read_csv("Data/Raw Data/linkedIn_data.csv", encoding = "latin1")
 not_searched = linkedin_df_missing[~linkedin_df_missing.isin(linkedin['author_id'])]
 not_searched = pd.DataFrame(not_searched, columns = ['author_id'])
 authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
 not_searched = pd.merge(not_searched,authors, on = 'author_id', how = 'inner')
 not_searched.to_csv("Names_to_search_linkedin.csv")
+
+# find how many authors for which we have twitter data
+
+
+
+
+
+# Find not included Twitter
+
+cs3 = cs[[
+         'author1_follower','author2_follower','author3_follower','author4_follower','author5_follower','author6_follower',
+         'author7_follower','author8_follower','author9_follower','author10_follower','author11_follower',
+         'author12_follower','author13_follower','author14_follower','author15_follower','eip_number']]
+
+
+follower_df = cs3.melt(id_vars = 'eip_number', value_vars = [
+         'author1_follower','author2_follower','author3_follower','author4_follower','author5_follower','author6_follower',
+         'author7_follower','author8_follower','author9_follower','author10_follower','author11_follower',
+         'author12_follower','author13_follower','author14_follower','author15_follower','eip_number'], 
+          var_name = 'number', value_name = 'Follower' )
+
+
+tw_df = pd.concat([author_df[['eip_number','Author_id']],follower_df['Follower']], axis = 1)
+tw_df = tw_df[pd.notnull(tw_df['Author_id'])]
+tw_df_missing = tw_df[pd.isnull(tw_df['Follower'])]
+tw_df_missing = tw_df_missing['Author_id']
+tw_df_missing = tw_df_missing.unique()
+tw_df_missing = pd.Series(tw_df_missing)
+
+twitter = pd.read_csv("Data/Raw Data/twitter_data.csv")
+not_searched = tw_df_missing[~tw_df_missing.isin(twitter['author_id'])]
+not_searched = pd.DataFrame(not_searched, columns = ['author_id'])
+authors = pd.read_csv("Data/Raw Data/unique_author_names_with_id.csv")
+not_searched = pd.merge(not_searched,authors, on = 'author_id', how = 'inner')
+not_searched.to_csv("Names_to_search_linkedin.csv")
+
+# find authors for which we have twitter data
+
+twitter_available = tw_df[pd.notnull(tw_df['Follower'])]
+twitter_available = twitter_available['Author_id'].unique()
+
+
+# for further analysis of author 
 
 author_df = author_df[pd.notnull(author_df['Author_id'])]
 author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
