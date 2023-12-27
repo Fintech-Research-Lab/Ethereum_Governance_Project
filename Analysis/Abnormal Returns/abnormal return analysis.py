@@ -169,7 +169,7 @@ for i in range(len(event.index)):
     #dat_temp['diff'] = (dat_temp['N'] - dat_temp.loc[pd.notnull(dat_temp['release']) , 'N'].values[0])
     dat_temp['eip'] = event.iloc[i]['EIP'] # For EIP Finalization Dates
     dat_temp['Category'] = event.iloc[i]['Category'] # To Add Category
-    dat_temp = dat_temp[(dat_temp['diff']>-301) & (dat_temp['diff']<301)]
+    dat_temp = dat_temp[(dat_temp['diff']>-41) & (dat_temp['diff']<41)]
     dat_temp['CAR'] = (dat_temp['AR']).cumsum()
     dat_temp['CAR_btc'] = (dat_temp['AR_btc']).cumsum()
     df = pd.concat([df,dat_temp], axis = 0)
@@ -201,8 +201,8 @@ fig.autofmt_xdate(rotation=45)
 plt.gca().yaxis.grid(True)
 plt.axvline(x=0, color='red', linestyle='--', label='Final Discussion Date')
 #plt.title("Cumulative Abnormal Returns (SPY) by Last AllDevCore Meeting Date of Core/Networking EIPs")
-plt.xlabel('Days to AllDevCore Meeting Date')
-plt.ylabel('Cumulative Abnormal Returns')
+plt.xlabel('Trading Days to AllCoreDevs Meeting Date')
+plt.ylabel('Average Cumulative Abnormal Returns')
 plt.savefig('Analysis/Abnormal Returns/CAR_SPY.png', bbox_inches="tight")
 plt.show()
 
@@ -228,8 +228,8 @@ fig.autofmt_xdate(rotation=45)
 plt.gca().yaxis.grid(True)
 plt.axvline(x=0, color='red', linestyle='--', label='Final Discussion Date')
 #plt.title("Cumulative Abnormal Returns (SPY) by Last AllDevCore Meeting Date of Core/Networking EIPs")
-plt.xlabel('Days to AllDevCore Meeting Date')
-plt.ylabel('Cumulative Abnormal Returns')
+plt.xlabel('Trading Days to AllCoreDevs Meeting Date')
+plt.ylabel('Average Cumulative Abnormal Returns')
 plt.savefig('Analysis/Abnormal Returns/CAR_BTC.png', bbox_inches="tight")
 plt.show()
 
@@ -282,4 +282,17 @@ plt.title("Cumulative Abnormal Returns (BTC) by Fork Release")
 plt.xlabel('Days to Finalization Announcement Date')
 plt.ylabel('Cumulative Abnormal Returns')
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
 

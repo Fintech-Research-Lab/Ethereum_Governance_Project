@@ -86,6 +86,18 @@ rename index author_id
 save "Data\Raw Data\centrality.dta", replace
 
 
+
+//////////////////////
+// N of WORDS in EIP
+
+
+import delimited "Data\Raw Data\eip_word_count.csv", clear
+rename eipnumber eip_number
+rename wordcount eip_nwords
+rename readability eip_read
+save "Data\Raw Data\temp_nwords.dta", replace
+
+
 //////////////////////
 // add start date for all eips, end dates of all EIPs that have been finalized
 
@@ -101,6 +113,16 @@ rename number eip_number
 gen edate = date(end, "MDY")
 format edate %td
 save "Data\Raw Data\finaleip_enddates.dta", replace
+
+
+
+//////////////////////
+// add anynoymity variable to data
+
+import delimited "Data\Raw Data\unique_author_names_with_id", clear
+keep author_id anonymity_flag
+rename anonymity_flag anon
+save "Data\Raw Data\temp_anon.dta", replace
 
 
 //////////////////////
@@ -246,6 +268,29 @@ merge 1:1 eip_number using "Data\Commit Data\Eip Commit Data\eip_commit_data", k
 drop _merge
 erase "Data\Commit Data\Eip Commit Data\eip_commit_data.dta"
 
+
+********************************************************************************
+* MERGE IN N WORDS in EIP DATA
+
+merge 1:1 eip_number using "Data\Raw Data\temp_nwords", keep(1 3) 
+drop _merge
+erase "Data\Raw Data\temp_nwords.dta"
+
+
+********************************************************************************
+* MERGE IN ANONYMITY DATA
+
+forvalues id = 1/15{
+	rename author`id'_id author_id
+	merge m:1 author_id using "Data\Raw Data\temp_anon", keep(1 3)
+	drop _merge
+	rename author_id author`id'_id
+	rename anon author`id'_anon
+	}
+
+egen anon_max = rowmax(author1_anon author2_anon author3_anon author4_anon author5_anon author6_anon author7_anon author8_anon author9_anon author10_anon author11_anon author12_anon author13_anon author14_anon author15_anon)
+
+erase "Data\Raw Data\temp_anon.dta"
 
 
 ********************************************************************************
