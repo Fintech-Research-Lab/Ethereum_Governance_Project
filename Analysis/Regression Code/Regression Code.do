@@ -324,6 +324,12 @@ graph export "analysis\results\Figures\eip_by_category.png", as(png) replace
 ********************************************************************************
 * Regressions
 
+
+* VARIABLES: success log_gh log_tw n_author n_contributors_eip
+* between client_commits_dum author_commit eip_nwords eip_read anon_max 
+
+
+
 *success
 eststo clear
 eststo one : reg success log_gh log_tw  i.category_encoded cdum_* i.year , robust 
