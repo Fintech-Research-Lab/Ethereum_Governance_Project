@@ -1,0 +1,44 @@
+{
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\begin{tabular}{l*{4}{c}}
+\hline\hline
+                                   &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}\\
+                                   &\multicolumn{1}{c}{log\_replies}&\multicolumn{1}{c}{log\_views}&\multicolumn{1}{c}{log\_likes}&\multicolumn{1}{c}{log\_users}\\
+\hline
+Number of EIP Authors              &      0.0671         &      0.0679         &      0.0900\sym{*}  &      0.0633\sym{**} \\
+                                   &      (1.45)         &      (0.68)         &      (1.76)         &      (2.06)         \\
+[1em]
+Twitter Followers (log)            &      0.0615\sym{**} &      0.1603\sym{**} &      0.0804\sym{***}&      0.0461\sym{***}\\
+                                   &      (2.37)         &      (2.51)         &      (3.05)         &      (3.27)         \\
+[1em]
+GitHub Followers (log)             &     -0.0086         &     -0.0440         &     -0.0008         &      0.0023         \\
+                                   &     (-0.20)         &     (-0.43)         &     (-0.02)         &      (0.09)         \\
+[1em]
+Betweenness Centrality             &      7.1543         &      9.4121         &     -7.1045         &      1.3994         \\
+                                   &      (0.85)         &      (0.57)         &     (-0.82)         &      (0.28)         \\
+[1em]
+Anonymous Author                   &      0.0383         &      0.6419\sym{*}  &      0.0285         &      0.0886         \\
+                                   &      (0.19)         &      (1.66)         &      (0.13)         &      (0.71)         \\
+[1em]
+Word Count                         &      0.0001         &     -0.0001         &      0.0001         &      0.0001         \\
+                                   &      (0.85)         &     (-0.46)         &      (1.20)         &      (1.20)         \\
+[1em]
+Readability                        &      0.0031         &     -0.0062         &      0.0055         &      0.0031         \\
+                                   &      (0.51)         &     (-0.51)         &      (0.85)         &      (0.82)         \\
+[1em]
+ERC                                &     -0.4652\sym{**} &     -0.7429\sym{*}  &     -0.3491\sym{*}  &     -0.2775\sym{***}\\
+                                   &     (-2.53)         &     (-1.88)         &     (-1.89)         &     (-2.60)         \\
+[1em]
+Interface                          &     -0.1988         &     -1.0828         &      0.1821         &      0.0404         \\
+                                   &     (-0.61)         &     (-1.30)         &      (0.55)         &      (0.21)         \\
+[1em]
+Networking                         &     -1.6444\sym{***}&     -4.2438\sym{***}&     -1.3026\sym{***}&     -0.7298\sym{***}\\
+                                   &     (-4.30)         &     (-3.56)         &     (-3.46)         &     (-3.02)         \\
+[1em]
+Year FE                            &         Yes         &         Yes         &         Yes         &         Yes         \\
+\hline
+Observations                       &         346         &         346         &         346         &         346         \\
+Adjusted \(R^{2}\)                 &        0.11         &        0.11         &        0.11         &        0.14         \\
+\hline\hline
+\end{tabular}
+}

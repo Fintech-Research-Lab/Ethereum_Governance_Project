@@ -95,6 +95,8 @@ import delimited "Data\Raw Data\eip_word_count.csv", clear
 rename eipnumber eip_number
 rename wordcount eip_nwords
 rename readability eip_read
+
+replace eip_read = 0 if eip_read <0
 save "Data\Raw Data\temp_nwords.dta", replace
 
 

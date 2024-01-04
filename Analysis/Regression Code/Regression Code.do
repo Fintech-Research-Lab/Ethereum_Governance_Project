@@ -23,6 +23,16 @@ use "Data\Raw Data\Ethereum_Cross-sectional_Data.dta", clear
 
 
 ********************************************************************************
+* ANALYSIS OF TEXT READABILITY
+
+sum eip_read, d
+
+hist eip_read, plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\read_hist.png", as(png) replace
+
+
+
+********************************************************************************
 * ADD TOP10 COMPANY DUMMIES AND PLOT EMPLOYMENT OF EIP AUTHORS
 
 keep eip_number author*id *company*
