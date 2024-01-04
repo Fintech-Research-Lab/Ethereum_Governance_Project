@@ -9,8 +9,8 @@ import pandas as pd
 import os as os
 import numpy as np
 
-os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
-#os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project')
+#os.chdir("C:/Users/moazz/Box/Fintech Research Lab/Ethereum_Governance_Project/")
+os.chdir('C:/Users/cf8745/Box/Research/Ethereum Governance/Ethereum_Governance_Project')
 
 
 # read client and Attendee data
@@ -59,7 +59,7 @@ author_df = cs.melt(id_vars = 'sdate', value_vars = ['author1_id','author2_id','
          'author11_id','author12_id','author13_id','author14_id','author15_id'], var_name = 'number', value_name = 'Author_id' )
 
 author_df = author_df[pd.notnull(author_df['Author_id'])]
-author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'inner')
+author_df = pd.merge(author_df, authors, left_on = 'Author_id', right_on = 'author_id', how = 'left')
 authors = author_df['Full_Name'].unique()
 authors = pd.DataFrame(authors, columns = ['Author_Name'])
 

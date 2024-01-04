@@ -30,6 +30,12 @@ sum eip_read, d
 hist eip_read, plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\read_hist.png", as(png) replace
 
+sum eip_nwords, d
+
+hist eip_nwords, plotregion(fcolor(white)) graphregion(fcolor(white) lcolor(white) ilcolor(white))
+graph export "analysis\results\Figures\nwords_hist.png", as(png) replace
+
+
 
 
 ********************************************************************************
@@ -204,10 +210,10 @@ foreach comp in `top10' {
 		}
 	}
 	
-gen cdum_EF2 = 0
+gen compdum_EF2 = 0
 forvalues x = 1 / 15 {
 	forvalues c = 1/5{
-		replace cdum_EF2 = 1 if author`x'_EF_start ~=. & (author`x'_EF_start <= year(sdate) & (author`x'_EF_end ==. | author`x'_EF_end >= year(sdate)))
+		replace compdum_EF2 = 1 if author`x'_EF_start ~=. & (author`x'_EF_start <= year(sdate) & (author`x'_EF_end ==. | author`x'_EF_end >= year(sdate)))
 		}
 	}
 	
@@ -227,11 +233,11 @@ forvalues y = 2015/2023 {
 	use temp_ef, clear
 	keep if year == `y'
 	gen tot = _N
-	egen EF = count(eip_number) if cdum_EF2 ==1
+	egen EF = count(eip_number) if compdum_EF2 ==1
 	egen tot_erc = count(eip_number) if Category =="ERC" | Category =="Interface"
-	egen EF_erc = count(eip_number) if cdum_EF2 ==1 & (Category =="ERC" | Category =="Interface")
+	egen EF_erc = count(eip_number) if compdum_EF2 ==1 & (Category =="ERC" | Category =="Interface")
 	egen tot_core = count(eip_number) if Category =="Core" | Category =="Networking"
-	egen EF_core = count(eip_number) if cdum_EF2 ==1 & (Category =="Core" | Category =="Networking")
+	egen EF_core = count(eip_number) if compdum_EF2 ==1 & (Category =="Core" | Category =="Networking")
 	gen frac = EF / tot
 	gen frac_erc = EF_erc / tot_erc
 	gen frac_core = EF_core / tot_core
@@ -266,17 +272,15 @@ erase temp_ef.dta
 ********************************************************************************
 * Principal Component Analysis
 
-pca log_gh log_tw 
+
+pca log_gh log_tw between anon_max 
 predict pca_social, score 
-label var pca_social "Social Influence Index (PCA)"
+label var pca_social "Social Influence Index"
 
-pca n_author n_contributors_eip total_eip_commit
-predict pca_author, score 
-label var pca_author "Engagement Index (PCA)"
+pca replies views users likes
+predict pca_engag, score 
+label var pca_engag "Community Engagement Index"
 
-pca client_commits_dum author_commit between 
-predict pca_skill, score 
-label var pca_skill "Skill Index (PCA)"
 
 gen implemented = implementation 
 replace implemented = . if (status =="Draft" |  status =="Final"  | ///
@@ -286,17 +290,11 @@ label var implemented "Implemented"
 gen time_start_today = date("june 21, 2023", "MDY") - dofc(sdate)
 
 
-gen success2 = "Finalized" if status =="Final"
-replace success2 = "In Progress" if status =="Draft" | status =="Review" |  status =="Last Call" 
-replace success2 = "Failed" if status =="Withdrawn" | status =="Stagnant"  
-encode success2 , gen (success2_enc)
-
-
 ********************************************************************************
 * Summary Statistics
 
 
-local summary_list = "success implemented time_to_final n_author tf_scale gh_follower total_eip_commit author_commit n_contributors_eip besu_commits erigon_commits geth_commits nethermind_commits client_commits betweenness"
+local summary_list = "anon_max betweenness pca_engag replies likes users views  success implemented   n_author  tf_scale gh_follower  eip_nwords eip_read  pca_social  "
 
 eststo clear	
 eststo: estpost summarize `summary_list', detail	
@@ -334,22 +332,30 @@ graph export "analysis\results\Figures\eip_by_category.png", as(png) replace
 ********************************************************************************
 * Regressions
 
-
-* VARIABLES: success log_gh log_tw n_author n_contributors_eip
-* between client_commits_dum author_commit eip_nwords eip_read anon_max 
-
-
-
 *success
 eststo clear
-eststo one : reg success log_gh log_tw  i.category_encoded cdum_* i.year , robust 
-eststo two : reg success n_author n_contributors_eip  i.category_encoded cdum_*  i.year, robust 
-eststo three: reg success between client_commits_dum author_commit  i.category_encoded cdum_*  i.year, robust 
-eststo four: reg success pca_social  i.category_encoded cdum_* i.year, robust 
-eststo five: reg success pca_author  i.category_encoded cdum_* i.year, robust 
-eststo six: reg success pca_skill i.category_encoded cdum_* i.year, robust 
-eststo seven: reg success pca_social pca_author pca_skill i.category_encoded cdum_* i.year, robust 
+eststo: reg success pca_social n_author eip_nwords eip_read  i.category_encoded  cdum_*  i.year, robust
+eststo: reg success pca_social pca_engag n_author eip_nwords eip_read  i.category_encoded  cdum_*   i.year, robust
 
+eststo: reg success pca_social n_author eip_nwords eip_read  i.category_encoded  cdum_*   i.year if implementation ==., robust
+eststo: reg success pca_social pca_engag n_author eip_nwords eip_read  i.category_encoded  cdum_*   i.year if implementation ==., robust
+
+eststo: reg implemented pca_social n_author eip_nwords eip_read  i.category_encoded  cdum_*   i.year, robust
+eststo: reg implemented pca_social pca_engag n_author eip_nwords eip_read  i.category_encoded  cdum_*   i.year, robust
+
+esttab using analysis\Results\Tables\final_all.tex , unstack varwidth(35)  ///
+	b(3) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
+	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
+	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
+
+* TO ADD TO LATEX TABLE
+/*
+& \multicolumn{4}{c}{Finalized} &  \multicolumn{2}{c}{Implemented}  \\ \cline{2-5}\cline{6-7}
+& \multicolumn{2}{c}{All EIPs} &  \multicolumn{2}{c}{ERC EIPs} &  \multicolumn{2}{c}{Core EIPs} \\ \cline{2-3}\cline{4-5}\cline{6-7}
+*/
+
+* Employer test
+reg success pca_social n_author eip_nwords eip_read  i.category_encoded  cdum_*  i.year, robust
 unab varlist : cdum_*
 foreach cd in `varlist'{
 	local var2 = substr("`cd'",6,.)
@@ -362,51 +368,6 @@ coefplot, drop(_cons) yline(0) vertical keep(cdum_*) xlabel(, angle(45) ///
 	plotregion(fcolor(white)) 	graphregion(fcolor(white) lcolor(white) ilcolor(white))
 graph export "analysis\results\Figures\cdum_coef.png", as(png) replace
 
-
-eststo eight: reg success pca_social pca_author pca_skill i.category_encoded cdum_*  i.year if implementation ==., robust 
-eststo nine: reg implemented  pca_social pca_author pca_skill  cdum_* i.year , robust 
-
-esttab one two three seven using analysis\Results\Tables\final_all.tex , eform unstack varwidth(35)  ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
-
-	
-	
-esttab one two three using analysis\Results\Tables\final_all_alt1.tex , eform unstack varwidth(35)  ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
-
-esttab four five six seven eight nine using analysis\Results\Tables\final_all_alt2.tex , eform unstack varwidth(35)  ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") 
-	
-	
-	
-	
-* EIP SUCCESS NO IMPL/ IMPL
-	
-
-*success
-eststo clear
-eststo : reg success log_gh log_tw  i.category_encoded cdum_*  i.year if implementation ==., robust 
-eststo : reg success n_author n_contributors_eip  i.category_encoded cdum_*   i.year if implementation ==., robust 
-eststo : reg success between client_commits_dum author_commit  i.category_encoded cdum_*  i.year  if implementation ==., robust 
-eststo : reg success pca_social pca_author pca_skill i.category_encoded cdum_*  i.year if implementation ==., robust 
-eststo : reg implemented log_gh log_tw cdum_*  i.year , robust 
-eststo : reg implemented  n_author n_contributors_eip  cdum_*  i.year , robust 
-eststo : reg implemented between  client_commits_dum author_commit   cdum_* i.year , robust 
-eststo : reg implemented  pca_social pca_author pca_skill  cdum_* i.year , robust 
-
-
-esttab using analysis\Results\Tables\final_noimpl_impl.tex ,  eform unstack varwidth(35)  ///
-	b(4) nobaselevels noomitted interaction(" X ") label ar2(2)  ///
-	star (* .1 ** .05 *** .01) replace nodepvars nomtitles mlabels(none) nonotes noconstant ///
-	indicate("Category FE = *.category_encoded" "Company FE = cdum_*" "Year FE = *year") ///
-	mgroups("Finalized ERC EIP" "Implemented Core EIP", pattern(1 0 0 0 1 0 0 0 ) prefix(\multicolumn{@span}{c}{) ///
-	suffix(}) span erepeat(\cmidrule(lr){@span})) 
 	
 	
 
@@ -425,6 +386,14 @@ drop author_*id
 duplicates drop
 save temp_year_author, replace
 
+*N. of unique authors
+restore
+keep author*_id eip_number
+reshape long author@_id, i(eip_number) j(n)
+keep author_id
+duplicates drop
+count
+preserve
 
 * EIP Over time
 restore

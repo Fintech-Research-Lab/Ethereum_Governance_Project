@@ -33,6 +33,12 @@ save "Data\Raw Data\linkedin_data.dta",replace
 insheet using "Data\Raw Data\author_EF.csv", clear comma
 save "Data\Raw Data\author_EF.dta",replace
 
+//////////////////////
+//import Ethereum Magician data and save it as a stata file
+insheet using "Analysis\Magician Comments\FEM_Data_for_regressions.csv", clear comma
+rename eip eip_number
+save "Data\Raw Data\temp_FEM", replace
+
 
 //////////////////////
 // import EIP commit data
@@ -97,6 +103,7 @@ rename wordcount eip_nwords
 rename readability eip_read
 
 replace eip_read = 0 if eip_read <0
+replace eip_nwords = eip_nwords/1000
 save "Data\Raw Data\temp_nwords.dta", replace
 
 
@@ -339,6 +346,15 @@ drop _merge
 erase "Data\Raw Data\eip_implementation.dta"
 
 
+********************************************************************************
+* MERGE IN FEMN DATA
+
+merge 1:1 eip_number using "Data\Raw Data\temp_fem.dta" , keepusing(eip_number replies views likes links createddate users)
+drop if _merge == 2
+drop _merge
+erase "Data\Raw Data\temp_fem.dta"
+
+
 // move variables
 move sdate author1
 move edate author1
@@ -438,7 +454,7 @@ label var log_gh "GitHub Followers (log)"
 label var tw_follower "N. Twitter Followers"
 label var tf_scale "N. Twitter Followers (K)"
 label var gh_follower "N. Github Followers"
-label var n_author "Number of EIP Authors"
+label var n_author "N. EIP Authors"
 label var betweenness "Betweenness Centrality"
 label var author_commit "EIP Author Commits"
 label var total_eip_commit "Total EIP Commits"
@@ -450,7 +466,13 @@ label var nethermind_commits "Nethermind Commits"
 label var success "Finalized"
 label var implementation "Implemented EIP"
 label var time_to_final "Time from EIP Start to Finalization"
-	
+label var eip_nwords "N. Words in EIP (k)"	
+label var eip_read "Readability Score"	
+label var replies "FEM Comments"
+label var views "FEM Views"
+label var likes "FEM Likes"
+label var users "FEM Unique Users"
+label var anon_max "Anonymous Author"
 
 // fix living
 replace status = "Living" if status == "Living "

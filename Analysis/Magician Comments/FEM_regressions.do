@@ -19,10 +19,10 @@ foreach var of varlist replies views likes users {
 	}
 
 eststo clear
-eststo: reg replies n_authors log_tw log_gh betweenness_centrality anon_max eip_nwords eip_read i.category_encoded i.year
-eststo: reg views n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
-eststo: reg likes n_authors log_tw log_gh betweenness_centrality anon_max  eip_nwords eip_read i.category_encoded i.year
-eststo: reg users n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
+eststo: reg replies n_authors log_tw log_gh betweenness_centrality anon_max eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg views n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg likes n_authors log_tw log_gh betweenness_centrality anon_max  eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg users n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
 
 
 esttab using "Analysis\Magician Comments\FEM_reg_out.tex", unstack varwidth(35)  ///
@@ -31,10 +31,10 @@ esttab using "Analysis\Magician Comments\FEM_reg_out.tex", unstack varwidth(35) 
 	indicate(  "Year FE = *year") 
 
 eststo clear
-eststo: reg log_replies n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
-eststo: reg log_views n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
-eststo: reg log_likes n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
-eststo: reg log_users n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year
+eststo: reg log_replies n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg log_views n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg log_likes n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
+eststo: reg log_users n_authors log_tw log_gh betweenness_centrality  anon_max eip_nwords eip_read i.category_encoded i.year, robust
 
 
 esttab using "Analysis\Magician Comments\FEM_reg_out_log.tex", unstack varwidth(35)  ///
