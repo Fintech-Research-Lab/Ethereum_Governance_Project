@@ -302,7 +302,27 @@ esttab using "analysis\Results\Tables\summstat.tex" , cells("count mean(fmt(%12.
 	collabels("N." " Mean" "St. Dev." "Min"  "p25" "p50" "p75" "Max" ) ///
 	tex replace label nonumbers alignment(rrrrrrrr) noobs
 
+* Stats for the conclusion of the paper
+preserve
+keep if implemented~=.
+keep author*_id eip_number
+reshape long author@_id, i(eip_number) j(n)
+keep author_id
+duplicates drop
+count
+restore
 
+preserve
+keep if implemented==1
+keep author*_id eip_number
+reshape long author@_id, i(eip_number) j(n)
+keep author_id
+duplicates drop
+count
+restore
+
+	
+	
 	
 ********************************************************************************
 * Stats on Success and category
