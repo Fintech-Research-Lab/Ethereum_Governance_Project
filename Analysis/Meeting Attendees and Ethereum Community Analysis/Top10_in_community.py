@@ -95,12 +95,23 @@ Common.loc[len(Common)] = ['Percent of authors and clients that are either top 1
 Common.loc[len(Common)] = ['Percent of attendees and clients that are either top 10 clients or top 10 attendees',np.sum((top10_clients.index.isin(clients_and_attendees))|(top10_authors.index.isin(clients_and_attendees)))/clients_and_attendees.size] 
 Common.loc[len(Common)] = ['Percent of authors and attendees that are either top 10 authors or top 10 attendees',np.sum((top10_authors.index.isin(attendees_and_authors))|(top10_attendees.index.isin(attendees_and_authors)))/attendees_and_authors.size] 
 
-
-
-
-
 Common.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/top10_communityengagement.csv", index = False)
 
+# create a data frame of top 10
 
+top10_attendees = pd.DataFrame(top10_attendees, columns = ['Meetings_Attended'])
+top10_attendees = top10_attendees.reset_index()
 
- 
+top10_clients = pd.DataFrame(top10_clients, columns = ["date"])
+top10_clients = top10_clients.reset_index()
+top10_clients = top10_clients.rename(columns = {'date' : 'Total_Commits'})
+
+top10_authors = pd.DataFrame(top10_authors, columns = ['EIP_Authored'])
+top10_authors = top10_authors.reset_index()
+
+top10 = pd.concat([top10_clients,top10_attendees,top10_authors], axis = 1)
+
+top10.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/top10.csv", index = False, encoding = 'latin-1')
+
+all_three = pd.DataFrame(all_three, columns = ['Name'])
+all_three.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/everything.csv", index = False)
