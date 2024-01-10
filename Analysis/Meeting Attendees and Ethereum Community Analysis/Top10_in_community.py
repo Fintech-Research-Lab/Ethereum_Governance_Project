@@ -72,15 +72,32 @@ clients_and_attendees = pd.Series(clients_and_attendees.values.flatten()).unique
 # Collating Analysis 
 
 Common = pd.DataFrame(columns = ['Common','Result'])
-Common.loc[len(Common)] = ['Top 10 Authors who do everything',np.sum(top10_authors.index.isin(all_three))/all_three.size]
-Common.loc[len(Common)] = ['Top 10 Attendees who do everything',np.sum(top10_attendees.index.isin(all_three))/all_three.size] 
-Common.loc[len(Common)] = ['Top 10 Clients who do everything',np.sum(top10_clients.index.isin(all_three))/all_three.size] 
-Common.loc[len(Common)] = ['Top 10 Authors who are also client',np.sum(top10_authors.index.isin(clients_and_authors))/clients_and_authors.size]
-Common.loc[len(Common)] = ['Top 10 Clients who are also Authors',np.sum(top10_clients.index.isin(clients_and_authors))/clients_and_authors.size] 
-Common.loc[len(Common)] = ['Top 10 Authors who also attend meetings',np.sum(top10_authors.index.isin(attendees_and_authors))/attendees_and_authors.size]
-Common.loc[len(Common)] = ['Top 10 Attendees who are also Authors',np.sum(top10_attendees.index.isin(attendees_and_authors))/attendees_and_authors.size] 
-Common.loc[len(Common)] = ['Top 10 Attendees who also clients',np.sum(top10_attendees.index.isin(clients_and_attendees))/clients_and_attendees.size]
-Common.loc[len(Common)] = ['Top 10 Clients who are also Attendees',np.sum(top10_clients.index.isin(clients_and_attendees))/clients_and_attendees.size] 
+Common.loc[len(Common)] = ['What percent of people who do everything are top 10 authors',np.sum(top10_authors.index.isin(all_three))/all_three.size]
+Common.loc[len(Common)] = ['What percent of people who do everything are top 10 attendees',np.sum(top10_attendees.index.isin(all_three))/all_three.size] 
+Common.loc[len(Common)] = ['What percent of people who do everything are top 10 clients',np.sum(top10_clients.index.isin(all_three))/all_three.size] 
+Common.loc[len(Common)] = ['What percent of people who are clients and authors are top 10 authors',np.sum(top10_authors.index.isin(clients_and_authors))/clients_and_authors.size]
+Common.loc[len(Common)] = ['What percent of people who are clients and authors are top 10 clients',np.sum(top10_clients.index.isin(clients_and_authors))/clients_and_authors.size] 
+Common.loc[len(Common)] = ['What percent of people who are attendees and authors are top 10 authors',np.sum(top10_authors.index.isin(attendees_and_authors))/attendees_and_authors.size]
+Common.loc[len(Common)] = ['What percent of people who are attendees and authors are top 10 attendees',np.sum(top10_attendees.index.isin(attendees_and_authors))/attendees_and_authors.size] 
+Common.loc[len(Common)] = ['What percent of people who are clients and attendees are top 10 attendees',np.sum(top10_attendees.index.isin(clients_and_attendees))/clients_and_attendees.size]
+Common.loc[len(Common)] = ['What percent of people who are clients and attendees are top 10 clients',np.sum(top10_clients.index.isin(clients_and_attendees))/clients_and_attendees.size] 
+Common.loc[len(Common)] = ['Percent of top 10 authors who do everything',np.sum(top10_authors.index.isin(all_three))/top10_authors.size] 
+Common.loc[len(Common)] = ['Percent of top 10 clients who do everything',np.sum(top10_clients.index.isin(all_three))/top10_clients.size] 
+Common.loc[len(Common)] = ['Percent of top 10 attendees who do everything',np.sum(top10_attendees.index.isin(all_three))/top10_attendees.size] 
+Common.loc[len(Common)] = ['Percent of top 10 authors who are also clients',np.sum(top10_authors.index.isin(clients_and_authors))/top10_authors.size] 
+Common.loc[len(Common)] = ['Percent of top 10 clients who are also authors',np.sum(top10_clients.index.isin(clients_and_authors))/top10_clients.size] 
+Common.loc[len(Common)] = ['Percent of top 10 attendees who are also authors',np.sum(top10_attendees.index.isin(attendees_and_authors))/top10_attendees.size] 
+Common.loc[len(Common)] = ['Percent of top 10 authors who are also attendees',np.sum(top10_authors.index.isin(attendees_and_authors))/top10_authors.size] 
+Common.loc[len(Common)] = ['Percent of top 10 attendees who are also clients',np.sum(top10_attendees.index.isin(clients_and_attendees))/top10_attendees.size] 
+Common.loc[len(Common)] = ['Percent of top 10 clients who are also attendees',np.sum(top10_clients.index.isin(clients_and_attendees))/top10_clients.size] 
+Common.loc[len(Common)] = ['Percent of people who do everything that are either top 10 clients or authors or attendees',np.sum((top10_clients.index.isin(all_three))|(top10_authors.index.isin(all_three))|(top10_attendees.index.isin(all_three)))/all_three.size] 
+Common.loc[len(Common)] = ['Percent of authors and clients that are either top 10 clients or top 10 authors',np.sum((top10_clients.index.isin(clients_and_authors))|(top10_authors.index.isin(clients_and_authors)))/clients_and_authors.size] 
+Common.loc[len(Common)] = ['Percent of attendees and clients that are either top 10 clients or top 10 attendees',np.sum((top10_clients.index.isin(clients_and_attendees))|(top10_authors.index.isin(clients_and_attendees)))/clients_and_attendees.size] 
+Common.loc[len(Common)] = ['Percent of authors and attendees that are either top 10 authors or top 10 attendees',np.sum((top10_authors.index.isin(attendees_and_authors))|(top10_attendees.index.isin(attendees_and_authors)))/attendees_and_authors.size] 
+
+
+
+
 
 Common.to_csv("Analysis/Meeting Attendees and Ethereum Community Analysis/top10_communityengagement.csv", index = False)
 
