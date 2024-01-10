@@ -1,10 +1,23 @@
 Common,Result
-Top 10 Authors who do everything,0.16666666666666666
-Top 10 Attendees who do everything,0.20833333333333334
-Top 10 Clients who do everything,0.16666666666666666
-Top 10 Authors who are also client,0.07352941176470588
-Top 10 Clients who are also Authors,0.058823529411764705
-Top 10 Authors who also attend meetings,0.07042253521126761
-Top 10 Attendees who are also Authors,0.08450704225352113
-Top 10 Attendees who also clients,0.20833333333333334
-Top 10 Clients who are also Attendees,0.16666666666666666
+What percent of people who do everything are top 10 authors,0.16666666666666666
+What percent of people who do everything are top 10 attendees,0.20833333333333334
+What percent of people who do everything are top 10 clients,0.16666666666666666
+What percent of people who are clients and authors are top 10 authors,0.07352941176470588
+What percent of people who are clients and authors are top 10 clients,0.058823529411764705
+What percent of people who are attendees and authors are top 10 authors,0.07042253521126761
+What percent of people who are attendees and authors are top 10 attendees,0.08450704225352113
+What percent of people who are clients and attendees are top 10 attendees,0.20833333333333334
+What percent of people who are clients and attendees are top 10 clients,0.16666666666666666
+Percent of top 10 authors who do everything,0.4
+Percent of top 10 clients who do everything,0.4
+Percent of top 10 attendees who do everything,0.5
+Percent of top 10 authors who are also clients,0.5
+Percent of top 10 clients who are also authors,0.4
+Percent of top 10 attendees who are also authors,0.6
+Percent of top 10 authors who are also attendees,0.5
+Percent of top 10 attendees who are also clients,0.5
+Percent of top 10 clients who are also attendees,0.4
+Percent of people who do everything that are either top 10 clients or authors or attendees,0.3333333333333333
+Percent of authors and clients that are either top 10 clients or top 10 authors,0.10294117647058823
+Percent of attendees and clients that are either top 10 clients or top 10 attendees,0.2916666666666667
+Percent of authors and attendees that are either top 10 authors or top 10 attendees,0.11267605633802817
