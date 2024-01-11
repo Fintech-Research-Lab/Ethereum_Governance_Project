@@ -57,3 +57,7 @@ This document describes how to replicate the data and the results of the paper "
     - Make sure you have all the files in the correct directory
     - Assign proper directory to the *data merging code.do*
     - Run *data merging code.do*
+## Analysis Code
+We conduct several analysis for the paper and these are organized in separate folders. The following describes the purpose of analysis and replication steps for each
+1. Abnormal Return folder contains code to calculate abnormal returns defined as ETH returns over S&P 500 returns and bitcoin returns. The python code *abnormal return analysis* should be executed. ETH, BTC, and S&P500 prices are stored in the Raw Data folder while S&P 500 prices are obtained by fetching it from Yahoo Finance in the code. Once the code is run it produces results in form of abnormal return graphs.
+2.  
