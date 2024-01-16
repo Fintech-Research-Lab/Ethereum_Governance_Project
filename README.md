@@ -65,9 +65,14 @@ In our paper, we perform various analyses, each organized within dedicated folde
  - The Raw Data folder stores ETH, BTC, and S&P 500 prices. S&P 500 prices are fetched from Yahoo Finance within the code.
  - Upon running the code, it generates abnormal return graphs as results.
  
-2. <ins>Anonymity Analysis</ins> folder contains code to identify names of individuals in the community deliberationswho chose to remain anonymous. The python code *Anonymity Analysis.py* should be executed to obtain the graph of percent of community participants who choose to remain anonymous. The code obtains information on EIP authors extracted from Ethereum_Cross-Sectional_Data.dta, client data from client commit
-   for each of the four clients, attendees from attenees file which is created in name cleaning process, and contributors only file which represents the github contributors of EIPs who are not EIP authors. The anonymity is defined as any community participant who chose to either sign up with a psuedo name or who only signs up with the first name. The code applies this algorithm but then manual checks are made on individuals who
-   may have been missed because of type I or type II errors. The code manually changes the assignment of these individuals and then create a graph that shows percentage of participants in each category who chose to be anonymous.
+2. <ins>Anonymity Analysis</ins> 
+   Within the "Anonymity Analysis" folder, you'll find code designed to identify individuals in community deliberations who opted for anonymity. To replicate this analysis, follow these steps:
+   - Execute the Python code Anonymity Analysis.py
+   - The code utilizes information from various sources, including EIP authors (extracted from Ethereum_Cross-Sectional_Data.dta), client data from client commit records for four clients, attendees from the attendees file (created during the name cleaning process), and contributors-only file (representing GitHub contributors of EIPs who are not EIP authors).
+   - Anonymity, in this context, is defined as any community participant signing up with a pseudonym or only providing a first name.
+   - The code employs an algorithm to identify such participants, with subsequent manual checks to address potential type I or type II errors.
+   - The final output is a graph illustrating the percentage of participants in each category who chose to remain anonymous.
+
 3. <ins>Client Analysis</ins> This folder analyzes client data and identifies the influence of Ethereum Foundation and ConSensys in client developers. It also produces the lorenz curve to show the concentration of commits make by developers for each of the clients. To replicate this analysis, run *Client_analysis.do* file in stata
 4. <ins>Commit Analysis Around Meetings</ins> This folder analyze the progression of eip commits around meetings.
 5. <ins> Meeting Attendees and Ethereum Community Analysis </ins> This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
