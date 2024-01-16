@@ -97,4 +97,12 @@ In our paper, we perform various analyses, each organized within dedicated folde
    	- The entire process is repeated for EIP contributors and client contributors. The contributor list is initially separated from the author list to create a "contributors_only" list.
    	- The Name Cleaning Code Cross List appends the lists of authors, contributors_only, clients, and attendees. It applies fuzzywuzzy logic on standardized lists to further remove non-standard names from cross lists, ensuring consistency across the entire community.
    	- The name standardization process results in four lists: unique_attendees_final, unique_authors_final, unique_clients_final, and unique_contributorsonly_final.
+   	
+  - Execution of *Community Engagement Analysis.py*
+  
+    - The community engagement analysis code takes data from the finalized files and matches names to find names that are common in different lists. This code creates two files
+      - *Name_Results* which provides summary stats of number of unique individuals of the commuinity in different files and number of overlapping individuals in multiple lists. For example, number of authors who are also eip contributors
+      - *unique_name_allplayers* This file contains names of individuals in four lists which are sorted so that those individuals can be easily identified that exists in multiple lists
+      - The above code also generates a venn diagram  called venn_diagram which uses python code to generate venn diagram of meeting attendees, authors, and clients. It omits contributors only
+      - The manually created powerpoint slide called venn diagram.pptx has been manually created to show graphically overlap amongst four categories of community participants, attendees, authors, eip contributors (not authors), and clients
      	
