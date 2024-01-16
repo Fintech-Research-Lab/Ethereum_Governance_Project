@@ -85,7 +85,7 @@ In our paper, we perform various analyses, each organized within dedicated folde
 5. <ins> Meeting Attendees and Ethereum Community Analysis </ins> 
 
 	This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
-   - <ins> Name Cleaning Folder </ins>
+  - <ins> Name Cleaning Folder </ins>
    	The name cleaning folder contains three python codes: *Name Cleaning Codes for Attendees*,*Name Cleaning Codes for Contributors and Clients*, *Name Cleaning Code Cross List* All these codes do the following process
    	- Apply python's fuzzywuzzy package to generate similarity scores from the flat list of unique names in attendees list obtained using a web scrapping python code *devcalls* in the Data\Data Gathering Code folder. Then the python code *Python code to create flat list* creates a list of meeting attendees. Similar treatment of creating a list is done to client contributors and eip contributors (called contributors in the code). 
      - The fuzzywuzzy similarity score is obtained by comparing names in each of these lists to other names within the same list.  After getting similarity scores for each pair of names a threshold of 76 is applied to filter all names that match above this score. This threshold is picked after manual iteration of seeing names with different similarity scores. 
