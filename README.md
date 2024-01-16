@@ -79,11 +79,13 @@ In our paper, we perform various analyses, each organized within dedicated folde
    - The analysis further generates a Lorenz curve, illustrating the concentration of commits made by developers for each client.
    - To replicate this analysis, execute the Client_analysis.do file in Stata.
    
-   4. <ins>Commit Analysis Around Meetings</ins> 
+4. <ins>Commit Analysis Around Meetings</ins> 
    - Within this folder, the analysis revolves around scrutinizing the progression of commits around meetings
    - To replicate this analysis, execute the eip_commit_around_devcalls.do code in Stata.
    
-5. <ins> Meeting Attendees and Ethereum Community Analysis </ins> 
+5. <ins>Magician Comment Analysis</ins> 
+   
+6. <ins> Meeting Attendees and Ethereum Community Analysis </ins> 
 
 	This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
   - <ins> Name Cleaning Folder </ins>
@@ -113,4 +115,12 @@ In our paper, we perform various analyses, each organized within dedicated folde
      - The result of this code produces two files
      	 - *top10* is a list of 10 most prolific authors, top 10 attendees of dev call meetings, and top 10 people who had the most commits on client github repositories
      	 - *top10_community_engagement* file provides the percent of people who overlap in more than one list amongst the most prolific members of the list
+
+5. <ins>Regression</ins> 
+   - Within this folder, there is one Stata code called *Regression.do*. Execute this code to replicate regression results of the paper
+
+5. <ins>Result</ins> 
+   - Within this folder, contains all the latex tables and figures of the paper
+
+
      	
