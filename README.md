@@ -66,6 +66,7 @@ In our paper, we perform various analyses, each organized within dedicated folde
    - Upon running the code, it generates abnormal return graphs as results.
  
 2. <ins>Anonymity Analysis</ins> 
+
    Within the "Anonymity Analysis" folder, you'll find code designed to identify individuals in community deliberations who opted for anonymity. To replicate this analysis, follow these steps:
    - Execute the Python code Anonymity Analysis.py
    - The code utilizes information from various sources, including EIP authors (extracted from Ethereum_Cross-Sectional_Data.dta), client data from client commit records for four clients, attendees from the attendees file (created during the name cleaning process), and contributors-only file (representing GitHub contributors of EIPs who are not EIP authors).
