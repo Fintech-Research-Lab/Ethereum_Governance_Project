@@ -105,4 +105,11 @@ In our paper, we perform various analyses, each organized within dedicated folde
       - *unique_name_allplayers* This file contains names of individuals in four lists which are sorted so that those individuals can be easily identified that exists in multiple lists
       - The above code also generates a venn diagram  called venn_diagram which uses python code to generate venn diagram of meeting attendees, authors, and clients. It omits contributors only
       - The manually created powerpoint slide called venn diagram.pptx has been manually created to show graphically overlap amongst four categories of community participants, attendees, authors, eip contributors (not authors), and clients
+      
+  - Execution of *Top_10_in_community.py* 
+  
+   - The Top 10 in community code identifies most active top 10 participants in meeting attendees, clients, and authors lists to see what percent of top 10 participants overlap amongst various list. This analysis is designed to find whether key players are ones who overlap the most
+     - The result of this code produces two files
+     	 - *top10* is a list of 10 most prolific authors, top 10 attendees of dev call meetings, and top 10 people who had the most commits on client github repositories
+     	 - *top10_community_engagement* file provides the percent of people who overlap in more than one list amongst the most prolific members of the list
      	
