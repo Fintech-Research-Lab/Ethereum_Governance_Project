@@ -108,7 +108,7 @@ In our paper, we perform various analyses, each organized within dedicated folde
       
   - Execution of *Top_10_in_community.py* 
   
-   - The Top 10 in community code identifies most active top 10 participants in meeting attendees, clients, and authors lists to see what percent of top 10 participants overlap amongst various list. This analysis is designed to find whether key players are ones who overlap the most
+   	- The Top 10 in community code identifies most active top 10 participants in meeting attendees, clients, and authors lists to see what percent of top 10 participants overlap amongst various list. This analysis is designed to find whether key players are ones who overlap the most
      - The result of this code produces two files
      	 - *top10* is a list of 10 most prolific authors, top 10 attendees of dev call meetings, and top 10 people who had the most commits on client github repositories
      	 - *top10_community_engagement* file provides the percent of people who overlap in more than one list amongst the most prolific members of the list
