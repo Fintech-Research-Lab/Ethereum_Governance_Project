@@ -73,12 +73,19 @@ In our paper, we perform various analyses, each organized within dedicated folde
    - The code employs an algorithm to identify such participants, with subsequent manual checks to address potential type I or type II errors.
    - The final output is a graph illustrating the percentage of participants in each category who chose to remain anonymous.
 
-3. <ins>Client Analysis</ins> This folder analyzes client data and identifies the influence of Ethereum Foundation and ConSensys in client developers. It also produces the lorenz curve to show the concentration of commits make by developers for each of the clients. To replicate this analysis, run *Client_analysis.do* file in stata
-4. <ins>Commit Analysis Around Meetings</ins> This folder analyze the progression of eip commits around meetings.
+3. <ins>Client Analysis</ins> 
+   - The contents of the "Client Analysis" folder focus on analyzing client data to discern the impact of Ethereum Foundation and ConSensys on client developers.
+   - The analysis further generates a Lorenz curve, illustrating the concentration of commits made by developers for each client.
+   - To replicate this analysis, execute the Client_analysis.do file in Stata.
+   
+   4. <ins>Commit Analysis Around Meetings</ins> 
+   - Within this folder, the analysis revolves around scrutinizing the progression of commits around meetings
+   - To replicate this analysis, execute the eip_commit_around_devcalls.do code in Stata.
+   
 5. <ins> Meeting Attendees and Ethereum Community Analysis </ins> This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
    - <ins> Name Cleaning Folder </ins>
    The name cleaning folder contains three python codes: *Name Cleaning Codes for Attendees*,*Name Cleaning Codes for Contributors and Clients*, *Name Cleaning Code Cross List* All these codes do the following process
-   - Apply python's fuzzywuzzy package to generate similarity scores from the flat list of unique names in attendees list obtained using a web scrapping python code *devcalls* in the Data\Data Gathering Code folder. Then the python code *Python code to create flat list* creates a list of meeting attendees. Similar treatment of creating a list is done to client contributors and eip contributors (called contributors in the code). 
+   	- Apply python's fuzzywuzzy package to generate similarity scores from the flat list of unique names in attendees list obtained using a web scrapping python code *devcalls* in the Data\Data Gathering Code folder. Then the python code *Python code to create flat list* creates a list of meeting attendees. Similar treatment of creating a list is done to client contributors and eip contributors (called contributors in the code). 
      - The fuzzywuzzy similarity score is obtained by comparing names in each of these lists to other names within the same list.  After getting similarity scores for each pair of names a threshold of 76 is applied to filter all names that match above this score. This threshold is picked after manual iteration of seeing names with different similarity scores. 
      - The names that are similar to each other based on this threshold are manually checked. This manual process results in a list of original names and names to replace. The manual process standardizes similar names into one common name. For example, a person may have used a full name with middle initial in one meeting while only use first and last name in other. Both these names belong to the same individual so one common name is used
      - The second threshold is used to do similar exercise with a cuttoff of similarity scores between 55 to 75. The same manual process is applied to standardize names.
