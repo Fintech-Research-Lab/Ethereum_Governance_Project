@@ -60,10 +60,10 @@ This document describes how to replicate the data and the results of the paper "
 ## Analysis Code
 In our paper, we perform various analyses, each organized within dedicated folders. Below is a breakdown of the analysis purposes and the steps to replicate each one
 1. <ins>Abnormal Return</ins>
- - Located in the "Abnormal Return" folder, this code calculates abnormal returns by comparing ETH returns to those of S&P 500 and bitcoin.
- - Execute the Python code abnormal_return_analysis.py
- - The Raw Data folder stores ETH, BTC, and S&P 500 prices. S&P 500 prices are fetched from Yahoo Finance within the code.
- - Upon running the code, it generates abnormal return graphs as results.
+   - Located in the "Abnormal Return" folder, this code calculates abnormal returns by comparing ETH returns to those of S&P 500 and bitcoin.
+   - Execute the Python code abnormal_return_analysis.py
+   - The Raw Data folder stores ETH, BTC, and S&P 500 prices. S&P 500 prices are fetched from Yahoo Finance within the code.
+   - Upon running the code, it generates abnormal return graphs as results.
  
 2. <ins>Anonymity Analysis</ins> 
    Within the "Anonymity Analysis" folder, you'll find code designed to identify individuals in community deliberations who opted for anonymity. To replicate this analysis, follow these steps:
