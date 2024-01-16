@@ -83,6 +83,7 @@ In our paper, we perform various analyses, each organized within dedicated folde
    - To replicate this analysis, execute the eip_commit_around_devcalls.do code in Stata.
    
 5. <ins> Meeting Attendees and Ethereum Community Analysis </ins> 
+
 	This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
    - <ins> Name Cleaning Folder </ins>
    	The name cleaning folder contains three python codes: *Name Cleaning Codes for Attendees*,*Name Cleaning Codes for Contributors and Clients*, *Name Cleaning Code Cross List* All these codes do the following process
