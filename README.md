@@ -1,4 +1,4 @@
-This document describes how to replicate the data and the results of the paper ["Decentralized Crypto Governance? Transparency and Concentration in Ethereum Decision-Making"](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4691000]) by Cesare Fracassi, Moazzam Khoja, and Fabian Schar.
+This document describes how to replicate the data and the results of the paper ["Decentralized Crypto Governance? Transparency and Concentration in Ethereum Decision-Making"](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4691000) by Cesare Fracassi, Moazzam Khoja, and Fabian Schar.
  
 
 # Data Collection Process.
