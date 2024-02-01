@@ -58,3 +58,70 @@ This document describes how to replicate the data and the results of the paper [
     - Make sure you have all the files in the correct directory
     - Assign proper directory to the *data merging code.do*
     - Run *data merging code.do*
+## Analysis Code
+In our paper, we perform various analyses, each organized within dedicated folders. Below is a breakdown of the analysis purposes and the steps to replicate each one
+1. <ins>Abnormal Return</ins>
+   - Located in the "Abnormal Return" folder, this code calculates abnormal returns by comparing ETH returns to those of S&P 500 and bitcoin.
+   - Execute the Python code abnormal_return_analysis.py
+   - The Raw Data folder stores ETH, BTC, and S&P 500 prices. S&P 500 prices are fetched from Yahoo Finance within the code.
+   - Upon running the code, it generates abnormal return graphs as results.
+ 
+2. <ins>Anonymity Analysis</ins> 
+
+   Within the "Anonymity Analysis" folder, you'll find code designed to identify individuals in community deliberations who opted for anonymity. To replicate this analysis, follow these steps:
+   - Execute the Python code Anonymity Analysis.py
+   - The code utilizes information from various sources, including EIP authors (extracted from Ethereum_Cross-Sectional_Data.dta), client data from client commit records for four clients, attendees from the attendees file (created during the name cleaning process), and contributors-only file (representing GitHub contributors of EIPs who are not EIP authors).
+   - Anonymity, in this context, is defined as any community participant signing up with a pseudonym or only providing a first name.
+   - The code employs an algorithm to identify such participants, with subsequent manual checks to address potential type I or type II errors.
+   - The final output is a graph illustrating the percentage of participants in each category who chose to remain anonymous.
+
+3. <ins>Client Analysis</ins> 
+   - The contents of the "Client Analysis" folder focus on analyzing client data to discern the impact of Ethereum Foundation and ConSensys on client developers.
+   - The analysis further generates a Lorenz curve, illustrating the concentration of commits made by developers for each client.
+   - To replicate this analysis, execute the Client_analysis.do file in Stata.
+   
+4. <ins>Commit Analysis Around Meetings</ins> 
+   - Within this folder, the analysis revolves around scrutinizing the progression of commits around meetings
+   - To replicate this analysis, execute the eip_commit_around_devcalls.do code in Stata.
+   
+5. <ins>Magician Comment Analysis</ins> 
+   
+6. <ins> Meeting Attendees and Ethereum Community Analysis </ins> 
+
+	This folder analyze the overlap amongst participants who perform various activities in the Ethereum Community. The folder contains a sub-folder called *Name Cleaning* folder that has the code to standardized naming convention
+  - <ins> Name Cleaning Folder </ins>
+  
+   	This sub-folder comprises three Python codes: *Name Cleaning Codes for Attendees*, *Name Cleaning Codes for Contributors and Clients*, and *Name Cleaning Code Cross List*. Each of these codes follows a specific process:
+   	- Utilizes Python's fuzzywuzzy package to generate similarity scores from a flat list of unique names in the attendees list, obtained through a web scraping Python code *devcalls.py* in the Data\Data Gathering Code folder.
+   	- The Python code to create flat list is employed to generate a list of meeting attendees. Similar processes are carried out for client contributors and EIP contributors (referred to as contributors in the code).
+   	- Fuzzywuzzy similarity scores are obtained by comparing names within each list. A threshold of 76 is applied to filter names matching above this score, chosen after manual iteration and observation of different similarity scores.
+   	- The names with similarity scores above the threshold are manually reviewed, resulting in a list of original names and replacement names. This manual process standardizes similar names into a common name. For example, a person may have used a full name with middle initial in one meeting while only use first and last name in other. Both these names belong to the same individual so one common name is used
+   	- A second threshold (55 to 75) is applied for a similar exercise, with the same manual process to standardize names.
+   	- A final manual check ensures that no name is counted more than once in obtaining the ultimate unique list of attendees.
+   	- The entire process is repeated for EIP contributors and client contributors. The contributor list is initially separated from the author list to create a "contributors_only" list.
+   	- The Name Cleaning Code Cross List appends the lists of authors, contributors_only, clients, and attendees. It applies fuzzywuzzy logic on standardized lists to further remove non-standard names from cross lists, ensuring consistency across the entire community.
+   	- The name standardization process results in four lists: unique_attendees_final, unique_authors_final, unique_clients_final, and unique_contributorsonly_final.
+   	
+  - Execution of *Community Engagement Analysis.py*
+  
+    - The community engagement analysis code takes data from the finalized files and matches names to find names that are common in different lists. This code creates two files
+      - *Name_Results* which provides summary stats of number of unique individuals of the commuinity in different files and number of overlapping individuals in multiple lists. For example, number of authors who are also eip contributors
+      - *unique_name_allplayers* This file contains names of individuals in four lists which are sorted so that those individuals can be easily identified that exists in multiple lists
+      - The above code also generates a venn diagram  called venn_diagram which uses python code to generate venn diagram of meeting attendees, authors, and clients. It omits contributors only
+      - The manually created powerpoint slide called venn diagram.pptx has been manually created to show graphically overlap amongst four categories of community participants, attendees, authors, eip contributors (not authors), and clients
+      
+  - Execution of *Top_10_in_community.py* 
+  
+   	- The Top 10 in community code identifies most active top 10 participants in meeting attendees, clients, and authors lists to see what percent of top 10 participants overlap amongst various list. This analysis is designed to find whether key players are ones who overlap the most
+     - The result of this code produces two files
+     	 - *top10* is a list of 10 most prolific authors, top 10 attendees of dev call meetings, and top 10 people who had the most commits on client github repositories
+     	 - *top10_community_engagement* file provides the percent of people who overlap in more than one list amongst the most prolific members of the list
+
+5. <ins>Regression</ins> 
+   - Within this folder, there is one Stata code called *Regression.do*. Execute this code to replicate regression results of the paper
+
+5. <ins>Result</ins> 
+   - Within this folder, contains all the latex tables and figures of the paper
+
+
+     	
