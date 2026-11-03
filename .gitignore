@@ -8,16 +8,18 @@ data/raw/revelio/revelio_positions_enriched.parquet
 data/raw/revelio/revelio_user.parquet
 data/raw/revelio/_revelio_input.csv
 
-# Separate scraped LinkedIn data (not via the Revelio/WRDS license) feeding the anonymity and
-# organization-affiliation figures. Excluded for the same reason: real names tied to employment
-# history scraped from LinkedIn profiles. See README.md.
-data/raw/social/linkedin_data.csv
-data/raw/social/client_employment.csv
-
 # Superseded, pre-pipeline exploratory work area. Duplicates code/03_analysis/labor_market_effects/
-# with extra Revelio fields, its own copy of the name-to-LinkedIn-URL crosswalk, and pre-publication
-# draft memos/reports. Not part of the clean reproduction package.
+# with extra Revelio fields and its own copy of the name-to-LinkedIn-URL crosswalk. Not part of the
+# clean reproduction package. Its WiP/ subfolder (superseded draft scripts, intermediate results,
+# pre-publication memos/reports) has been moved to archive/labor_market_wip/ (see below) -- kept
+# locally for the project's own record, but not published.
 /revelio_pull/
+
+# Everything historical/dropped (scripts and outputs from earlier paper drafts no longer published,
+# the labor-market analysis's exploratory trail, pre-publication draft memos/reports) is kept for the
+# authors' own record but not published. See each subfolder for what it holds; archive/README.md
+# documents the dropped-analysis scripts and PIPELINE_TODO.md documents the rest.
+/archive/
 
 # paper/latex_overleaf/ is its own separate git repo (synced to a private Overleaf remote) and is
 # not included here at all -- git refuses to recurse into an embedded repository anyway. A flattened,

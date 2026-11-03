@@ -6,6 +6,12 @@ that was current *at the time of that entry* — several of those numbers (e.g. 
 CAR event study, "Figure 12" for FEM engagement) have since shifted. Treat any number in a dated
 entry below as historical. For the current numbering, see `docs/figure_table_index.md`.
 
+**Note on `archive/` paths in this file:** this changelog references `archive/code/01_data_collection/`,
+`archive/README.md`, and similar paths throughout. The `archive/` folder (dropped-analysis scripts,
+stale outputs, the labor-market analysis's exploratory trail, pre-publication draft memos) is kept
+in the authors' own private working copy and is **not included in this public repository**. Treat
+every `archive/...` path below as a reference to that private copy, not something browsable here.
+
 ## (a) Pipeline stage checklist
 
 Mirrors the 17-stage order defined in `code/run_pipeline.py::PIPELINE_STAGES`. `python
@@ -495,5 +501,7 @@ Five changes, made together so the package can be published as-is:
   file's top, and that file's own text) that figure/table numbers are a dated snapshot, not a
   fixed fact, since the manuscript is still under revision.
 
-`git init` was run for the first time in this package's history (previously only
-`paper/latex/` was version-controlled, via its Overleaf-synced remote).
+`git init` was run for the first time in this package's history (previously only the authors'
+private `paper/latex_overleaf/` working copy was version-controlled, via its Overleaf-synced
+remote; this public repo instead ships a flattened, non-git snapshot of that content at
+`paper/latex/`, since git refuses to nest one repo inside another).

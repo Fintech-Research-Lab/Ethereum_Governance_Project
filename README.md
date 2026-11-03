@@ -46,9 +46,9 @@ Decentralized Crypto Governance/
 ├── data/
 │   ├── raw/                        Frozen, untouched source data (never written to by any script)
 │   │   ├── eip_registry/            EIP metadata: authors, dates, word counts, implementation status
-│   │   ├── social/                  Twitter/GitHub/LinkedIn/EF author-affiliation data. Two files
-│   │   │                            (`linkedin_data.csv`, `client_employment.csv`) are excluded from
-│   │   │                            this repo — see "Data availability" below.
+│   │   ├── social/                  Twitter/GitHub/LinkedIn/EF author-affiliation data, including
+│   │   │                            `linkedin_data.csv` and `client_employment.csv`, used by Figure
+│   │   │                            20's panels a-d (company/employer affiliation)
 │   │   ├── commits/                 EIP-repo and execution-client (geth/besu/erigon/nethermind) commit logs
 │   │   ├── forum/                   Raw Ethereum Magicians (FEM) forum scrape
 │   │   ├── github/                  GitHub PR/issue comment and review events, per EIP
@@ -87,13 +87,12 @@ Decentralized Crypto Governance/
 ├── output/
 │   ├── figures/                     Regenerated .png figures
 │   └── tables/                      Regenerated .tex table fragments
-├── archive/                         Scripts/outputs from earlier paper drafts no longer published —
-│                                    see archive/README.md for what was dropped and why
 ├── docs/
 │   └── figure_table_index.md        Master Figure/Table -> script -> output cross-reference (dated
 │                                    snapshot — numbers shift as the paper is revised, see that file)
-├── .gitignore                      Excludes licensed/identity-linking data and the superseded
-│                                    revelio_pull/ working area — see "Data availability" below
+├── .gitignore                      Excludes licensed/identity-linking data and everything historical
+│                                    (archive/, the superseded revelio_pull/ working area) — see
+│                                    "Data availability" below and docs/figure_table_index.md
 ├── environment.yml                 Conda environment spec
 ├── PIPELINE_TODO.md                Pipeline stage checklist + fixed-bug summary + follow-ups
 └── README.md                       This file
@@ -101,33 +100,24 @@ Decentralized Crypto Governance/
 
 ## Data availability
 
-Two categories of raw input are **not included in this public repository**, and are listed in
-`.gitignore` rather than committed:
+One category of raw input is **not included in this public repository**, and is listed in
+`.gitignore` rather than committed: **Revelio Labs / LinkedIn-derived career data**
+(`data/raw/revelio/author_to_revelio_userid.parquet`, `revelio_positions_enriched.parquet`,
+`revelio_user.parquet`, `_revelio_input.csv`), used by the labor-market analysis (stage 17,
+Table 3 / Figure 4). This is accessed through a WRDS institutional license; redistributing the
+underlying vendor data is not permitted by that license, and the seed file (`_revelio_input.csv`)
+is a plain-text real-name-to-LinkedIn-URL crosswalk for 491 individuals. The original pull code
+(querying `revelio.individual_user`/`individual_positions` tables via WRDS, matching on
+`profile_linkedin_url`) is kept privately alongside this package's own development history, not in
+this public repo; contact the authors if you have WRDS/Revelio access and want to regenerate it.
 
-1. **Revelio Labs / LinkedIn-derived career data** (`data/raw/revelio/author_to_revelio_userid.parquet`,
-   `revelio_positions_enriched.parquet`, `revelio_user.parquet`, `_revelio_input.csv`), used by the
-   labor-market analysis (stage 17, Table 3 / Figure 4). This is accessed through a WRDS
-   institutional license; redistributing the underlying vendor data is not permitted by that
-   license, and the seed file (`_revelio_input.csv`) is a plain-text real-name-to-LinkedIn-URL
-   crosswalk for 491 individuals. If you have your own WRDS/Revelio access, see
-   `archive/code/01_data_collection/pull_revelio.py` and `enrich_revelio.py` for the original pull
-   code (historical/optional, not run by `run_pipeline.py`).
-2. **A separate scraped LinkedIn dataset**: `data/raw/social/linkedin_data.csv` feeds the
-   `author{n}_company{c}` columns of the cross-sectional dataset, which `fig_company_concentration.py`
-   uses for Figure 20's panels a-c (company-affiliation Lorenz curve and top-10 charts).
-   `data/raw/social/client_employment.csv` is read directly by `fig_client_concentration.py` for
-   Figure 20's panel d (client-developer company affiliation). Both are excluded for the same
-   reason: real names tied to employment history scraped from LinkedIn profiles. (The anonymity
-   figure, Figure 6, does not depend on either file — it only uses author/attendee IDs and the
-   manually-reviewed `name_cleaning_manual/` anonymity flags, both included.)
+Everything else under `data/raw/` is included, including `data/raw/social/linkedin_data.csv` and
+`client_employment.csv` (manually collected LinkedIn/employment data, not WRDS-licensed), which
+`fig_company_concentration.py` and `fig_client_concentration.py` need for Figure 20's panels a-d.
 
-Everything else under `data/raw/` (EIP metadata, public AllCoreDevs meeting notes, public GitHub
-commit/comment/review logs, the public FEM forum scrape, public price/TVL data) is included.
-
-Without the two categories above, `run_pipeline.py` reproduces every figure and table in the
-current paper except stage 17 (the labor-market analysis, Table 3 / Figure 4) and Figure 20's
-panels a-c and d; those outputs are already checked in under `paper/latex/` and `output/`
-so the results remain visible without re-running them.
+Without the Revelio data above, `run_pipeline.py` reproduces every figure and table in the current
+paper except stage 17 (the labor-market analysis, Table 3 / Figure 4); that output is already
+checked in under `paper/latex/` and `output/` so the result remains visible without re-running it.
 
 ## Quickstart
 
@@ -183,8 +173,7 @@ pre-revision SSRN draft this validation pass was run against):
   figures exactly as printed.
 - The two regression tables this validation pass also checked (FEM-engagement regressions, EIP
   finalization/implementation regressions) have since been dropped from the published paper during
-  revision; their scripts and that validation history live in `archive/`, not in the active
-  pipeline — see `archive/README.md`.
+  revision and are no longer part of this package's active pipeline.
 
 ## Credit
 
