@@ -17,14 +17,18 @@ data/raw/revelio/_revelio_input.csv
 
 # Everything historical/dropped (scripts and outputs from earlier paper drafts no longer published,
 # the labor-market analysis's exploratory trail, pre-publication draft memos/reports) is kept for the
-# authors' own record but not published. See each subfolder for what it holds; archive/README.md
-# documents the dropped-analysis scripts and PIPELINE_TODO.md documents the rest.
+# authors' own record but not published. See each subfolder's own README/docstrings for what it holds.
 /archive/
 
 # paper/latex_overleaf/ is its own separate git repo (synced to a private Overleaf remote) and is
 # not included here at all -- git refuses to recurse into an embedded repository anyway. A flattened,
 # non-git snapshot of its current content is checked in instead at paper/latex/ (see README.md).
 /paper/latex_overleaf/
+
+# Internal engineering changelog (bug-fix history, development process notes) -- kept for the
+# authors' own record, not meant for public consumption. Each fix it documents is also noted inline
+# in the relevant script's own docstring, so nothing about reproducing the paper depends on this file.
+/PIPELINE_TODO.md
 
 # === Python ===
 __pycache__/

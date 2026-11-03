@@ -94,7 +94,6 @@ Decentralized Crypto Governance/
 │                                    (archive/, the superseded revelio_pull/ working area) — see
 │                                    "Data availability" below and docs/figure_table_index.md
 ├── environment.yml                 Conda environment spec
-├── PIPELINE_TODO.md                Pipeline stage checklist + fixed-bug summary + follow-ups
 └── README.md                       This file
 ```
 
@@ -144,12 +143,8 @@ which stages succeeded, failed, or were skipped.
 - **[`docs/figure_table_index.md`](docs/figure_table_index.md)** — the full Figure/Table
   cross-reference: every current-paper Figure/Table number (a dated snapshot — see that file for
   why the numbers shift), its generating script, and its exact output filename(s).
-- **[`PIPELINE_TODO.md`](PIPELINE_TODO.md)** — the pipeline stage checklist (all stages verified
-  passing end-to-end) plus a consolidated summary of every bug fixed (what changed, and whether a
-  published number moved), frozen data-collection steps that would need re-collection to extend the
-  analysis to a later date range, environment setup notes (e.g. `GITHUB_TOKEN`), and section (vi)'s
-  writeup of the labor-market analysis (data provenance, the deliberate pandas-not-Polars
-  exception, and its replication check).
+- Each script's own module docstring documents its specific data sources, any algorithmic fixes
+  applied relative to the original Stata/Python code, and which Figure/Table it produces.
 
 ## Validation
 
@@ -167,10 +162,10 @@ pre-revision SSRN draft this validation pass was run against):
   "Top Client Developers" percentage now shown in the anonymity figure (78.8% published -> 80.0%
   here), the FEM-forum figure's year-by-year view totals (now Figure 13a), and the
   EIP-authorship-concentration figures (now Figures 8/10/11, which needed a sort-order fix to even
-  approach the published values, and now match them closely). Every one of these is documented in
-  `PIPELINE_TODO.md` with the exact original-vs-fixed numbers, and the original (bug-reproducing)
-  behavior remains available as an explicit opt-in for anyone who wants to regenerate the published
-  figures exactly as printed.
+  approach the published values, and now match them closely). Each fix is documented inline in the
+  relevant script's docstring with the exact original-vs-fixed numbers, and the original
+  (bug-reproducing) behavior remains available as an explicit opt-in for anyone who wants to
+  regenerate the published figures exactly as printed.
 - The two regression tables this validation pass also checked (FEM-engagement regressions, EIP
   finalization/implementation regressions) have since been dropped from the published paper during
   revision and are no longer part of this package's active pipeline.
@@ -184,5 +179,4 @@ This reproduction package — the Python/Polars port, the pipeline orchestration
 documentation — was built via an AI-assisted conversion of the original Stata/Python project.
 Disclosed transparently here, as is appropriate for a replication package: every deliberate
 deviation from the original code (a bug fix, a data-immutability workaround, a design judgment
-call) is documented in `PIPELINE_TODO.md` or inline in the relevant script, rather than silently
-folded in.
+call) is documented inline in the relevant script's own docstring, rather than silently folded in.
