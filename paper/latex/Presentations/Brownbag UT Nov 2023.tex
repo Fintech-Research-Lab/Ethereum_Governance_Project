@@ -1,0 +1,684 @@
+\documentclass[12pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{chronology}
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+\usepackage{tikz}
+\usepackage{ulem}
+\usepackage{comment}
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand\fitem{\vfill\item}
+\newcommand\fitemp{\vfill\item\pause}
+
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Roadmap}
+        \setcounter{tocdepth}{1}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+
+\AtBeginSubsection[]
+{
+    \begin{frame}
+        \frametitle{Roadmap}
+        \setcounter{tocdepth}{2}
+        \tableofcontents[sectionstyle=show/hide, subsectionstyle=show/shaded/hide]
+    \end{frame}
+}
+
+
+\setbeamercolor{background canvas}{bg=white}
+\title{Decentralized Governance? \\ Concentration in Ethereum Decision-Making}
+\author{Cesare Fracassi, Moazzam Khoja, and Fabian Sch\"{a}r }
+\date{Nov 2023}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Roadmap}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What Are Open Source Communities?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Close vs Open-sourcing Communities: a third way of governance. Lerner and Tirole (2005).}
+
+\includegraphics[width = \textwidth]{Presentations/coase_linux.png}
+
+\end{frame}
+
+\begin{comment}
+Talk about Coase 1937: boundaries of the firm are determined by transaction costs: 
+Issue of Arms length negotiation: 
+    - Price Discovery
+    - Contract negotiation
+    - Incomplete contracts
+    - Inability to commit to long term contract
+
+Issue with Firms
+    - Organizational complexity costs
+    - agency
+    - Resource allocation inefficiency (no price mechanism)
+
+Open source communities (like Linux) do not follow this framework. It is a third way. 
+
+What are open source communities? Communities that come together to work on solving a specific project. Almost always a software. No owners. No formal company nor organization. No CEOs, board of directors, nor employees. Often there is no hierarchy within the community. No voting. The product is free, and open sourced. There are no financial statements. No profits. 
+
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Decision making in open source communities}
+
+\large
+\begin{quote}
+    ``We reject: kings, presidents, and voting. We believe in:
+rough consensus and running code.'' 
+\begin{flushright}
+    David Clark -- IETF, 1992
+\end{flushright}
+\end{quote}
+
+
+\end{frame}
+
+ 
+\begin{comment}
+How do OSC make decisions? 
+
+Rough Consensus: 
+- Anyone can make proposals
+- proposals are advanced and finalized only when a large number of participants agree, and there is a general sense that the concerns of the dissenting party have been heard and considered. 
+- It's essentially an agreement that is "good enough" and can move forward without full agreement from all parties involved. 
+- This approach allows for progress despite the presence of minor unresolved objections.
+
+Running Code: 
+- multiple actual and interoperable implementations of a proposed standard
+must exist and be demonstrated before the proposal can be advanced along the standards
+track.
+
+No voting, otherwise sybil attack. 
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Example of open-sourcing communities.}
+
+\includegraphics[width = \textwidth]{Presentations/open-source-community.png}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Incentives in open source communities.}
+
+\includegraphics[width = \textwidth]{Presentations/ibm_geek.jpg}
+
+\end{frame}
+
+
+\begin{comment}
+
+All contributors involved in OSC are volunteers, not paid. Why do they do it? 
+
+Two types: 
+- Independent contributors. Skill building. Labor market signaling. Identity/Believing in the cause. BUt give up opportunity costs. 
+
+- Affiliated companies: Establishing standards that are a better fit to their products/technology. Getting knowhow to then sell interface products. 
+
+\end{comment}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Cryptocurrencies are all open-sourced communities...}
+
+\includegraphics[width = \textwidth]{Presentations/cryptos.png}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{...but with a new set of incentives/market structure.}
+
+\begin{itemize}
+    \fitem Regulatory challenges.
+    \fitem Publicly listed tokens (pricing/incentives).
+    \fitem Market size.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{comment}
+
+- Most crypto applications focus on financial services, a heavily regulated sector. How do regulators deal with a system where there are no companies, CEOs, responsible individuals, financial statements? 
+
+- The presence of a token might align the behavior of contributors towards a common goal. Less dependend on outside support from companies.  It also provides a market pricing feedback. 
+
+- Market size is \$1.4T. This is the largest experiment in OSC that has ever been attempted.  
+
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{What is Ethereum?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ethereum is the most widely used programmable permissionless blockchain}
+
+\includegraphics[width = \textwidth]{Presentations/eth_network.png} 
+
+\end{frame}
+
+
+\begin{comment}
+
+Ethereum is the most widely used programmable permissionless blockchain: 
+
+Let's unpack these three terms: Blockchain. Permissionless. Programmable. 
+
+Blockchain: The idea is to have a network of computers, all running a compatible software called client), and they interact with each other. Differently from the internet, the P2P network not only relay information, but more importantly, comes to a consensus about whether transactions are valid or not. Several consensus mechanisms are used in crypto: PoW, PoS, BFT, ... .Ethereum switched from PoW to PoS last year. 
+
+Permissionless: Anyone in the world can run the code, and interact in the P2P, by relaying transactions, and even participating in the consensus process. Anyone in the world can transact with anyone else. 
+
+Programmable: Ethereum was the first crypto that used smart contracts. i.e. software that can be executed by nodes. For example, you and I can enter into a contracts that executes if certain conditions are fulfilled. Seems simple, but this conditional transaction spurred the birth of running software on the ethereum protocol. Ethereum is an worldwide, decentralized internet computer not owned nor controlled by anyone. 
+
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Blockchain Layers}
+
+\includegraphics[width = \textwidth]{Presentations/layers.png} 
+
+\end{frame}
+
+
+\begin{comment}
+
+Ethereum is thus one of the base layers on top of which software runs to provide services to users that access services using their crypto wallets. For exampe, uniswap provides token swaps. Compound provides overcollateralized borrowing and lending. Chainlink offers oracles that bring off-chain information on-chain.  Makerdao offers crypto-backed stablecoins. 
+
+Ethereum is not the only base layers that offer a global internet computer. Many (too many) others exist. Actually, in my view, there has been overinvestment in base layers, and not enough on application layers.  
+
+GO BACK ONE PAGE, AND SHOW the ETH NETWORK AGAIN: 
+
+Now, usually when people talk about decentralization, they talk about the decentralization of the consensus process (51% attack,...). For good reason, it is a very important topic in blockchain, because there is no centralized entity, and at its core, the purpose of a blockhain is to validate (conditional) transactions. 
+
+In this paper, we do not want to talk about the decentalization of the consensus protocol, but about something equally important, but less studied: the decentralization of the Ethereum governance. Ethereum has been evolving over time, to make the protocol faster, more energy efficient, more decentralized.
+
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{In this paper, we embark on a comprehensive exploration of Ethereum's governance.}
+
+\begin{itemize}
+    \fitem  How are protocol enhancements are proposed, reviewed, finalized, implemented, and adopted? 
+    \fitem How decentralized is Ethereum governance? Which entities exert the greatest influence? 
+    \fitem Does governance matter for Ether token price?
+\end{itemize}
+
+\end{frame}
+
+
+\begin{comment}
+
+
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Why is governance decentralization important? }
+
+\includegraphics[width = \textwidth]{Presentations/liability_insider.png} 
+
+\end{frame}
+
+
+\begin{comment}
+
+If you think about the mission of the SEC, it is : (i) protect investors (ii) maintain a fair, orderly, and efficient financial markets. (iii) Facilitate capital formation. 
+
+To accomplish this mission, the SEC specifies rules about registering securities, with related duties to disclose information to the public for a number of reasons. To enforce such rules, the agency has to identify responsible individuals who are required to make disclosure statements. 
+
+For example, assigning liability if something goes wrong. Have fair markets with a disclosure regime that prevents insider trading and information. and prevent contagion and systemic risks. 
+\end{comment}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{1946 Orange Groves in Florida and Crypto}
+\centering
+\includegraphics[width = 0.5\textwidth]{Presentations/howey.png} 
+
+\end{frame}
+
+
+\begin{comment}
+
+Why does the SEC care so much about crypto, and not Linux, or Mozzilla?
+
+It obviously hinges on the definition of security, and whether cryptocurrencies are indeed securities. 
+
+This is William John Howey. I don't want to engage in a lenghty legal discussion on whether or when crytpo is a security or not, but the main test to determine that is the Howey Test, which has four legs: (i) an investment of money/value (ii) in a common enterprise (iii) with an expectation of profit (iv) derived from the effort of others. 
+
+The last leg has to do with how decentralized the goverance process truly is. if it is truly decentralized, noone has any insider information, and thus the disclosure requirement are not needed. 
+
+
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Is crypto governance truly decentralized? }
+
+\includegraphics[width = \textwidth]{Presentations/gary_satoshi.png} 
+
+\end{frame}
+
+
+\begin{comment}
+
+There are two main camps: people that believe that crypto currencies are not really decentralized, but are centralized with clearly identifiable responsible individuals.   
+
+And others that believe that they are fully decentralized, and noone is really in charge? 
+
+Our paper will not answer this question. We are not lawyers, nor regulators. it is not our job to draw the line on whether it is decentralized "enough" or not. But what we can do is to provide evidence about the concentration of power in the ethereum governance process. To our knowledge, this is the first paper that provides a framework to evaluate the decentalization of ethereum's decision making process, the data, and the analysis. 
+
+\end{comment}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How are decisions made in Ethereum?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ethereum Improvement Proposal (EIP) Process}
+
+\includegraphics[width = \textwidth]{Figures/EIP_Process.png} 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}[fragile]{EIPs by Status and Category}
+
+\begin{tabular}{cc}
+ \hspace{-2cm} By Stage &  \hspace{-2cm}  By Category \\
+  \hspace{-2cm}   \includegraphics[width = 0.7\textwidth]{Figures/success.png} & 
+      \hspace{-2cm}  \includegraphics[width = 0.7\textwidth]{Figures/eip_by_category.png} \\
+
+      \multicolumn{2}{c}{N. EIPs: 612}
+\end{tabular}
+
+\end{frame}
+
+\clearpage
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How Concentrated is Ethereum Decision Making?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{EIP Authorship}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Ethereum Improvement Proposal (EIP) Process}
+
+\includegraphics[width = \textwidth]{Figures/n_authors_by_stage.png} 
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Top Authors}
+  \centering
+  \begin{tabular}{c}
+    All EIPs  \\
+      \includegraphics[width =.9\textwidth]{Figures/neip_top10author.png} \\
+    \end{tabular} 
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Top Authors}
+  \begin{tabular}{cc}
+   
+      Finalized ERCs/Interf. & Implemented Core/Network EIPs \\
+      \includegraphics[width =.4\textwidth]{Figures/neip_final_top10author.png}   &  \includegraphics[width =.4\textwidth]{Figures/neip_imp_top10author.png}   \\
+    \end{tabular} 
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lorenz Curve}
+ \centering
+ \includegraphics[width = 1\textwidth]{Figures/neip_by_author.png}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Lorenz Curve}
+ \centering
+    \includegraphics[width = 0.9\textwidth]{Figures/npeip_by_author.png}
+
+ \textbf{Gini Coefficient= ~60\%}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{EIP Co-Authorship Centrality}
+     \makebox[\textwidth][c]{\includegraphics[width = 0.8\textwidth]{Figures/eip_between_all.png}}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Affiliated Companies}
+\begin{tabular}{cc}
+\textbf{by EIP} & \textbf{by Author} \\
+           \includegraphics[width = 0.5\textwidth]{Figures/company_neip3.png}
+           & \includegraphics[width = 0.5\textwidth]{Figures/company_neip2.png}
+           
+\end{tabular}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Other Contributors to EIP Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{EIP Contributors}
+     \makebox[\textwidth][c]{\includegraphics[width = \textwidth]{Figures/commit_total.png}}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{AllDev Calls and EIP Commits}
+
+    \includegraphics[width = \textwidth]{Figures/commit_call.png}
+    
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{AllDev Calls Attendance and EIP Production}
+
+    \includegraphics[width = \textwidth]{Figures/attended_eip.png}
+    
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Determinants of EIP Success}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Determinants of EIP Success}
+
+\begin{itemize}
+    \fitem Social capital facilitates economic transactions and builds trust in society through obligations and expectations, information channels, and social norms.  
+    \begin{itemize}
+        \item Even more important in OSCs, where relationships are informal, and contracts implicit.
+    \end{itemize}
+  
+    \fitem Outcome Variable: EIP Finalization. (No WIP EIP)
+    \fitem Determinants: (i) reputation and social influence of EIP authors, (ii) intensity of the community engagement around EIPs, and (iii) skills of EIP authors.
+\end{itemize}
+\begin{equation*}
+\begin{split}   
+  Y_i  =& \beta_0 + \beta_1 \text{Social}_i + \beta_2 \text{Engagement}_i + \beta_{3} \text{Skills}_i +  \\ & + \text{Cat. FE}_i + \text{Company FE}_i  + \text{Year. FE}_i 
+\end{split}
+\end{equation*}
+  
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Determinants of EIP Success: All EIPs}
+\tiny
+\centering\input{Tables/final_all_alt1}
+     
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]{Determinants of EIP Success: PCA}
+\tiny
+\makebox[\textwidth][c]{\input{Tables/final_all_alt2.tex}}
+% Add this line to the tex file
+% & \multicolumn{4}{c}{All EIPs} & Finalized ERCs & Implemented Core EIPs \\ \hline
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Company FE Coefficients}
+\includegraphics[width = 0.8\textwidth]{Figures/cdum_coef.png}
+\begin{align*}
+\text{FE Join Test:  }& F( 10,   406) =    2.59\\
+               &\text{Prob } > F =    0.0046
+\end{align*} 
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{EIP Client Implementation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Clients}
+\begin{itemize}
+    \fitem Client developers maintain the software used in the p2p network for nodes to communicate with each others. 
+    \fitem Most finalized Core EIPs are eventually implemented by the client team through a ``hard fork''. 
+    \fitem But client developers are not required to implement finalized EIPs, and have effective veto power. 
+    \fitem Often, client implementation is the real bottleneck for the development of Ethereum protocol.
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Lorenz Curve - Client Commits Concentration}
+\includegraphics[width = \textwidth]{Figures/lorenz_commits.png}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{EIP Adoption}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Major Hard Forks}
+\makebox[\textwidth][c]{
+\begin{chronology}[1]{2016}{2023}{1.1\textwidth}
+\event{\decimaldate{14}{3}{2016}}{Homestead}
+\event{\decimaldate{15}{7}{2016}}{DAO}
+\event{\decimaldate{16}{10}{2017}}{Byzantium}
+\event{\decimaldate{28}{2}{2019}}{Constantinople}
+\event{\decimaldate{8}{12}{2019}}{Istanbul}
+\event{\decimaldate{15}{4}{2021}}{Berlin}
+\event{\decimaldate{5}{8}{2021}}{London}
+\event{\decimaldate{24}{8}{2022}}{Bellatrix/Paris}
+\event{\decimaldate{12}{4}{2023}}{Shapella}
+
+\end{chronology}
+}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Adoption}
+\begin{itemize}
+    \fitem Once a new software version is released, nodes in the network can choose whether to upgrade the software or not. 
+    \fitem \textbf{Network Externalities: }With hard forks, most nodes do not have the power to go against the upgrade, unless the fork is very controversial...
+    \fitem ... with the exception of applications that bridge with the off-chain world:
+    \begin{itemize}
+        \item Stablecoin issuers.
+        \item Oracle providers.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Stablecoin Issuance Market Power in Ethereum}
+\includegraphics[width = \textwidth]{Figures/stable.png}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Oracle Provision Market Power in Ethereum}
+\includegraphics[width = \textwidth]{Figures/oracle.png}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Governance Time Trends}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{EIP Production Over Time}
+    \includegraphics[width = \textwidth]{Figures/neip_by_year.png}
+    \tiny{Note: 2023 is incomplete, as data collection ended on June 21, 2023}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Clustering Coefficient}
+\includegraphics[width = \textwidth]{Presentations/clustering_example.png}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Clustering Coefficient Trend in Ethereum Co-Authorship Network}
+
+\centering
+\includegraphics[width = 0.9\textwidth]{Figures/clustering_trends.png}
+
+\tiny{Note: For each year, we defined a network of all EIPs started in that or the previous year.}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Gini Coefficient Trend in EIP Production}
+\centering
+\includegraphics[width = 0.85\textwidth]{Figures/gini_by_year.png}
+
+\tiny{Note: For each year, we defined a network of all EIPs started in that or the previous year.}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The role of Ethereum Foundation is diminishing over time}
+\centering
+\includegraphics[width = 0.85\textwidth]{Figures/eip_ef_by_year.png}
+
+\tiny{Note: For each year, we defined a network of all EIPs started in that or the previous year.}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Does Governance Matter for Ether Prices?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Governance Process affects Ether returns.}
+\centering
+\begin{tabular}{cc}
+\textit{Vs SPY} & \textit{Vs BTC} \\
+\includegraphics[width = 0.49\textwidth]{Figures/CAR_SPY.png}     &  \includegraphics[width = 0.51\textwidth]{Figures/CAR_BTC.png} 
+\end{tabular}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Conclusions}
+\begin{itemize}
+    \item Ethereum governance is\textbf{ predominantly shaped by a core group of influential contributors}.
+    \item The success of these proposals is significantly driven by key attributes of the proposers, including \textbf{their skills, social outreach, and EIP engagement. }
+    \item \textbf{Developer calls} are a critical forum for discussing and ratifying governance proposals.
+    \item We observe a notable \textbf{concentration in the roles of client and application developers}, and identify potential governance centralization vectors through stablecoin issuers and oracle providers. 
+\end{itemize}
+\end{frame}
+
+\end{document}
+
+
+

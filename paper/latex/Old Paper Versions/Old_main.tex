@@ -1,0 +1,966 @@
+% AER-Article.tex for AEA last revised 22 June 2011
+\documentclass[No]{AEA}
+%%%%%% NOTE FROM OVERLEAF: The mathtime package is no longer publicly available nor distributed. We recommend using a different font package e.g. mathptmx if you'd like to use a Times font.
+% \usepackage{mathptmx}
+
+% The mathtime package uses a Times font instead of Computer Modern.
+% Uncomment the line below if you wish to use the mathtime package:
+%\usepackage[cmbold]{mathtime}
+% Note that miktex, by default, configures the mathtime package to use commercial fonts
+% which you may not have. If you would like to use mathtime but you are seeing error
+% messages about missing fonts (mtex.pfb, mtsy.pfb, or rmtmi.pfb) then please see
+% the technical support document at http://www.aeaweb.org/templates/technical_support.pdf
+% for instructions on fixing this problem.
+
+% Note: you may use either harvard or natbib (but not both) to provide a wider
+% variety of citation commands than latex supports natively. See below.
+
+% Uncomment the next line to use the natbib package with bibtex 
+%\usepackage{natbib}
+
+% Uncomment the next line to use the harvard package with bibtex
+%\usepackage[abbr]{harvard}
+
+% This command determines the leading (vertical space between lines) in draft mode
+% with 1.5 corresponding to "double" spacing.
+
+\usepackage{graphicx, booktabs, rotating}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\newcommand{\tablexplain}[1]{\footnotesize{#1}}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{pdflscape} 
+\draftSpacing{1.5}
+\usepackage{natbib}
+\newcommand{\citeg}[1]{\citep[e.g.,][]{#1}}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{chronology}
+\usepackage{epigraph}
+%\newlength{\epigraphwidth}
+\setlength{\epigraphwidth}{.5\textwidth}
+%\newlength{\epigraphrule}
+\setlength{\epigraphrule}{0pt}
+\usepackage{subcaption}
+
+\DeclareMathOperator{\logit}{logit}
+
+\begin{document}
+
+\title{Decentralized Crypto Governance? \\ Transparency and Concentration in Ethereum Decision-Making}
+\shortTitle{Decentralized Crypto Governance?}
+\author{Cesare Fracassi, Moazzam Khoja, and Fabian Sch\"{a}r \thanks{Fracassi and Khoja: University of Texas at Austin. Sch\"{a}r: University of Basel. Data and code to replicate the results can be found at \url{https://github.com/Fintech-Research-Lab/Ethereum_Governance_Project}. We thank Ethan Abraham, Shantikiran Chanal, Haoxiang Yi, and Matthias Nadler for their invaluable contribution as research assistants, as well as Katrin Schuler, Dario Thürkauf, Vikramaditya Khanna, and the seminar participants at the University of Texas at Austin.}}
+\date{\today}
+\pubMonth{January}
+\pubYear{2024}
+\pubVolume{Vol}
+\pubIssue{Issue}
+\JEL{}
+\Keywords{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract}
+The regulatory treatment of cryptoassets depends primarily on three main governance characteristics: transparency, decentralized decision-making, and the effect of governance on token prices. We offer the first comprehensive analysis of the decision-making process of Ethereum, the leading programmable blockchain. We find that its governance is open and transparent, with all Ethereum Improvement Proposals (EIPs) disclosed and discussed in public venues, engaging thousands of people. At the same time, EIPs are predominantly shaped by a core group of influential authors: 10 individuals are responsible for proposing 68\% of all implemented Core EIPs. The success of these proposals is significantly associated with key attributes of the proposers, including their social outreach, community engagement, and company affiliation. Furthermore, we observe a notable concentration in client development, where on average 10 people per client implementation are responsible for 80\% of all software changes, and identify stablecoin issuers and oracle providers as potential governance centralization vectors. The governance concentration has been slowly decreasing over time, with the Ethereum Foundation still playing an important role. Finally, we find that governance decisions influence crypto prices: Ether price increases 12\% leading to the final discussion of Core EIPs.
+\end{abstract}
+
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\epigraph{``We reject: kings, presidents, and voting. We believe in: rough consensus and running code.''}{David Clark, \textit{IETF, 1992}}
+
+
+Ethereum is a leading and widely adopted blockchain, notable for its programmable and permissionless nature. With its robust smart-contract capabilities, it functions as an open and decentralized operating system, and is often compared to a world computer. It serves as the foundational platform upon which a diverse array of decentralized applications offer services across an ever-expanding spectrum of industries, spanning finance, gaming, supply chain, identity solutions, and more. Ethereum operates as a permissionless system, allowing anyone worldwide with internet connectivity to engage with others on the platform autonomously, free from dependence on centralized intermediaries such as banks, brokers, or other traditional financial institutions.
+
+Notwithstanding Ethereum's pivotal role within the cryptocurrency and decentralized finance ecosystem, its governance structure is not clearly understood. Formally, Ethereum functions as an autonomous, self-regulating open-source community without centralized ownership or control. This means there are no designated leaders, such as executives or directors, nor a formal organizational structure guiding its operations. The platform's goals and decisions are not driven by a singular vision or formal voting processes; instead, they emerge organically through a consensus of its community members. The decentralized, permissionless, and global aspects of Ethereum's governance pose extraordinary challenges to the way government agencies around the world address financial regulatory and supervisory frameworks, as they must adapt to a system that operates beyond traditional jurisdictional boundaries and lacks a centralized authority to designate as responsible entity. Furthermore, the regulatory categorization of crypto-assets largely hinges on the presence of asymmetric information and agency problems, yet there has been little effort to quantify these elements within the blockchain ecosystem. Given the growing expectation that Ethereum and the broader crypto ecosystem may serve as a viable alternative to the traditional financial system, it becomes imperative that we gain a deeper understanding of its decision-making processes. 
+
+In this paper, we embark on a comprehensive exploration of Ethereum's governance. We focus on three main governance aspects: (i) openness and transparency, (ii) decision-making engagement and concentration, and (iii) governance effect on token value. First, we elucidate the journey through which protocol enhancements and smart contract standards, called Ethereum Improvement Proposals (EIPs), are introduced, reviewed, finalized, implemented, and adopted. We find that all aspects of the protocol and the governance process are openly accessible on code repositories like GitHub, internet forums, and public conference calls, granting any individual interested in Ethereum the ability to propose improvements and contribute to discussions. Second, while over 600 people have actively proposed improvements to the Ethereum ecosystem, many of the changes to the Ethereum protocol are proposed only by a handful of contributors. The social characteristics of these influential individuals, their affiliations, and the community engagement are associated with a greater likelihood of a proposal to be adopted. Furthermore, we find that client developers and applications that bridge the crypto ecosystem with the traditional financial system can be governance centralization vectors. While the introduction of protocol changes seems to be relatively concentrated, the discussion involves a much greater number of participants: over 1100 people actively comment on proposals in online discussion boards, and 378 people participate in technical implementation calls. Lastly, we find that the governance process is associated with the price of Ether, Ethereum's token: Leading up to the approval of Core EIPs, Ether prices rise by 12\% on average relative to the S\&P500 and Bitcoin. 
+
+\cite{Coase1937} posited that firms originate from the need to mitigate transaction costs that arise within arm's length markets. The establishment of ownership structures and managerial hierarchies serves to alleviate these frictions, fostering greater production efficiency. However, \cite{Benkler2002} delves into the intriguing conundrum presented by the rise of open-source software development, a phenomenon that seemingly defies Coasian organizational theories. Within open-source communities, where volunteers come together contributing their time and skills towards a common project, the traditional constructs of markets and hierarchical firms are conspicuously absent, challenging our conventional understanding of organizational dynamics. As articulated by \cite{LernerTirole2005}, contributors to open-source communities weigh the opportunity cost of their volunteer time against the benefits of knowledge acquisition from others, thus enhancing their skills. Furthermore, Ethereum differs from traditional open source communities like Linux and Apache in two important ways: First, it has a native token that accrues and drops in value depending on the success of the platform. The presence of a tradable token alters the incentives of developers, and provides a market feedback about the platform improvements. Second, Ethereum's current addressable market dwarfs that of previous open-source communities. To put it into perspective, the global Linux operating system market size in 2022 was estimated at nearly \$16 billion, whereas Ethereum's market capitalization exceeded \$260 billion, with the entire cryptoasset market valued at over \$1.6 trillion.\footnote{Source: \url{https://www.fortunebusinessinsights.com/linux-operating-system-market-103037}} Cryptoassets constitute the largest social experiment in open-source and open-governance in the history of the world, with Ethereum at the core of this ecosystem.
+
+Our exploration starts with an in-depth description of the Ethereum governance process. The Ethereum ecosystem includes four main elements: the protocol, clients, nodes, and applications. Ethereum operates as a network of nodes that interact with one another according to a predefined set of communication and execution rules — the Ethereum Protocol. These rules are implemented in various software packages known as clients.\footnote{Ethereum comprises two layers of peer-to-peer networks, with their own protocols and clients. The execution client processes and validates transactions in line with the Ethereum Virtual Machine (EVM), subsequently bundling them into a candidate block. The consensus client, in turn, receives these data from the execution client and uses a separate protocol to establish a consensus on the canonical order and most recent state.  The execution layer has been operational since Ethereum's inception, and originally also included the consensus part. The consensus layer was introduced during the transition from proof-of-work to proof-of-stake, thus having a shorter history and lower visibility of upgrades. This paper thus primarily focuses on the execution layer.} There are a variety of execution clients, written in different programming languages, that can be employed to run an Ethereum node. Nodes have the autonomy to choose their preferred client (or develop a custom solution), as all clients adhere to the same protocol, enabling seamless communication among them. Lastly, application developers deploy smart contracts on the blockchain, thereby creating tokens and financial protocols, and offering users the opportunity to engage in conditional transactions with one another.
+
+The Ethereum protocol follows a specific governance process for any upgrade to take place. Initially, a proposal, known as an Ethereum Improvements Proposal (EIP), must be submitted to the Ethereum community. This proposal should encompass a concise description of the rationale behind the proposed change and a precise technical specification outlining the features integral to the upgrade. The Ethereum community then engages in discussions regarding the EIP across various open internet forums, conferences, and recurring developer meetings. If a consensus favoring the proposal emerges among the stakeholders, the EIP is deemed finalized. Subsequently, it falls upon the client developer teams to incorporate the technical specifications outlined in the EIP into the existing client software. Typically, client developers bundle multiple EIPs together into comprehensive software upgrade releases. Upon deployment of a software release, nodes, and application developers are afforded the autonomy to decide whether to adopt and utilize the new software version or not. 
+
+Firstly, our examination focuses on the transparency and openness inherent in Ethereum's governance. The development and maintenance of the Ethereum platform is a collaborative effort, involving a wide spectrum of participants. This includes EIP authors, client developers, application developers, and the broader Ethereum community. For our analysis, we have compiled an exhaustive dataset encompassing all EIP submissions up to July 2023. A total of 612 EIPs have been co-authored by 689  unique individuals, reflecting a substantial degree of participation. These proposals are publicly accessible on the Ethereum GitHub repository. EIP discussion also occurs in the public sphere, with internet discussion boards and live-streamed developer calls. Finally, changes to the client software code are open-source and available to anyone on GitHub. However, these proposals are quite technically advanced, written in a college-level style. 
+
+In contrast to the prevalence of anonymity in the cryptocurrency industry, which has often been associated with fraudulent activities like rug pulls and scams, we find that most Ethereum contributors disclose their identity, despite there being no formal requirement to do so: 89\% of authors, 79\% of AllCoreDevs meetings, and 79\% of the most prolific client developer disclose their full names. Additionally, the contributors who disclose their full names are actively engaged on social media platforms: 75\% of EIP authors have an X (formerly Twitter) account, and 72\% can be found on Linkedin. Overall, the level of transparency in the Ethereum's governance is high and stands in stark contrast to governance models found in traditional public or private companies.  
+
+Secondly, we analyze the community engagement and decision-making concentration within Ethereum governance. Initially, we examine the introduction of Ethereum Improvement Proposals (EIPs). Our findings reveal that a relatively small group of authors is responsible for proposing the majority of EIPs, particularly implementable (Core and Networking) EIPs, which impact client software. Notably, 20\% of authors are responsible for over 60\% of EIPs, demonstrating a significant concentration with a Gini coefficient of 0.6. This trend has remained stable over the past five years. By mapping the co-authorship network, we highlight that a core group of contributors occupies central positions, although the network is gradually decentralizing. This shift is evidenced by the clustering coefficient, which has increased from 0.5 in the initial years to 0.65 in 2023.
+
+Following a proposal's introduction, the Ethereum community engages in discussions through internet forums like the ``Fellowship of Ethereum Magicians''. Participation in these forums is broad, with 1,101 unique commentators, but moderately concentrated,  with the top 10 most prolific commentators contributing to 25\% of the discussion, indicated by a Gini coefficient of 72\%. Core EIPs, longer EIPs, and EIPs authored by individuals popular on X receive the most community engagement. As proposals progress towards finalization, Core EIPs also undergo discussion in AllCoreDevs meetings, a crucial platform for refining proposals. These meetings are public conference calls, live-streamed online, allowing widespread accessibility and participation. On average, each meeting sees active participation from 21 developers and researchers. Our analysis reveals that the likelihood of an EIP undergoing modifications through a GitHub commit triples around the time of these meetings. On average, the attendance at these meetings is about 21 individuals, growing by an average of 30\% each year.
+
+Once an EIP has undergone extensive community discussion, it proceeds to approval and finalization if it achieves ``rough consensus.'' Approximately one third of proposals reach this stage. Our research indicates that proposals by authors with substantial social following, community engagement, and technical proficiency are more likely to be approved. Additionally, the affiliation of authors with various companies plays a significant role in EIP approval. In particular, while individuals associated with the Ethereum Foundation have introduced numerous EIPs, their proposals have a comparatively lower approval rate. Over time, the Ethereum Foundation's influence has seen a slight decline, though 40\% of all Core EIPs have some involvement from the foundation. 
+
+Core Ethereum Improvement Proposals (EIPs) require modifications to the client software. Presently, there are several development teams providing distinct implementations of the Ethereum protocol. The diversity of these clients is crucial for two primary reasons: it enhances network resilience against potential software bugs and mitigates concerns regarding centralized governance. Client development is a critical step in Ethereum's governance, as these development teams often face resource constraints, creating a bottleneck that can delay the incorporation of finalized EIPs into subsequent software upgrades. An analysis of GitHub commits reveals a significant concentration of code contributions: changes to client code are predominantly managed by a very limited number of individuals, as indicated by a Gini coefficient exceeding 80\%. Moreover, a majority of these contributors are affiliated with either the Ethereum Foundation or ConsenSys.
+
+Once protocol modifications are integrated into clients, a new software upgrade is released. At this juncture, Ethereum network nodes and smart contract providers face a decision: to adopt the new release or not. Most releases take the form of hard forks, meaning that nodes which do not upgrade become unable to communicate with those that do, effectively creating a bifurcation in the network \citep{FS:20}. The Ethereum node network is notably diverse, with around 7,500 nodes operating within the network. However, our analysis identifies two significant centralization vectors that disproportionately influence network decisions regarding upgrades: stablecoin issuers and oracle providers. Specifically, we find that two major stablecoins, USDC and USDT, represent more than 90\% of the total stablecoins used in Ethereum, and Chainlink dominates the oracle space. Given the pivotal role of stablecoins and oracles in the Ethereum ecosystem, their support, or lack thereof, for the latest release could greatly sway the decisions of other nodes in the network through reverse dependency, when a significant portion of the ecosystem depends on a specific service or application. 
+
+The relevance of regulatory and policy discussions concerning cryptoassets hinges on whether governance influences token prices. In our final analysis, we examine how changes in the Ethereum protocol impact Ether prices. A key challenge is the transparent nature of the governance process. As EIPs progress from introduction to approval, and then to implementation and adoption, the market gradually prices in the potential impact on the token’s value. This gradual absorption makes quantifying the overall effect challenging. Our focus is therefore on a specific event: the discussion and approval of core EIPs during AllCoreDevs Calls. We observe an approximate 18\% increase in Ether prices in the weeks preceding these calls, indicating investors' evolving expectations about the likelihood of proposal approval, and the value consequences of EIPs. 
+
+Overall, our paper offers a comprehensive analysis of Ethereum's governance, proposing a governance framework focused on the economic principles needed to assess the regulatory treatment of Ethereum and other cryptoassets. We highlight the exceptional transparency of Ethereum's governance process compared to more traditional organization structures, such as private and public companies. Additionally, our findings reveal widespread community engagement in discussions about protocol changes. We also identify potential centralization factors in the introduction, client implementation, and adoption of protocol changes, with a particular focus on the roles of the Ethereum Foundation, stablecoin issuers, and oracle providers. Some of these centralization vectors can be interpreted as implicit veto rights, potentially creating hold-up problems and ultimately leading to more concentrated decision-making. 
+
+Similarly, the Ethereum Foundation appears to wield significant soft power. While roadmaps and blog posts by Vitalik Buterin are openly discussed and sometimes criticized, it is evident that these contributions are highly influential and shape both the focus of the community and the overall development of the ecosystem. If the Ethereum Foundation were to disappear suddenly, disagreements would likely be more frequent, thereby increasing the risk of a persistent fork. Therefore, the influence of the Ethereum Foundation should not be underestimated.
+
+Another potential concern lies in the nature of rough consensus itself. While the model of open contributions and discussions without formal voting may be effective in smaller groups, it may not scale well to larger ones. If the Ethereum blockchain were to evolve into foundational financial market infrastructure, a growing number of stakeholders would inevitably become invested in its development. At that point, the rough consensus approach would likely reach its limits, necessitating a shift in governance that could involve the introduction of gatekeepers.
+
+Importantly, our research confirms that governance decisions significantly affect Ether prices. The implications of these findings for the regulatory classification of Ethereum and other cryptoassets depend on how regulators and policymakers weigh the advantages of transparency and community involvement against concerns of potential centralization.
+
+Our paper makes significant contributions to four primary areas of academic research. The first area involves the classification and measurement of corporate governance. Building on the foundational work of \cite{Gompers_Ishii2003}, numerous indices have been developed to analyze the dynamics of corporate decision-making, the balance of power between insiders and shareholders, as highlighted by \cite{JensenMeckling1976} and \cite{Bebchuketal2009}, and the influence of governance on firm value, as examined by \cite{Coreetal2006} among others. Our research extends these concepts by introducing a framework designed to evaluate the governance structure of open-source communities like Ethereum, in particular when assessing the openness and community participation in governance.
+
+The second strand of literature, we contribute to, concerns the economic tensions inherent in decentralized platforms. \cite{Cong_Zhiguo2019} suggest that while decentralized consensus reduces asymmetric information, it also raises the potential for collusion among incumbents. Similarly, \cite{Sockin_Xiong2023} argue that decentralized ownership of utility tokens can mitigate the ex-post expropriation of user data, albeit at the expense of limiting the potential for subsidizing participation despite positive network externalities. \cite{MakarovSchoar22} shows that the Bitcoin ecosystem is still dominated by large and concentrated players. Our work adds to this discourse by elucidating the economic principles underpinning the governance of open-source communities. 
+
+Thirdly, we offer insights into the inner governance mechanisms of open-source communities. \cite{Mahony_Ferraro2007} delve into the evolution of governance systems within such communities, shedding light on the interaction between formal and informal structures, as well as the changing perceptions of leadership and authority. \cite{LernerTirole2005} provide a comprehensive overview of the various aspects of open-source literature. 
+
+Finally, we address the intersection of corporate governance and securities laws, a topic extensively researched as summarized by \cite{Mahoney2009}. \cite{Choi_Pritchard2019} discuss the economics of securities disclosure, including recent developments in cryptocurrencies. Our paper enriches this field by offering empirical evidence on the economic principles that shape the regulatory treatment of cryptocurrencies.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Ethereum Ecosystem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Ethereum Infrastructure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Ethereum is a peer-to-peer permissionless blockchain network created in 2014 by a group of developers in the crypto community, and launched in July 2015. Ethereum was the first blockchain that included a Turing-complete virtual machine (EVM). In addition to regular accounts which are controlled by users, Ethereum also introduces contract accounts (or smart contracts) which are controlled by code. Whenever someone interacts with a smart contract, the code is executed by each node and the result of the execution stored on-chain. This allows for the execution of conditional financial interactions, for which a set of operations and instructions are only executed when specific conditions are met. Prior blockchains, like bitcoin, have been limited in this regard, as their execution environment did not allow for flow control (loops), nor was it possible to create new variables on which state changes could be persisted. In simple terms, Ethereum could be described as a decentralized permissionless operating system, where anyone in the world with an internet connection can provide financial and commercial services to anyone else, through the use of smart contracts deployed on-chain. For example, several smart contract applications allow people to borrow and lend cryptocurrencies, where lenders deposit tokens in a liquidity pool, that borrowers can take, after posting a collateral to ensure the loan repayment. In this case, Ethereum acts as the operating system that enables borrowers and lenders to interact with each other through the smart contract.
+
+Three main actors define the Ethereum ecosystem: (i) the peer-to-peer network of nodes, which is the underlying core infrastructure; (ii) Application developers, who deploy smart contracts on the network; (iii) End-users, whose wallets interact with the smart contracts to engage in a service.     
+Each full node of the Ethereum peer-to-peer network is an instance of the Ethereum client software, which enables nodes to communicate with each  other according to a pre-specified set of standard communication protocols. Each node runs two client software: an execution client, and a consensus client. The former is used to listen and relay transactions throughout the network, to execute transactions in the virtual machine, and to store the current and past state of the database. The latter enables the network to achieve consensus about the validity and the order of transactions in blocks. 
+
+Application developers create and deploy smart contracts to offer services to end-users. These developers are usually governed through a decentralized autonomous organization (DAO) where token holders have a say in the management of the smart contract. This type of governance is commonly called on-chain governance, because proposals are approved through a token voting process. Applications currently offered on-chain range from decentralized finance services like token swaps, borrowing/lending services, and stablecoin issuance, to gaming, and digital identity. Currently, there are more than 36 million contracts deployed on the Ethereum network.\footnote{see \url{https://cryptoquant.com/asset/eth/chart/addresses/number-of-contracts?window=DAY&sma=0&ema=0&priceScale=log&metricScale=linear&chartStyle=line}}
+
+Finally, end-users usually own a wallet containing a set of public and private keys that act as a sort of pseudonymous digital identity in the Ethereum network. Users can interact with each others and with smart contracts using their wallets. Currently, there are over 248 million unique addresses, and 400 thousand daily active addresses.\footnote{see \url{https://etherscan.io/chart/address}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Ethereum Governance} \label{subsec_eth_gov}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Ethereum's governance system is a multi-tiered framework designed to evolve the protocol in a collaborative and decentralized fashion. Drawing inspiration from established open-source governance models, such as Bitcoin Improvement Proposals (BIPs) and Python Enhancement Proposals (PEPs), Ethereum's central mechanism for change is the Ethereum Improvement Proposal (EIP). Open to all, the EIP process, illustrated in Figure \ref{EIP_process}, includes three main phases: EIP introduction and discussion, implementation, and adoption. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t!]
+    \caption{EIP Process}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the EIP process, from idea generation to adoption. Once EIPs are finalized, they cannot be changed. EIPs become stagnant if they do not make any tangible progress for at least 6 months, but they can be resurrected by the EIP editors and authors. Withdrawn EIPs cannot be resurrected.  
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+    \makebox[\textwidth][c]{\includegraphics[width = 1\textwidth]{Figures/EIP_Process.png}}
+    \label{EIP_process}
+\end{figure}
+
+\textit{EIP Introduction and Discussion:} The EIP process typically begins on a discussion board called Ethereum Research \footnote{See \url{https://ethresear.ch/}}, a forum for those interested to discuss ideas on how to change the Ethereum protocol. This venue serves as a sounding board for community feedback, and it is commonly used before an official EIP is created. Official proposals are then submitted via GitHub through a pull request, where an editor is tasked with ensuring adherence to format standards, acting as an archivist and moderator rather than a gatekeeper. The editor assigns a number to the EIP, and a dedicated channel on the Fellowship of Ethereum Magician, the main forum to discuss EIPs. The EIP thus enters the Draft stage, where the proposal is further developed. When the authors, in agreement with the editor, are ready to receive feedback from the community, they move the EIP to the Review stage. The term ``editor'' may be misleading, particularly to an academic audience. There are no editorial decisions involved; anyone who wishes to write an EIP may do so, provided that the formatting standards and general structure of an EIP are met. EIP authors are responsible to shepherd the proposal to all stakeholders, listed to their comments, and address possible concerns. Venues for discussing include the Magician discussion board, Ethereum conferences, developers calls, and social media servers like Discord. 
+
+After the proposal is mature and stable, it is advanced to the Last Call stage, where the proposal is discussed during in AllCoreDevs calls, a biweekly meeting held by the Ethereum developer community. Since Ethereum is not a membership organization, it does not vote, nor believes that voting is the best decision-making process. Instead, it follows the idea of ``rough consensus'', where proposals are advanced and finalized only when a large number of participants agree, and there is a general sense that the concerns of the dissenting party have been heard and considered. This does not necessarily require an unanimous agreement that the proposal is the best option. Instead, it signifies a consensus that it is ``good enough'' and that no specific concerns remain unaddressed.\footnote{See \cite{Resnick2014} for a detailed description of what rough consensus means.} Once a rough consensus is achieved, its status is updated to final. Once the proposal is final, it cannot be changed anymore.
+
+Any proposal in the draft, review, and last call stages that lie dormant for six months enter a Stagnant stage, but can be revived, or formally withdrawn by their authors, if consensus cannot be reached, or if it is made redundant by other proposals. Withdrawn proposals cannot be resurrected. \footnote{Two additional stages, ``living'' (for continuously updated EIPs, exemplified by EIP 1, which establishes EIP standards and guidelines) and ``idea'' (for pre-draft proposals not formally tracked in the EIP repository), are excluded from our analysis.} 
+
+\textit{EIP Implementation:}  EIP can be distinguished between proposals that necessitate client software changes, and those who do not. EIPs are classified into 6 categories: ERCs, Interface, Core, Networking, Interface, Informational, and Meta. ERCs and Interface EIPs are related to creating a standard for specific applications and smart contracts, like EIP-20, which creates a standard for fungible tokens. These EIPs do not require any implementation in the client software. The finalization of such EIPs means that these standards have been approved by the Ethereum community. In theory, there is no need to go through the EIP process to create a standard, but it is good practice to do so to engage the community on the standard creation. Informational and Meta EIPs provide information about the governance process, and the software releases. All Core and Networking EIPs involve a change to the client software, and thus require the involvement of client developers. 
+
+Ethereum currently has 4 main execution clients, each written in a different programming language: Geth is by far the most popular client with 85\% of nodes running its implementation of the Ethereum protocol, written in the Go language. Nethermind and Besu are next, with both about 5\% of market share, written in C\# and Java, respectively. Erigon, with about 1\% of market share, also written in Go.\footnote{Recently, Reth, a new client written in Rust, has gained some popularity. Reth is excluded from our analysis as the first alpha has only been released in June 2023. It therefore falls outside the observation period. Similarly, we are not considering deprecated clients.} Each client is an open source project with dedicated developers who often attend AllCoreDevs meeting, and participate in the governance process. Client developers work with EIP authors to implement proposals that they deem worthy. Technically, clients cannot be forced to implement all finalized EIPs. They are often constrained in their resources to implement changes to the software. Not implementing the same changes as other clients could lead to consensus issues and unintentional chain splits. Consequently, the client teams often work together with the community at large to find which finalized EIPs should be implemented first.
+
+\textit{EIP Adoption:} Finally, once EIPs are implemented, a new client software version is released to the public, and node operators decide whether to upgrade. Major protocol upgrades historically occur through hard forks which are not backward compatible, meaning that if some nodes decide not to upgrade, they are left out of the peer-to-peer network. This means that all upgraded nodes will be part of a new network, and all the nodes that decide not to upgrade will be on another network, and the protocol splits. This has happened rarely in the history of Ethereum: The most controversial persistent chain split occurred during the DAO hacking event of June 2016, when the community decided to rewind a very large hacking attack, effectively re-writing its history. While many participants agreed to the change, some did not, and the protocol split into two networks: Ethereum and Ethereum Classic. 
+
+Nodes are not the only entities deciding which version of the software to adopt. Other stakeholders have influence in whether to follow the recommended changes or not. For example, if the network splits into two forks, some service providers might decide to follow just one of the forks. For example, issuers of off-chain collateralized stablecoins have to choose only one of the forks, as a dollar of off-chain reserves cannot be backing two stablecoin tokens. Since stablecoins are an important component of the Ethereum ecosystem and used as collateral across numerous smart contract-based financial protocols, stablecoin issuers may have large influence on whether an upgrade is successful or not. Similarly, providers of external data, so-called Oracles, might decide not to support an upgrade if they do not agree with the changes to the protocol. Since many smart contract-based financial protocols are dependent on these oracles, they will only ever work on a chain that is supported by the data provider. Consequently, oracle providers could have significant influence in the governance process. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Transparency and Openness of Ethereum Governance} \label{sec:transparency}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Open source communities are known to have a high level of transparency. This is not simply a necessity to effectively collaborate on a global scale, but also part of a cultural ethos based on the belief that openness and transparency generate positive externalities. In cryptocurrencies, transparency is also important because it addresses some of the concerns regulators have with regard to the presence of insider information and disclosure requirements. We thus proceed to assess the level of access and transparency of the Ethereum governance process. We use three main measures: the availability and technicality of the Ethereum protocol documents and codes, the anonymity of the participants, and the transparency of the Ethereum Foundation. 
+
+Ethereum is a permissionless platform not only because anyone can run a client software and join the network, but also because it allows anyone to engage in the governance, and propose a change to the protocol. Most information about the protocol is accessible openly on the Ethereum GitHub page.\footnote{https://github.com/ethereum/} From there, we collect the list of all EIPs numbers, titles, and authors as of June 21, 2023. A total of 612 EIPs have been submitted by 689 unique authors.The median EIP has 2 authors. Figure \ref{fig:neip_year} illustrates the growth in the number of EIP and authors and the categorization of EIPs initiated each year.\footnote{In our study, we exclude EIPs labeled as ``Meta'' and ``Informational'' as they simply provide governance information, rather than proposals to actually change the protocol.} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[t!]
+    \caption{Number of EIPs by Year}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the number of EIPs by category (left axis) and the number of unique authors (right axis) over time. Year 2023 numbers are incomplete, as data collection ended on June 21. 
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = \textwidth]{Figures/neip_by_year.png}
+    \label{fig:neip_year}
+\end{figure}
+%\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+54\% of all proposed EIPs are related to ERC standards, 35\% are Core EIPs that propose changes to the client software, and the rest are Interface and Networking related. Since Ethereum's early days, the total number of EIPs has seen significant growth. Notably, ERC EIPs have gained recent popularity, while Core EIPs have remained relatively stable since 2018. Similarly, the number of authors has risen markedly, with over 250 individuals authoring an EIP in 2022. EIP discussions are also held in open venues, either on the ``Fellowship of Ethereum Magicians'' internet forum, or during AllCoreDevs calls. Furthermore, proposals are discussed in unofficial venues, like Ethereum conferences and Discord channels. 
+While it is plausible that unobservable, private discussions occur among some developers (e.g., through Telegram chats), the discussions in official venues are thorough, and the set of participants is large and diverse. Objections can be and are regularly raised through various channels, including forums and AllCoreDev calls.
+Overall, the EIP process is open and transparent, particularly when compared to more traditional organizations where this data is generally unavailable.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{landscape}
+\begin{table}
+    \caption{Summary Statistics}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the summary statistics of the variables used in the paper. 
+  \end{minipage}
+         \end{small}
+    \makebox[\textwidth][c]{\input{Tables/summstat.tex}}
+    \label{summarystats}
+
+\end{table}
+%\end{landscape}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+In the cryptocurrency community, a fundamental belief is that ``Code is Law.'' Due to the irreversible nature of crypto transactions, it is crucial for individuals to thoroughly understand the associated documentation and code. However, this can be challenging for those without a technical background. To gauge the extent to which people can understand EIPs, we have analyzed the length and readability of each Ethereum Improvement Proposal (EIP) using the Flesch Reading Ease scale. This scale rates texts on a spectrum from 1 (least readable) to 100 (most readable) taking into account the number of words in a sentence, and the number of syllables in words. Our findings, illustrated in Figure \ref{fig:understand}, reveal that the average EIP scores 39.1 in readability, with a standard deviation of 12.2, as shown in figure \ref{summarystats}. Scores in the 30-50 range typically indicate that a college-level understanding is necessary for comprehension. As a frame of reference, this paper has a readability score of 43.5. While this may be expected for technical documents, a push for greater clarity in EIPs could help make them more accessible to a broader audience. Also, the average text length is 1,500 words, which is similar to typical scientific publications and articles. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{EIP Readability}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the histogram of the Flesch Reading Ease readability score applied to EIP texts. The score takes into account the number of words in a sentence, and the number of syllables in words. Panel (b) shows the histogram of the length of EIP texts, measured as the number of words (,000s).   
+     \end{minipage}
+         \end{small}
+          \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/read_hist.png}
+            \caption{EIP Readability Score}
+            \label{fig:read}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/nwords_hist.png}
+            \caption{EIP Length}
+            \label{fig:nword}
+   \end{subfigure}
+    \label{fig:understand}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We then turn to the issue of anonymity. A common concern in the cryptocurrency sector is that projects are occasionally developed by anonymous bad actors that proceed to abscond with users' funds through what are called rug pulls. The lack of identity verification prevents law enforcement to pursue charges against these criminals. Furthermore, anonymity prevents third parties to pursue legal claims towards responsible individuals in case of negligence or malfeasance. A fully transparent ecosystem includes not only the disclosure and availability of relevant discussions and documents, but also information about their contributors to assess potential conflicts of interests. We thus measure how many contributors in the Ethereum governance process disclose their full names. Figure \ref{fig:anon} shows that 89\% of EIP authors disclose their identity, and 79\% for attendees of AllCoreDevs meetings and top client developers. A potential issue is that we do not have the ability to confirm whether their disclosed names match their true identity. We thus proceed to search for their social media accounts, to verify their real identity, and to use their employment information for further tests. We are able to find 75\% of EIP authors who disclose their full names on X, and 72\% on LinkedIn.      
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Anonymity in the Ethereum Governance Process}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the percentage of people disclosing their full names in EIP proposals, AllCoreDevs meetings, and Github Client commits for the top 20 most prolific developers.    
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+    \makebox[\textwidth][c]{\includegraphics[width = 0.8\textwidth]{Figures/Anonymity_Diagram.png}}
+    \label{fig:anon}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Many companies and non-profits engage with the Ethereum governance process. By the nature of their businesses, these companies are not as transparent as the Ethereum governance process. However, one organization stands out among many for it special role within the ecosystem: The Ethereum Foundation. The goal of the Ethereum Foundation is to support the development of the Ethereum ecosystem. During Ethereum's 2014 initial coin offering, about 12 million Ether tokens (or 20\% of the pre-mined supply) were allocated to the Ethereum Foundation and early contributors. As we will see in the next sections, the Ethereum Foundation still plays an important role in the introduction, approval, and implementation of governance proposals. While the foundation is not the only decision maker, the extent of its influence raises important questions about the transparency of the foundation's organization structure to assess conflict of interests and insider information in the Ethereum governance process. 
+
+While the Ethereum governance process is open and transparent, the case of the Ethereum Foundation is more complex. The foundation is registered in Zug, Switzerland (UID: CHE-292.124.800) and controlled by three board members, one of which acts as an executive director. Funding sources, and addresses are publicly disclosed and can be monitored in real time by anyone. According to the \emph{Swiss Central Business Registry}, two different companies have audited the Ethereum Foundation. Grants are regularly disclosed and the corresponding transactions visible on-chain. While the Ethereum Foundation arguably is very transparent in its operation, this happens in a somewhat unusual form. Traditional disclosure techniques, such as financial and audit reports, are hardly used and the governance process in the foundation itself appears to be unstructured, when compared to traditional legal entities. In fact, the foundation issued its first report on their finances and activities only in 2022. Instead, they use the public permissionless nature of the blockchain, where any transaction is public by default. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Community Engagement and Concentration in EIP Introduction and Discussion} \label{sec:concentration}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+As we have seen in the previous section, the Ethereum governance process is relatively transparent and open. However, another economic principle that is important for the regulatory treatment of cryptoassets is the extent to which the governance process is decentralized. In corporate finance and securities laws, disclosures are required to limit information asymmetries between firms and investors, because firms' profits are derived from the efforts of its management team. If the management of a project or organization is reasonably decentralized, where no independent entity has significant control to influence business outcomes, then concerns about inside information are limited. To assess the decentralization of the governance process, we study the concentration of proposals to change the protocol, and the extent of the community engagement to approve these proposals. 
+
+As explained in section \ref{subsec_eth_gov}, the Ethereum governance follows a stepwise process where in each stage, different actors are responsible for shepherding changes to the protocol. This section focuses primarily on the initial phase: the creation and discussion of EIPs. Figure \ref{fig:venn} shows a Venn diagram of the three main groups of contributors to the Ethereum governance ecosystem: EIP authors, AllCoreDevs meeting attendees, and client developers. Overall, 2,126 people participate in at least one of the three governance phases, 142 are active in two of the groups, and only 24 people have participated in all three.  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Contributors to the Ethereum Ecosystem}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the Venn diagram of the individuals involved in EIP production, AllCoreDevs meetings, and client implementation.    
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+    \makebox[\textwidth][c]{\includegraphics[width = 0.8\textwidth]{Figures/venn_diagram.png}}
+    \label{fig:venn}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Initially, we examine the EIP authors, analyzing their number, concentration, and overall impact on governance. Following this, we explore the discussion phase, highlighting the key platforms utilized for garnering community feedback and refining the proposals. Concluding this section, we delve into the factors that contribute to the success of an EIP, integrating insights from social capital theory.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Influential Authors in EIP Production} \label{subsec:infl_authors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We begin by examining the concentration of power during the Ethereum Improvement Proposal (EIP) discussion, highlighting the involvement and impact of individual contributors. As shown in figure \ref{n_author_by_stage}, initially, the analysis reveals that 688 individuals have proposed at least one EIP, with a majority contributing to Ethereum Request for Comments (ERCs), and smaller percentages to core and interface EIPs. The count of contributors significantly drops to 150 when considering only successful ERC and Interface EIPs that have been finalized, and further narrows down to 53 individuals for Core EIPs implemented into client software.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Number of EIP Authors}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the number of unique individuals involved in authoring an EIP. The first bar shows the unique authors for all EIPs. The second bar only uses finalized ERC and Interface EIPs. The third bar only uses implemented Core and Network EIPs.    
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+    \makebox[\textwidth][c]{\includegraphics[width = 0.8\textwidth]{Figures/n_authors_by_stage.png}}
+    \label{n_author_by_stage}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We then shift focus to the disparity in contributions among authors. A few authors are exceptionally prolific, with figure \ref{top10_author} illustrating the top 10 EIP contributors across different EIP categories. Vitalik Buterin, Ethereum's co-founder, is the most prolific proposer of EIPs. However, when we focus on EIPs that have actually been approved, we find that authors seem to specialize their contributions either on Core or ERC EIPs: None of the top 10 ERC EIP authors are in the top 10 of Core EIPs. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Top 10 EIP Authors}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the top 10 authors ranked in terms of how many EIP they co-authored. The top figure includes all EIPs, whether they have been approved or not. The figure on the lower left only focuses on authorship of finalized ERC EIPs. The figure on the lower right focuses on authorship of Core EIPs.    
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+    \makebox[\textwidth][c]{\begin{tabular}{cc}
+    \hspace{5cm} All EIPs  \\
+     \multicolumn{2}{c}{ \includegraphics[width =.55\textwidth]{Figures/neip_top10author.png}} \\
+      \hspace{-1cm} Finalized ERCs/Interf. &       \hspace{-1cm} Implemented Core/Network EIPs \\ \hspace{-1cm}
+      \includegraphics[width =.55\textwidth]{Figures/neip_final_top10author.png}   &
+      \hspace{-1cm}\includegraphics[width =.55\textwidth]{Figures/neip_imp_top10author.png}   \\
+    \end{tabular} }
+    \label{top10_author}
+\end{figure}
+
+To analyze numerically the concentration of EIP production, we can use the Lorenz curve adapted to EIP authorship, as shown in Figure \ref{lorenz_authorship}, which plots the proportion of all EIPs  cumulatively authored by the fraction of the population of authors in the horizontal axis. The vertical axis is the cumulative percentage of EIPs, and the horizontal axis is the number (panel a) or percentile (panel b) of authors sorted from the most to the least prolific. The top 10 EIP authors produced about 21\% of all EIPs, 29\% of finalized ERC/Interface EIPs, and 68\% of implemented Core/Networking EIPs. The Gini coefficient, defined as two times the area between the 45-degree line and the Lorenz curve in the bottom graph of Figure \ref{lorenz_authorship} \citep{Dorfman1979}, is a typical measure of concentration. The Gini coefficient for all EIPs is 0.59, but it is lower for finalized ERCs and Interface EIPs, at 0.5, and higher for Implemented Core/Networking EIPs, at 0.62. This is consistent with the argument that proposing Core/Networking EIPs is a much more sophisticated and time-consuming process, while proposing ERCs and Interface EIPs is technically accessible to a wider audience.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{EIP Introduction Concentration}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the Lorenz curve adapted to EIP authorship. The horizontal axis represents the number of authors, sorted from the most prolific to the least ones. The vertical axis represents the cumulative number of EIPs authored by the number of authors indicated in the horizontal axis. Each author is assigned a fraction of the EIP relative to the total number of co-authors on the EIP.   
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/neip_by_author.png}
+            \caption{by Number of Authors}
+            \label{fig:neip}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/npeip_by_author.png}
+            \caption{by Percentile of Authors}
+            \label{fig:npeip}
+   \end{subfigure}
+  
+    \label{lorenz_authorship}
+\end{figure}
+
+
+Our analysis comprehensively covers the period from Ethereum's launch in 2015 to mid-2023. During this time, Ethereum has undergone significant changes, including the expansion of its features, a shift in its core consensus mechanism, and a broadening of its community. As a result, current centralization trends in Ethereum may differ from the average outcomes observed over the entire period. Therefore, examining temporal trends in decision-making concentration within Ethereum is crucial.
+
+Given the increasing involvement in EIP authorship shown in figure \ref{fig:neip_year}, we investigate if this wider participation has led to a decreased concentration in decision-making within Ethereum's governance. To smooth out annual fluctuations in EIP production, we employ a two-year rolling window for our analysis. First, we examine the Gini coefficient of EIP authorship concentration. More authors do not automatically imply a lower Gini coefficient, as it could increase if new authors contribute fewer EIPs, steepening the Lorenz curve and raising the Gini coefficient. Figure \ref{fig:gini_year} shows a significant drop in concentration around 2018-2019, but a stabilization thereafter.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+    \caption{Concentration of EIP Production over Time}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the Gini coefficient for each two-year rolling window. Year 2023 numbers are incomplete, as data collection ended on June 21. 
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/gini_by_year.png}
+    \label{fig:gini_year}
+\end{figure}
+
+Finally, we can use network analysis to explore which authors are more centrally located in the EIP co-authorship network. We create an undirected weighted graph where each node is an EIP author, and each node pair is connected with a weight proportional to the number of times the two individuals co-author an EIP together. Figure \ref{fig:between} depicts the network's spring layout, revealing cliques around prolific authors like Gavin John, Vitalik Buterin, Nick Johnson, Fabian Vogelsteller, and Charles Cooper, emphasizing their central role in the EIP production. We will be using these centrality measures in section \ref{subsec_determinants} as determinants of the success of an EIP. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h!]
+    \caption{EIP Co-Authorship Network}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the EIP co-authorship network. Each node identifies an EIP author. Authors are connected with each other if they are co-authors in an EIP. Connections are weighted by the numbers of EIPs co-authored together. Nodes in the graph are positioned using the Fruchterman-Reingold force-directed algorithm. The size of each node is proportional to its betweenness centrality value. We display the names of the top 5 percentile of authors, ranked by betweenness centrality.
+     \end{minipage}
+     \end{small}
+     \makebox[\textwidth][c]{\includegraphics[width = \textwidth]{Figures/eip_between_all.png}}
+     \label{fig:between}
+\end{figure}
+
+A metric used in network analysis to assess the decentralization of the co-authorship network is the average clustering coefficient, a measure of network connectedness. More precisely, the local clustering coefficient $C_i$ for each node $i$ counts the fraction of closed triangles over the total possible triangles involving node $i$. The average clustering coefficient $C$ is the average of the individual clustering coefficients across all $n$ nodes in the network. 
+
+\begin{equation}
+    C = \frac{1}{n} \sum_i C_i = \frac{1}{n} \sum_i \frac{\sum_{j,k} A_{i,j}A_{j,k}A_{k,i}}{\sum_j A_{i,j} ( \sum_j A_{i,j} - 1)}
+\end{equation}
+
+where $A$ is the adjacency matrix of the co-authorship network.
+
+A network with $C=0$ is a hub-and-spoke network where there is one single central node that is connected with all other nodes, which can be thought as a very centralized network. A network with $C=1$ is a fully connected network, where all nodes have equal influence, and thus fully decentralized.
+
+Our analysis of the co-authorship network in Figure \ref{fig:between} shows an average clustering coefficient of 0.6 over the period. The red column in Figure \ref{fig:clustering_trends} shows with an upward trend from 0.5 in 2016 to over 0.65 in 2023. Such a rise in connectedness could be attributed to two main factors: The number of co-authors in each EIPs might be rising over time, or authors might be working with different people across EIPs. The blue column in the figure shows that the average number of co-authors working for an EIP has been relatively flat over the last five years,  suggesting growing interconnectedness and decentralization in EIP co-authorship.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Decentralization of EIP Co-Authorship over Time}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the clustering coefficient of the EIP co-authorship network for each two-year rolling window. The clustering coefficient is defined as Year 2023 numbers are incomplete, as data collection ended on June 21. 
+  \end{minipage}
+         \end{small}
+            \\[0.5cm]
+ \includegraphics[width = 0.8\textwidth]{Figures/clustering_trends.png}
+    \label{fig:clustering_trends}
+\end{figure}
+
+Overall, we find that the EIP production is rather concentrated in the hands of few individuals, especially for the most important EIPs which introduce a change to the protocol. Such concentration has remained relatively constant over the last 5 years. We also find that a handful of authors are in the center of the co-authorship network, even though lately the network has become more decentralized. Next we turn to how these proposals are discussed in the Ethereum community. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Governance Discussion Venues}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+After an EIP is drafted, it enters a circulation phase that includes three primary channels for community engagement and discussion. The first is the Fellowship of Ethereum Magicians (FEM) internet forum, where each EIP is allocated a discussion board. This platform allows anyone to pose questions or suggest amendments to the proposal. We are able to find 346 EIPs discussed on the board. For some of them, there are multiple boards discussing different aspects of the proposal, and in those cases, we aggregate the statistics across the boards. So far, 1,101 individuals have contributed to these discussions, resulting in 1,6M views, 6,416 comments, and 4,675 likes. Panel (a) of Figure \ref{fig:FEM} shows that the community engagement has been increasing rapidly over time, with views growing at 38\% y-o-y from 2018 to 2022. Contributors are not all equally engaged with the discussion, as shown in the Lorenz Curve in panel (b) of Figure \ref{fig:FEM}. The top 10 contributors account for 24.8\% of all discussion, with a moderately high Gini coefficient of 71.6\%. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Discussion on Fellowship of Ethereum Magicians}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the number of views received ordered by year in which the EIP discussion was initiated on the Fellowship of Ethereum magicians (FEM) discussion board. Year 2023 is incomplete, as data collection stopped in June 2023. Panel (b) shows the Lorenz curve for comments on the discussion board by contributor. The vertical axis is the percentage of all comments made by the most prolific contributors, and the horizontal axis is the number of contributors sorted by the most to the least prolific. 
+ 
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/FEM_Views_year.png}
+            \caption{FEM Views by EIP Year}
+            \label{fig:FEM_Views_year}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/FEM_Lorenz_Comments.png}
+            \caption{Lorenz Curve of FEM Contributors}
+            \label{fig:FEM_Lorenz_Comments}
+   \end{subfigure}
+  
+    \label{fig:FEM}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We then proceed to analyze the determinant of community engagement on the FEM site. We use four measures of community engagement: The number of comments, views, likes, and unique users for each EIP discussion board. We also argue that the number and the popularity of the EIP authors, and the EIP characteristics can be drivers of community engagement. We thus run the following OLS regression model: 
+
+\begin{equation}
+\begin{split}   
+  Y_i  =& \beta_0 + \beta_1 \text{Social}_i + \beta_2 \text{EIP Char}_i   + \text{Year FE}_t   \label{eq:FEM}
+\end{split}
+\end{equation}
+
+where $Y_i$ are the engagement outcome variables N. of Comments, Views, Likes, and Unique Users for each EIP $i$ listed on FEM, $Social_i$ are the X and GitHub followers, as well as the betweenness centrality of the EIP authors, and whether at least one EIP author is anonymous, $EIP Char.$ include the number of words in the EIP, the Flesch Reading Ease scale, and the EIP category type (ERC, Networking, Interface, and Core as reference group). Standard errors are adjusted for heteroskedasticity using the Eicker–Huber–White adjustment. 
+
+Table \ref{table:FEM_reg_out} shows the OLS coefficients and t-statistics. Across all four engagement measures, the findings are consistent: the community is more engaged in Core EIPs, in EIPs that have longer proposals, and whose authors are popular on X. Surprisingly, readability is not a factor in the extent of community engagement, probably because the people who participate in these discussions are already technically savvy. Furthermore, whether authors are anonymous or well-connected in the co-authorship network or not do not seem to play a factor in engaging the community. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}[ht!]
+    \caption{Determinants of Community Engagement}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      The table shows the OLS coefficients and t-statistics of a regression where the dependent variable is the number of comments (column 1), number of views (column 2), number of likes (column 3), and number of unique contributors (column 4)) for each EIP page in the Fellowship of Ethereum Magicians. Standard errors are adjusted for heteroskedasticity using the Eicker–Huber–White adjustment. Constant is included in all specifications. *, **, and *** indicate statistical significance at the $10\%$, $5\%$, and $1\%$ levels, respectively.   
+  \end{minipage}
+    \input{Tables/FEM_reg_out}
+    \label{table:FEM_reg_out}
+         \end{small}
+\end{table}
+
+
+Another possible avenue for contributing to EIP development is through direct input on the EIP draft document on GitHub. Each EIP has a corresponding document where feedback can be directly incorporated via pull requests. Authors then have the discretion to either integrate these changes into the main branch or reject them. To monitor EIP progression and assess the extent of meaningful contributions from participants other than the authors, we downloaded all GitHub commits for each EIP. We differentiate between commits made by authors and those by external contributors, excluding bot-generated commits. Figure \ref{fig:commit_total} illustrates the histogram of GitHub commits per EIP, showing an average of nearly 7 commits per EIP, with 85\% originating from authors and only 15\% from external contributors. Notably, a small subset of EIPs have received over 30 commits. We conclude that the GitHub repository is not a frequently used EIP discussion venue.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+    \caption{Number of GitHub Commits by EIP}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the histogram of the number of GitHub commits by EIP. The blue bar represents the fraction of commits in the bin that are made by the authors of the EIP, and the red bar by other contributors.   
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/commit_total.png}\label{fig:commit_total}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+An important venue of EIP discussion are AllCoreDevs Meetings, biweekly calls between authors, contributors, and client developers. These meetings, focusing solely on core EIPs due to their technical nature, play a crucial role in refining and finalizing EIPs for client implementation. As of June 2023, there have been 154 meetings with over 378 unique attendees. On average, 20 individuals attend each call, but the number of attendees has been growing over time, from around 15 in the early years to nearly double that number by the end of our study period, as shown in figure \ref{fig:attendees_year}. 20\% of meeting attendees are EIP authors, and 20\% are client developers, while the rest come from the broader Ethereum community, as shown in Figure \ref{fig:venn}. 
+ Figure \ref{fig:attended_eip} shows that the most prolific EIP authors are also the most likely to attend the developers meetings. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{AllCoreDevs Calls Attendees}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the average number of attendees to the bi-weekly AllCoreDevs Calls over time. Panel (b) shows a scatter plot where each dot is a EIP author. The vertical axis measures the number of AllCoreDevs meetings attended by the author, and on the horizontal axis the number of EIPs co-authored. 
+ 
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/attendees_year.png}
+            \caption{N. Attendees by Year}
+            \label{fig:attendees_year}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/attended_eip.png}
+            \caption{Attendees and EIP Authorship}
+            \label{fig:attended_eip}
+   \end{subfigure}
+  
+    \label{fig:attendees}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To evaluate the impact of these Devs calls on the EIP progress, we analyze changes to EIPs before and after their discussion in these meetings. Every meeting has an agenda with the list of EIPs discussed during the call. We thus download the agenda for each meeting, and look at the EIP GitHub commits around all meetings where the EIP is discussed. Our analysis employs a stacked-cohort OLS regression where for each cohort EIP-Meeting pair, we compute the weekly number of commits from the GitHub EIP repository in a window of [-6months; +6months] around the time an EIP is discussed in a meeting. We then stack these cohorts together, and run the following OLS regression: 
+
+\begin{equation}
+\begin{split}   
+  Y_{i,t}  =& \alpha_0 + \sum_{w = -26}^{26} \beta_w \text{Week}_{w} + \gamma_{i} + \epsilon_{i,t}  \label{eq:commit_meeting}
+\end{split}
+\end{equation}
+
+where for each EIP-Meeting cohort $i$, the dependent variable $Y_{i,t}$ is the weekly number of EIP commits at time $t$, $\text{Week}_{w}$ is a dummy variable equal to 1 if $t = w$ and 0 otherwise, and $\gamma_i$ are EIP-Meeting cohort dummies. Standard errors are clustered at the EIP-meeting cohort level. 
+
+The findings, summarized in Figure \ref{fig:commit_call}, indicate an uptick in commits starting approximately one month before the meeting, peaking in the week following it, and then gradually decreasing. This pattern underscores the significance of AllCoreDevs calls in EIP development, suggesting that authors actively prepare for these meetings and modify their proposals in response to feedback from the developer community. The magnitude of this effect is notable, with the frequency of updates around meeting dates approximately tripling from the average baseline of 0.12 weekly commits.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{EIP GitHub Commits around Dev Calls}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the coefficients of the regression in equation \ref{eq:commit_meeting}. The dotted mark represents the mean of the coefficient, and the line the 90\% confidence interval.  
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/commit_call.png}
+    \label{fig:commit_call}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Influential Companies in EIP Introduction, Discussion, and Implementation} \label{subsec:companies}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The involvement of developers in Ethereum governance is a voluntary effort, often balanced alongside their full-time employment. This raises a pertinent question about the alignment of authors' incentives with the objectives of their employers. Historically, open-source communities have held mixed perspectives on the involvement of for-profit companies in open source project development and support. On one hand, these companies contribute valuable financial and human resources to open source initiatives, which are often resource-constrained. Conversely, concerns have arisen regarding the potential for undue influence exerted by companies on the trajectory of open source projects. The literature on open source underscores the significance of trust for contributors (refer to \cite{Jarvenpaaetal2004}, \cite{Korsgaardetal1995}, and \cite{StewartGosain2006}). To maintain contributors' continued participation, it is crucial that the governance is fair where their voices are heard, and that all participants work towards the project's greater good, rather than being dominated by for-profit interests of a single or a group of companies.
+
+To explore the impact of company affiliations, we conducted a thorough examination of the current employment status of all EIP authors and client developers. We gathered details about their current and previous jobs from LinkedIn and correlated these with their contributions to various EIPs and Ethereum clients. Most of these contributors, actively engaged in EIPs, are volunteers with full-time roles in firms, often linked to the cryptocurrency sector. Our findings, illustrated in Figure \ref{fig:ncomp}, delve into the employment affiliations of EIP authors in panels (a) to (c) and client developers in panel (d).
+
+Our methodology for assessing the influence of these companies on EIP introductions involved tallying unique authors and their company affiliations. However, this approach does not account for the possibility that prolific authors may be associated with specific companies. Therefore, we also tracked the number of EIPs co-authored by individuals linked to each company.
+
+At first, the data reveals that the Ethereum community exhibits a remarkably diverse range of employment backgrounds, with no single company representing more than 3\% of all authors. The blue line in panel (a) of figure \ref{fig:ncomp} is very close to the 45\% line, demonstrating a fairly even distribution of company participation in Ethereum governance, as indicated by a Gini coefficient of 0.15. Panel (b) reveals that the Ethereum Foundation, followed by Consensys and Coinbase, employs the largest number of authors. However, this does not fully capture the influence of companies, because prolific authors could cluster in specific companies. Panel (a)'s red line indicates a moderate concentration of EIPs authored by individuals from specific companies, with a Gini coefficient of 0.51. Panel (c) highlights that over 21\% of all EIPs were co-authored by individuals employed by the Ethereum Foundation. 
+
+Shifting focus to client development, we identified the main employers of the top 20 developers for each client, who collectively are responsible for over 80\% of all commits. Our findings, as shown in panel (d), reveal that each client benefits from the backing of a prominent company: the Ethereum Foundation supports all four main clients included in our analysis: Erigon, Geth, Besu, and Nethermind. Some clients receive additional funding from firms like Consensys, public grants or have additional business models like auditing service.\footnote{See e.g., \url{https://blog.ethereum.org/2021/03/23/supporting-ethereums-client-ecosystem} or \url{https://blog.ethereum.org/2021/08/24/building-together}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Companies affiliated with contributors to EIPs and Clients}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the Lorenz curve for affiliated company concentration in EIPs and authors. Panel (b) counts how many authors are employed by an affiliated company. Panel (c) counts the number of EIPs co-authored by at least an individual who is affiliated with a company. Panel (d) shows the percentage of top-20 client developers working for affiliated companies for each of the four main clients.  
+  \end{minipage}
+     \end{small}
+         \\[0.5cm]
+  \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/company_lorenz.png}
+            \caption{by EIP}
+            \label{fig:ncomp_lorenz}
+   \end{subfigure}
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/company_neip2.png}
+            \caption{by Author}
+            \label{fig:ncomp_author}
+   \end{subfigure}
+       \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/company_neip3.png}
+            \caption{by EIP}
+            \label{fig:ncomp_eipauthor}
+   \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/client_company.png}
+            \caption{by Client}
+            \label{fig:client_company}
+   \end{subfigure}
+   \label{fig:ncomp}
+\end{figure}
+
+Overall, the Ethereum Foundation's influence in both EIP production and client development has been significant throughout our study period. As discussed in section \ref{sec:transparency}, the Ethereum Foundation was instrumental in the initial development stages of the Ethereum protocol. This leads us to question whether the Foundation's influence has waned over time. Figure \ref{fig:ef_year} plots the annual proportion of EIPs co-authored by someone from the Ethereum Foundation. Initially, the Foundation was involved in about 70\% of all EIPs, but this figure has declined sharply to under 20\% in recent years. However, the decline seems to be mostly due to ERC EIPs, in the red line. The percentage of core EIPs with some involvement of the Ethereum Foundation has been slowly increasing since 2019, reaching over 40\% of core EIPs today. The divergence in the Ethereum Foundation's involvement between core and ERC EIPs aligns with the transition from Proof-of-Work to Proof-of-Stake and may be related to increased specialization and complexity of the proposals.
+
+These insights set the stage for a more in-depth analysis to understand the determinants of an EIP approval and the extent to which these employment affiliations might be affecting the successful development of EIPs, which will be the focus of the next section.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Influence of Ethereum Foundation over Time}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the percentage of EIPs produced for each two-year rolling window where at least one author is affiliated with the Ethereum Foundation over time. Year 2023 numbers are incomplete, as data collection ended on June 21. 
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/eip_ef_by_year.png}\label{fig:ef_year}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Determinants of EIP Success} \label{subsec_determinants}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+The role of social connections and more broadly social capital is an important determinant of business success. Starting with \cite{Coleman1988}, people argued that social capital facilitates economic transactions and builds trust in society through its obligations and expectations, information channels, and social norms. Social capital is even more important in open-source communities, where relationships are informal, and contracts are implicit. \cite{LernerTirole2005} argue that individuals benefit from contributing to open-source communities by acquiring skills, enhancing their reputation and strengthening their outside options, including improved job prospects, involvement in related projects, or access to capital. Moreover, intrinsic motivation drives their commitment to building a common good that benefits a wide audience. Therefore, it is reasonable to assume that reputation plays a pivotal role in the acceptance of an EIP. In this section, we use an approach similar to \cite{Zanettietal2013}, who examines the quality of bug reports in open source software based on the social relationship among developers and bug reporters of open source communities. 
+
+First, we define EIP success. As shown in figure \ref{fig:EIP_Success}, almost half of all proposed EIPs are either withdrawn or stagnant. About a quarter has been finalized, and the remaining is in progress. We label an EIP a success if it is finalized, and a failure if it is in the withdrawn or stagnant stage. We thus do not consider EIPs that are in progress, as we do not know whether they will be finalized or stagnant/withdrawn. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{EIPs by Status}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This table shows the percentage of EIPs by EIP Status. Draft is the first stage of an EIP, when the proposal is first formalized. Review is the stage when an EIP is ready for community suggestions. Last Call is the final review period, where the community comes together to approve the proposal or not. An EIP is then finalized if there is rough consensus about its approval. At that stage, the EIP cannot be updated any further. Stagnant is an EIP that has been inactive for at least 6 months. An author can withdraw an EIP, and it can no longer be resurrected. 
+      \end{minipage}
+         \end{small}
+            
+           \includegraphics[width = 0.7\textwidth]{Figures/success.png}  
+        \label{fig:EIP_Success}
+
+\end{figure}
+
+Second, we define the determinants of EIP success. We argue that there are three main drivers of a successful EIP: the reputation and social influence of EIP authors, the intensity of the community engagement around EIPs, and the EIP characteristics. As proxy for EIP social influence, we measure the highest number of Github and X followers among EIP co-authors, the highest betweenness centrality in the co-authorship network among EIP co-authors, and whether one of the co-authors does not display his or her full name. Since these variables are highly correlated, we run a principal component analysis to avoid multicollinearity, and take the first component as a main measure of social influence. For community engagement, we use the number of comments, views, likes, and users in the EIP page of the Fellowship of Ethereum Magician discussion board. These four variables are also highly correlated, so we take the first component of a principal component analysis. Finally, we use the number of words and readability of the EIP text, and the number of co-authors on the EIP as measure of EIP characteristics. 
+
+We then proceed to study the determinants of the success of an EIP. We run the following multivariate OLS regression model:
+\begin{equation}
+\begin{split}   
+  Y_i  =& \beta_0 + \beta_1 \text{Social Influence}_i + \beta_2 \text{Comm. Engagement}_i + \beta_{3} \text{EIP Char}_i +  \\ & + \text{Cat. FE}_i + \text{Company FE}_i  + \text{Year FE}_t   \label{eq:success}
+\end{split}
+\end{equation}
+
+where the dependent variable is whether EIP $i$ is successfully finalized/implemented. The regression includes Category fixed effects (Core (omitted), ERC, Networking, or Interface), and dummies for the ten mostly represented companies affiliated with EIP authors, following the company list in figure \ref{fig:ncomp_eipauthor}. We adjust the standard error for heteroskedasticity using the Eicker-Huber-White adjustment. 
+
+Table \ref{table:final_all} shows the OLS coefficients and $t$-statistics of equation (\ref{eq:success}). As the Community Engagement index is only available for the subset of EIPs for which we were able to find a discussion page on the Fellowship of Ethereum Magicians website, we present results with (even columns) and without it (odd columns). Columns (1) and (2) show that social popularity is associated with a greater likelihood of the success of an EIP. A one standard deviation increase (1.5) in the authors' social influence is associated with a EIPs have a 12\%-17\% higher chance of being finalized. Similarly, the community engagement is a strong predictor of EIP finalization. column (2) shows that proxies for EIP engagement are positively associated with EIP finalization, albeit with a lower economic significance: a one standard deviation increase in engagement (1.9) is associated with a 5\% more likelihood of success. Somewhat surprisingly, the length and readability of the EIP text do not seem to influence the success of an EIP. 
+
+ As mentioned previously, EIPs can be grouped into two main classes: Core EIPs require a change to the client software, and thus need to be implemented after finalization. Others, like ERC, are protocol standards that do not require any implementation, and are usually less technical in nature.\footnote{Theoretically, ERCs do not require even finalization, as standards can be used by anyone freely in Ethereum smart contracts, regardless of whether they are finalized or not. Nonetheless, we consider the finalization of a ERC to be a measure of the consensus of the Ethereum community around a specific standard.} As shown in figure \ref{top10_author}, these two EIP classes are authored by different people, and require different skill sets. In the last four columns, we run equation \ref{eq:success} for each of these two classes separately. For Core EIPs, we define success if they are actually implemented into the client software. In columns (3) and (4) of table \ref{table:final_all}, we focus only on ERC EIPs. Social influence is still a strong determinant of EIP success. Furthermore, the readability and the length of an EIP text is also an important driver for the success of an EIP: a text that is one standard deviation more readable (12 points higher score) is associated with a 5\% higher likelihood of success. In columns (5) and (6) we only consider Core EIPs, which are usually highly technical. We find that social influence is still a very important determinant of success, but it seems that readability is less important. If anything, it is negatively correlated to success, indicating that the implementation requires a high level of technicality.    
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+    \caption{EIP Finalization/Implementation}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      The table shows the coefficients and t-statistics of a multivariate OLS regression where the dependent variable is whether an EIP is successfully finalized(columns (1)-(4))/implemented (columns (5)-(6)), or failed (withdrawn or stagnant). In column (1) and (2) we include all EIPs. In columns (3) and (4) we consider only ERC/Interface EIPs, and in columns (5) and (6) only Core/Networking EIPs in columns (1) to (4). We drop EIPs that are in progress (Draft, Review, Lat Call). Standard errors are adjusted for heteroskedasticity using the Eicker–Huber–White adjustment. Constant is included in all specifications. *, **, and *** indicate statistical significance at the $10\%$, $5\%$, and $1\%$ levels, respectively.   
+  \end{minipage}
+    \makebox[\textwidth][c]{\input{Tables/final_all.tex}}
+    \label{table:final_all}
+         \end{small}
+\end{table}
+
+Finally, we turn our attention to the potential influence of author affiliations with specific companies on the success of Ethereum Improvement Proposals (EIPs). It is important to clarify that we are not suggesting a causal relationship here. The observed correlations might be influenced by certain unobserved characteristics inherent to EIPs associated with these companies, which could predispose them to a higher likelihood of approval. Our analysis is focused on exploring these correlations and their implications.
+
+Figure \ref{fig:cdum} presents the coefficients related to company fixed effects in column (1) of Table \ref{table:final_all}. The reference category for this analysis comprises EIPs authored by individuals not affiliated with the top 10 companies. The data indicates that EIPs linked to the Ethereum Foundation and the Ethereum Name Service are less likely to succeed, whereas those associated with Google and StoneShot demonstrate a higher probability of success.
+
+Additionally, we conducted an F-test to evaluate the overall impact of affiliation with a top 10 company on the explanatory power of our regression model. The results yielded an F-value of 3.44 and a p-value of 0.0002. This statistically significant outcome suggests that company affiliation is associated with the success of an EIP. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+    \caption{Company FE Coefficients}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the coefficients of the company dummies in specification (4) of table \ref{table:final_all}.  
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/cdum_coef.png}
+    \label{fig:cdum}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Governance Concentration in EIP Implementation and Adoption}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Concentration of Power in Clients Development}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The finalization of core EIPs marks the beginning of an important phase where core client developers integrate these changes into the client software. Ethereum currently operates with four main clients: Geth, Besu, Nethermind, and Erigon. Our objective is to analyze the involvement and concentration of development efforts among these clients using GitHub commit data.
+
+We start by aggregating all commits from the GitHub repositories of these clients. In total, around 1,160 unique contributors have made contributions, amounting to 42,952 commits. Among these, Geth emerges as the most contributed-to client with 797 unique contributors, followed by Erigon with 691, Besu with 146, and Nethermind with 94. Despite the seemingly large number of contributors, it's noteworthy that a significant majority of them contribute on a very small scale. In fact, over 75\% of the contributors have made fewer than 7 commits, accounting in total for less than 4.4\% of the total. 
+
+To further understand the concentration of client implementation efforts, we employ a similar method to that used in section \ref{subsec:infl_authors}. We rank developers by the number of client commits, and then plot a Lorenz curve to represent the cumulative percentage of commits by these contributors. Figure \ref{fig:lorenz_commits} reveals a significant concentration of contributions in the hands of a few developers across all four main clients, with an average Gini coefficient of 89\%. Specifically, Nethermind shows the steepest Lorenz curve, with 6 developers responsible for 80\% of commits, followed by Erigon and Geth with 14 developers, whereas Besu has the least concentration with 22 developers contributing 80\% of commits. 
+
+Client software development is clearly concentrated in the hands of very few contributors, most of whom are affiliated with the Ethereum Foundation or Consensys, as we have seen in section \ref{subsec:companies}. Given the critical role of client implementation in the EIP governance process, this is an area that warrants more discussion and disclosure regarding inside information, and conflict of interests. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[htb!]
+    \caption{Client Implementation Concentration}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the Lorenz curve adapted to Client Commits Concentration. The horizontal axis represents the fraction of developers, sorted from the most prolific to the least ones. The vertical axis represents the cumulative number of commits authored by the number of developers indicated in the horizontal axis. 
+  \end{minipage}
+         \end{small}
+    \includegraphics[width = 0.8\textwidth]{Figures/lorenz_commits.png}
+    \label{fig:lorenz_commits}
+\end{figure}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Concentration of Power in Decentralized Applications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The culmination of the Ethereum Improvement Proposal (EIP) process is the adoption of client software updates by network nodes and participants. Figure \ref{fig:forks} shows the timeline for the most important Ethereum hard forks. Typically, these updates are ``hard forks,'' requiring nodes to upgrade by a specified deadline to maintain network compatibility. Failing to upgrade results in a network bifurcation: one with upgraded nodes and another with nodes on the older software version. This bifurcation extends to governance as well.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+ \caption{History of Forks}
+  \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the timeline of the major Ethereum hard forks. 
+  \end{minipage}
+    \end{small}
+\makebox[\textwidth][c]{
+\begin{chronology}[1]{2015}{2023}{1.1\textwidth}
+\event{\decimaldate{14}{3}{2016}}{Homestead}
+\event{\decimaldate{15}{7}{2016}}{DAO}
+\event{\decimaldate{16}{10}{2017}}{Byzantium}
+\event{\decimaldate{28}{2}{2019}}{Constantinople}
+\event{\decimaldate{8}{12}{2019}}{Istanbul}
+\event{\decimaldate{15}{4}{2021}}{Berlin}
+\event{\decimaldate{5}{8}{2021}}{London}
+\event{\decimaldate{24}{8}{2022}}{Bellatrix/Paris}
+\event{\decimaldate{12}{4}{2023}}{Shapella}
+
+\end{chronology}    \label{fig:forks}
+}
+\end{figure}
+
+A prime example of this was the significant fork on July 20, 2016, following a vulnerability in The DAO smart contract, which led to the theft of approximately 5\% of all Ethereum tokens then in existence. The community's response, a contentious implementation of EIP 779, reversed Ethereum's history to a pre-attack state. Not all participants agreed, leading to a split into two distinct blockchain networks and tokens: Ethereum and Ethereum Classic. This divergence marked not just a split in transaction histories but also in governance, contributors, and client developers.
+
+Another notable, albeit minor, disagreement occurred in 2022 during Ethereum's shift from proof-of-work to proof-of-stake. A faction of miners and participants, resistant to this change, opted not to upgrade, leading to another split. However, most software updates have been universally accepted without causing network or governance forks.
+
+With the substantial growth of the Ethereum ecosystem since the 2016 DAO fork, any major network division now risks significant loss of network externalities. Consequently, the likelihood increases that the vast majority of participants will align with the fork receiving the most support. In this section, we explore two centralization vectors in the adoption of new client updates: stablecoin issuers and oracle providers.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{Stablecoin Issuers and Their Influence on EIP Adoption}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Stablecoin issuers face a unique challenge in the event of a network fork: they must choose a single chain, as their stablecoins are backed one-to-one by off-chain reserves, usually consisting of cash and cash-equivalents. The stablecoins on the supported chain instance will still be redeemable and priced accordingly, while the ``stablecoins'' on the chain instance that is not supported by the issuer, would be worthless. Considering the fact that stablecoins are being used as collateral across a large variety of smart contract-based financial protocols, the invalidation of a stablecoin on one blockchain instance could create systemic shocks and render many protocols on that chain dysfunctional. 
+
+Consequently, the direction chosen by these issuers could significantly influence the broader community's alignment. Many protocols, and by extension protocol users, are forced to follow whatever decision the stablecoin issuer might take. If the stablecoin issuer decides (not) to support an update, many protocols and financial service providers would find themselves in a difficult position, where it would be hard to oppose this decision. A high concentration in stablecoin issuance could hence grant a few entities considerable sway, potentially vetoing or pushing through governance changes.
+
+Our analysis focuses on the three predominant stablecoins on the Ethereum network: USDC, USDT, and DAI. In decentralized finance (DeFi) applications, liquidity providers lock tokens in smart contracts to facilitate token swaps or lending. We collected the Total Value Locked (TVL) for all the major liquidity pools, and flagged the ones which include one or more of the three stablecoins. Figure \ref{fig:stable_perc} shows the importance of stablecoins over time for DeFi liquidity pools. The percentage of TVL associated with stablecoins increased dramatically in early 2022, from around 15\% to 55\% of aggregate TVL in Ethereum, and then stabilized since then. As of Q3 of 2023, the stablecoin-related pools accounted for \$12.9B, or 51\% of the value of all liquidity pools. The graph highlights how important stablecoins are for the Ethereum ecosystem, and thus the possible influence they might have in controversial governance discussions. 
+
+Further, we analyze the market share of each major stablecoin. Figure \ref{fig:stable} shows that USDC has a large and growing market share of the DeFi stablecoin market. This is in contrast to the off-chain stablecoin market, where USDT is mostly used. Stablecoin issuers with significant TVL market shares could become central figures in governance decisions. While their involvement in Ethereum's governance has been limited to date, the potential for their future influence, particularly on controversial EIPs concerning stablecoins, should not be underestimated.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{EIP Introduction Concentration}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the percentage of Total Value Locked (TVL) in liquidity pools that include one of the three major stablecoins USDC, USDT, and DAI over time. Panel (b) shows the TVL market share for each of the three major stablecoin USDC, USDT, and DAI over time.  
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/stable_perc.png}
+            \caption{Stablecoin Percentage in All Liquidity Pools}
+            \label{fig:stable_perc}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/stable.png}
+            \caption{Market Share of Major Stablecoin Issuers}
+            \label{fig:stable}
+   \end{subfigure}
+  
+\end{figure}
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsubsection{The Role of Oracle Providers in EIP Adoption}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Oracles represent another potential governance concentration vector. Many smart contracts depend on external data, sourced from oracles, for critical functions like maintaining collateralization ratios in borrowing and lending platforms. A dominant oracle provider's refusal to support a network upgrade could severely disrupt numerous DeFi applications. In turn, this means that oracles with large market shares could influence the governance process with their effective veto power. We identify the largest DeFi protocols that use oracle providers, and collect the total value locked (TVL) in these protocols using data from DefiLlama.com. Overall, over 200 protocols use oracle providers to receive on-chain and off-chain data for their smart contracts, with an aggregate TVL of \$23.5B. The left chart of Figure \ref{fig:oracle} show the market share of oracles by protocol TVL. We find that Chainlink and Chronicle provide oracle services to protocols that account for 90\% of the TVL. However, Chronicle is primarily used only by one large protocol, MakerDAO. In fact, panel (b) shows that Chainlink is the oracle used by the vast majority of protocols. The extensive reliance on Chainlink by a substantial number of DeFi applications raises concerns. This reliance not only poses risks regarding the potential exploitation of smart contracts but also highlights another facet of governance centralization and reverse dependency within the Ethereum ecosystem.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Oracle Concentration}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Panel (a) shows the percentage of Total Value Locked (TVL) in liquidity pools that use a specific oracle provider. Panel (b) shows the number of protocols that use a specific oracle provider. Data from DefiLlama.com
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/oracle_pie.png}
+            \caption{Protocols TVL by Oracle}
+            \label{fig:oracle_pie}
+   \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/oracle_bar.png}
+            \caption{Number of Protocols by Oracle}
+            \label{fig:oracle_bar}
+   \end{subfigure}
+  \label{fig:oracle}
+\end{figure}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Effect of Ethereum Governance on Token Value}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The governance structure of Ethereum is uniquely distinct from its native cryptocurrency, Ether. Unlike traditional companies where shareholders influence governance through voting and board elections, Ethereum's governance does not grant such power to Ether holders. Instead, anyone can participate in governance discussions, regardless of their Ether ownership. This approach, which operates off-chain without voting, contrasts with many cryptocurrencies where governance decisions are made through on-chain voting exclusive to token holders.
+
+Ether's value is theoretically linked to Ethereum's governance, as it underpins a decentralized financial ecosystem aiming for accessibility, scalability, speed, and affordability. Every network-validated transaction incurs a fee payable in Ether, with a portion of this fee being ``burned,'' effectively reducing the Ether supply similar to a company's share repurchase.
+
+Analyzing Ethereum's governance effect on Ether's price poses two main empirical challenges. The first is selecting an appropriate benchmark for comparison. We use the S\&P 500 index and Bitcoin price as reference markets. The S\&P 500 offers a broad stock market perspective, but Ether's price has significantly outpaced it over the sample period, with an average abnormal return of over 100\% per year. Comparing Ether and SP\&500 returns on random dates would thus provide an upward drift in Ether cumulative abnormal returns of about 10\% per month.  Bitcoin, having similar return levels to Ether, mitigates this drift, but the interconnected nature of the crypto market could mean that an improvement in Ethereum's prospects might spill over to the rest of the crypto-market, leading to underestimation of governance-related price responses.
+
+The second challenge is Ethereum's transparent governance process, with few market-surprising announcements. Major decisions, like the transition from proof-of-work to proof-of-stake, unfolded over years with extensive public discussion, with multiple proposals, testnet implementations, and delays. Even single EIPs are openly proposed on GitHub, discussed in online forums, conferences, and in AllCoreDevs Calls. Updates to the EIP proposals and the client code are also visible in plain sight on GitHub. It is thus likely that the effect of an EIP proposal on Ether value is priced in gradually over time until it is finalized.
+ 
+Our study focuses on Ether's price trend around the final discussions and approvals of successful Core EIPs. First, we collect hourly candles (open, close, min, max, and volume) from Coinbase's open API data feeds. \footnote{https://docs.cloud.coinbase.com/exchange/docs/welcome} The time-series data begins in May 2016 and ends in November 2023. Even if cryptocurrencies are traded 24/7, we compute daily returns using close prices at 4pm Eastern US time during trading days when traditional financial markets are open, so that the Ether time-series data is aligned with the S\&P500. We then use the S\&P500 index and the Bitcoin prices as benchmarks to compute abnormal returns. 
+
+For each EIP, we search the last AllCoreDevs Call in which developers meet to discuss and approve the proposal. We identified 48 out of 52 finalized Core EIPs. Figure \ref{fig:CAR} shows the cumulative abnormal returns (CARs) in the red line, and the 90\% confidence interval in the gray shaded area, on a window of [-40;+40] trading days around the call. Panel (a) uses as reference the S\&P500 index, and panel (b) Bitcoin. 
+ 
+The findings reveal a significant price increase about 30 trading days before a Core EIP's final discussion. As expected, when benchmarked against the S\&P 500, Ether's excess returns over the sample period displays a significant drift, making quantitative assessment of the influence of governance on prices challenging. Still, removing a 10\% drift per month, one can notice a run-up in price that begins about a month prior to the approval of the core EIP. To make a more precise assessment, we use Bitcoin as reference. We observe a 12\% price run-up in the 25 days preceding a Core EIP approval. The timing of the run-up in prices is consistent with the increase in changes to the proposal on the GitHub page dedicated to the EIP shown in figure \ref{fig:commit_call}.
+
+These findings show that the Ethereum governance, and the process of improving the protocol and thus the speed, security, and costs of operating on the platform, has a material impact on the value of the Ether token. This has significant implications both for investors, as we show that crypto returns are driven by governance decisions, and for regulators, as the impact of governance on token value is an important condition for disclosure and supervisory regimes. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[ht!]
+    \caption{Ethereum Governance and Token Price}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      This figure shows the Cumulative Abnormal Returns (CARs) of Ether prices in a [-40;+40] trading day window around the last AllCoreDevs Call where a Core EIP is discussed. Panel (a) uses the S\&P500 as reference, and panel (b) uses Bitcoin.  
+     \end{minipage}
+         \end{small}
+         \\[0.5cm]
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/CAR_SPY.png}
+            \caption{Benchmark: S\&P500 }
+            \label{fig:CARSPY}
+   \end{subfigure}
+   \begin{subfigure}{0.49\textwidth}
+           \includegraphics[width = 1\textwidth]{Figures/CAR_BTC.png}
+            \caption{Benchmark: Bitcoin}
+            \label{fig:CARBTC}
+   \end{subfigure}
+  
+    \label{fig:CAR}
+\end{figure}
+
+
+
+\section{Conclusion}
+%%%% WIP %%%%
+
+Our analysis of Ethereum's governance process focuses on three key aspects: (i) openness and transparency, (ii) decision-making engagement and concentration, and (iii) governance effect on token value.  
+
+% Transparency
+Our results suggest that the relevant information is publicly available, and the process is open to anyone. We were able to obtain the history of all governance proposals, read and collect data from the discussion threads of dedicated governance forums, and parse information from the AllCoreDev meetings. Despite the availability of this information, the decentralized nature and \emph{rough consensus} governance of Ethereum has a somewhat unorganized structure. This is quite normal for an open-source community, but it is rather unusual in the context of financial infrastructure.
+
+On the one hand, the openness and general transparency allows analysts, regulators and any sufficiently motivated individual to monitor the governance activities in real time. The general availability of data may potentially allow for more diverse and comprehensive analyses than what is generally possible with traditional disclosure requirements. On the other hand, there is a certain risk, that the complexity, distributed nature and sheer vastness of the information can make it hard to find and compile the relevant data. Moreover, implicit information asymmetries may emerge over time, when the topics become highly specialized, to the extent where only a handful of people can understand and discuss a given proposal. 
+This also occurs in traditional organizations -- however, in a traditional legal structure, it is the obligation of the management team to adhere to certain minimum standards and ensure communication that effectively addresses the target audience. In a decentralized open-source community, there are no clear legal responsibilities. Yet, finding ways to communicate with various (technical and non-technical) stakeholders, and present the information in an appropriate and unbiased way, will be crucial to maintain actual transparency and foster broader participation by the community. 
+
+% Community Engagement
+This brings us to the second part of our analysis: community involvement. The data indicate that the number of individuals submitting proposals in the form of EIPs is relatively large. We observe 688 distinct authors. Our analysis reveals some influential contributors, but also suggests a decrease in centralization over time. Notably, the authorship network clustering coefficient has increased from 0.5 in 2016 to 0.65 in 2023. Furthermore, the Lorenz curve, based on the author/EIP Gini-coefficient, decreased sharply in 2018 and has since stabilized. 
+However, it appears that these trends are predominantly influenced by proposals related to smart contract-level standardization. When focusing solely on implementable EIPs, the number of authors decreases significantly to 130 unique authors, and only 54 authors have co-authored a EIP that has been successfully implemented into the protocol. This finding suggests that the governance proposals that affect the underlying protocol, are introduced by a relatively small number of people. 
+
+Similarly, at first glance, client code is based on contributions by a large number of people. Yet, these contributions vary drastically in frequency and importance. Once we exclude contributors who have only made minor changes, the number drops significantly. This finding has three key implications:
+First, it reveals a pronounced dependence on a few key individuals within each client team, a result that raises some concerns.
+Second, a much larger number of individuals seem to actively monitor code changes and occasionally provide input. This engagement is reminiscent of an open peer-review process and may be indicative of a robust open-source community.
+Third, the more centralized the individual client teams are, the greater the need for multiple client implementations. As of this writing, Ethereum supports four main execution clients, with another one, Reth, on the horizon. Such diversity in client implementations is vital for decentralized governance. It serves to mitigate centralization risks and limit the influence of individual client teams.
+
+%To deepen our understanding of individual influence within different facets of the governance process, we have examined the intersection between EIP proposals, client contributions and AllDevCall attendance. Our findings indicate that while there are 25 individuals who have taken on all these roles, the vast majority are active in only one of these areas. 
+
+% Segue to affiliation of the authors and power concentration
+	% Some key facts about power concentration.
+A related question revolves around the individuals' affiliation. We explored the employment status of all EIP authors to identify potential concentration of power by legal entities. 
+Our results suggest that successful EIP authors have diverse affiliations, with no single entity controlling more than 3.6\% of the author pool. There is, however, a significant concentration of EIP authors affiliated with the Ethereum Foundation. 	
+	
+	% Concern about influence of EF -- not the same thing as companies, but important for different reasons. 
+It is important to understand that this does not necessarily constitute a problem. After all, the Ethereum Foundation has raised money to do exactly this and fund public goods and research that would otherwise have a hard time of getting funded. 		
+But seeing the importance of the Ethereum foundation, may extend Ethereum's transparency and governance questions to the Ethereum Foundation.
+There is strong evidence, that the Ethereum Foundation is very transparent in many regards, albeit in a somewhat unconventional form. There is a lot of information on subcommittees like the ecosystem support program, grant distribution processes, research focus areas, conferences, and other specific initiatives. They try to foster diversity and stay away from what they refer to as ``king making'', i.e., perceived endorsements of specific projects that would hinder competition. 
+The foundation has also published a financial report, including disclosure of their reserves and activities. More importantly, their on-chain reserves can be monitored directly on the blockchain. 
+However, one area of concern is that the Ethereum Foundation has only three board members. The Swiss Foundation Code, a document compiled by leading researchers and practitioners on Swiss foundations, suggests between five and seven board members and mentions three as the absolute minimum, suitable only for small foundations.\footnote{\url{https://www.swissfoundations.ch/wp-content/uploads/2021/06/9783727206849.pdf}} 
+ 
+% Further concerns and more subtle centralization vectors
+	% Stablecoins and Oracles
+Another concern, which also relates to the influence of individual organizations, is centralized vectors introduced by reverse dependencies. We define a reverse dependency as a situation in which a significant portion of the ecosystem depends on a specific service or application. This dependency may enable the application or service provider to undermine Ethereum's governance, assume implicit veto rights, and potentially have a large influence on the overall governance.
+Our results suggest that both off-chain collateralized stablecoins and oracle service providers pose a considerable risk in this regard. The two markets can be characterized as oligopolistic at best, and the dependencies of other ecosystem participants, particularly smart contract-based financial protocols, are substantial. Consequently, there is a notable risk that large stablecoin issuers or oracle providers could effectively veto a network upgrade, if they choose to do so.
+	
+% Concluding remarks
+Our analysis indicates that Ethereum governance is a multifaceted and intricate process. The pertinent information is publicly accessible, providing a high level of transparency that is unusual compared to traditional and more centralized organizational structures. Furthermore, community engagement is extensive and varied. However, the primary research and development efforts are concentrated among a relatively small group of individuals. This concentration may further increase with the technical complexity of the proposals. Additionally, the emergence of significant on-chain infrastructure could shift the governance power distribution and create reverse dependencies, potentially introducing implicit veto rights.
+
+Our paper aims to shed light on an important research question. Ethereum not only serves as a settlement layer for a myriad of smart contract-based financial protocols and a wide array of tokenized assets but also emerges as the leading blockchain platform for Decentralized Finance (DeFi) applications. 
+It has attracted considerable attention from financial institutions, including major commercial banks, fintech firms, and payment processors. These entities are not just passive observers but active participants, having issued a range of financial assets on Ethereum, from stablecoins to bonds and other securities. Consequently, a thorough understanding of Ethereum's governance -- how decisions are made and changes implemented -- becomes crucial. 
+
+Our analysis delved into these governance mechanisms, offering initial insights that are crucial for both academics and practitioners in the field. As such, it represents a first attempt to unravel the complexities of Ethereum's governance, underscoring the need for further research, to fully understand its intricacies and implications.
+
+% Limitations and further research
+
+\newpage
+\bibliographystyle{aea}
+\bibliography{bib.bib}
+
+\end{document}
