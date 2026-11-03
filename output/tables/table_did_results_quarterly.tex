@@ -1,0 +1,123 @@
+% ===== Table: covariate balance + difference-in-differences results (QUARTERLY) =====
+\begin{center}
+\begin{table}
+ \caption{The Effect of EIP Authorship on Seniority and Compensation (Quarterly Robustness Check)}
+ \label{tab:did_main_quarterly}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      Robustness check on the main (annual) specification: the same stacked diff-in-diff design at quarterly frequency. The table reports covariate balance and difference-in-differences estimates of the effect of authoring an Ethereum Improvement Proposal (EIP) on career outcomes over a $\pm8$-quarter ($\pm2$-year) event window. An author is treated if they propose an EIP in quarter t=0. Each treated author is matched to at most three similar control authors drawn from the population of EIP authors who author no EIP anywhere in the $\pm8$-quarter window; Panel A shows the results of a balance test at $t-1$ (one quarter before treatment). Panel B and C report stacked diff-in-diff results for Seniority and Total Compensation (log) as outcome variable. Column~(1) reports the static model. Column~(2) reports the dynamic specification with a separate coefficient for a representative subset of event quarters (every other quarter, plus $t=\pm1$), $t-1$ omitted as the reference. Columns~(3) and~(4) re-run column~(1) on the two halves of the sample, split at the median of seniority in the quarter before authorship. Standard errors, reported in parentheses, are clustered at the author level; $^{*}$, $^{**}$, and $^{***}$ denote statistical significance at the 10\%, 5\%, and 1\% levels, respectively.
+  \end{minipage}
+         \end{small}
+\begin{tabular}{lcccccc}
+\\
+
+\multicolumn{5}{l}{\textbf{Panel A. Covariate Balance (at $t-1$)}} \\[2pt]
+\toprule
+ & \multicolumn{2}{c}{Mean} & & & & \\
+\cmidrule(lr){2-3}
+Variable & Treated & Control & Difference  & $p$-value \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+\multicolumn{7}{l}{\textit{Variables used in matching}} \\
+\quad Seniority (1--7) & 4.134 & 4.118 & 0.016 &  0.895 \\
+\quad Total compensation (USD) & \$207,108 & \$205,072 & \$2,036 &  0.876 \\
+\addlinespace
+\multicolumn{7}{l}{\textit{Variables not used in matching}} \\
+\quad School prestige score & 0.532 & 0.539 & -0.007 &  0.758 \\
+\quad Education level (1--5) & 3.591 & 3.643 & -0.052 &  0.355 \\
+\quad Log base salary & 11.476 & 11.502 & -0.025 &  0.543 \\
+\quad Engineering occupation & 64.1\% & 64.7\% & -0.6\% &  0.842 \\
+\quad Female & 7.0\% & 8.2\% & -1.2\% &  0.466 \\
+\quad Ethnicity: White & 68.8\% & 70.9\% & -2.1\% &  0.469 \\
+\quad Based in United States & 30.6\% & 35.1\% & -4.5\% &  0.126 \\
+\quad Job located in North America & 40.9\% & 48.4\% & -7.4\% &  0.017 \\
+\quad Employer identified in data & 92.2\% & 89.1\% & 3.1\% &  0.082 \\
+\quad 500+ LinkedIn connections & 33.7\% & 35.4\% & -1.7\% &  0.558 \\
+\midrule
+Observations & 359 & 883 & &  \\
+\bottomrule
+\end{tabular}
+\vspace{10pt}
+\begin{tabular}{lcccc}
+\multicolumn{5}{l}{\textbf{Panel B. Seniority (1--7)}} \\[2pt]
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & \multicolumn{2}{c}{Full sample} & \multicolumn{2}{c}{By pre-event seniority} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & Static & Dynamic & Junior & Senior \\
+ & & & \small(1--3) & \small(4--7) \\
+\midrule
+\quad Treated $\times$ Post ($t\geq 0$) & 0.112$^{*}$ &  & 0.162$^{*}$ & 0.057 \\
+ & (0.066) &  & (0.085) & (0.092) \\
+\addlinespace
+\quad Treated $\times$ $t=-8$ &  & -0.133$^{*}$ &  &  \\
+ &  & (0.075) &  &  \\
+\quad Treated $\times$ $t=-6$ &  & -0.053 &  &  \\
+ &  & (0.044) &  &  \\
+\quad Treated $\times$ $t=-4$ &  & 0.007 &  &  \\
+ &  & (0.036) &  &  \\
+\quad Treated $\times$ $t=-2$ &  & -0.043 &  &  \\
+ &  & (0.030) &  &  \\
+\quad Treated $\times$ $t=-1$ & & --- & & \\
+\quad Treated $\times$ $t=+0$ &  & 0.054 &  &  \\
+ &  & (0.045) &  &  \\
+\quad Treated $\times$ $t=+1$ &  & 0.009 &  &  \\
+ &  & (0.055) &  &  \\
+\quad Treated $\times$ $t=+2$ &  & 0.072 &  &  \\
+ &  & (0.062) &  &  \\
+\quad Treated $\times$ $t=+4$ &  & 0.130$^{*}$ &  &  \\
+ &  & (0.073) &  &  \\
+\quad Treated $\times$ $t=+6$ &  & 0.095 &  &  \\
+ &  & (0.082) &  &  \\
+\quad Treated $\times$ $t=+8$ &  & 0.059 &  &  \\
+ &  & (0.090) &  &  \\
+\midrule
+Author $\times$ cohort FE & Yes & Yes & Yes & Yes \\
+Cohort $\times$ event-quarter FE & Yes & Yes & Yes & Yes \\
+Observations & 20,745 & 20,745 & 10,883 & 9,862 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[t]
+\vspace{-9cm}
+\begin{tabular}{lcccc}
+\multicolumn{5}{l}{\textbf{Panel C. Log compensation}} \\[2pt]
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & \multicolumn{2}{c}{Full sample} & \multicolumn{2}{c}{By pre-event seniority} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & Static & Dynamic & Junior & Senior \\
+ & & & \small(1--3) & \small(4--7) \\
+\midrule
+\quad Treated $\times$ Post ($t\geq 0$) & 0.070$^{**}$ &  & 0.085$^{**}$ & 0.055 \\
+ & (0.029) &  & (0.041) & (0.040) \\
+\addlinespace
+\quad Treated $\times$ $t=-8$ &  & -0.094$^{***}$ &  &  \\
+ &  & (0.034) &  &  \\
+\quad Treated $\times$ $t=-6$ &  & -0.058$^{**}$ &  &  \\
+ &  & (0.028) &  &  \\
+\quad Treated $\times$ $t=-4$ &  & -0.035 &  &  \\
+ &  & (0.022) &  &  \\
+\quad Treated $\times$ $t=-2$ &  & -0.025$^{*}$ &  &  \\
+ &  & (0.015) &  &  \\
+\quad Treated $\times$ $t=-1$ & & --- & & \\
+\quad Treated $\times$ $t=+0$ &  & 0.021 &  &  \\
+ &  & (0.019) &  &  \\
+\quad Treated $\times$ $t=+1$ &  & 0.030 &  &  \\
+ &  & (0.023) &  &  \\
+\quad Treated $\times$ $t=+2$ &  & 0.046$^{*}$ &  &  \\
+ &  & (0.028) &  &  \\
+\quad Treated $\times$ $t=+4$ &  & 0.063$^{*}$ &  &  \\
+ &  & (0.033) &  &  \\
+\quad Treated $\times$ $t=+6$ &  & 0.030 &  &  \\
+ &  & (0.036) &  &  \\
+\quad Treated $\times$ $t=+8$ &  & -0.019 &  &  \\
+ &  & (0.040) &  &  \\
+\midrule
+Author $\times$ cohort FE & Yes & Yes & Yes & Yes \\
+Cohort $\times$ event-quarter FE & Yes & Yes & Yes & Yes \\
+Observations & 20,745 & 20,745 & 10,883 & 9,862 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{center}

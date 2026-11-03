@@ -1,0 +1,68 @@
+# environment.yml
+# ================
+# Conda environment for the reproduction package for:
+#
+#   Fracassi, C., Khoja, M., & Schar, F. (2024). "Decentralized Crypto Governance?
+#   Transparency and Concentration in Ethereum Decision-Making." SSRN 4691000.
+#
+# Build with:
+#   conda env create -f environment.yml
+#   conda activate decentralized-crypto-governance
+#
+# This covers every third-party import found across the ENTIRE `code/` tree, including
+# `code/01_data_collection/` (historical/optional live-fetch scripts that are NOT part
+# of the default `code/run_pipeline.py` run -- see that script's module docstring). Two
+# packages are needed ONLY for that optional folder and are called out below.
+#
+# Version pins are approximate major versions inferred from the code's actual usage
+# (Polars' `.melt()`/`.pivot(columns=...)` API, matplotlib's modern API, etc.); packages
+# with no version-sensitive usage detected are left unpinned so conda/pip can resolve a
+# mutually-compatible set.
+name: decentralized-crypto-governance
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - polars>=1.0
+  - numpy
+  - matplotlib>=3.7
+  - statsmodels
+  - scikit-learn
+  - networkx
+  - openpyxl
+  # Excel reading: `pl.read_excel(...)` (used in name_cleaning_pipeline.py,
+  # fig_venn_diagram.py, fig_commit_timing.py) uses Polars' default "calamine" engine,
+  # backed by the `fastexcel` package, in addition to the `openpyxl` engine explicitly
+  # used by build_cross_sectional_dataset.py. Both are installed so either code path
+  # works regardless of the installed Polars version's default engine choice.
+  - fastexcel
+  # `.to_pandas()` / `pl.from_pandas()` boundary conversions (statsmodels requires a
+  # pandas DataFrame; see fig_commit_timing.py, table2_fem_regressions.py,
+  # table3_finalization_regressions.py, fig_abnormal_returns.py) plus pyarrow, which
+  # Polars uses internally for those conversions.
+  - pandas
+  - pyarrow
+  - requests
+  - beautifulsoup4
+  - yfinance
+  # matplotlib_venn (import name `matplotlib_venn`, PyPI/conda-forge name
+  # `matplotlib-venn`) -- fig_venn_diagram.py (Figure 5).
+  - matplotlib-venn
+  - pip
+  - pip:
+      # Fuzzy string matching for the name-cleaning pipeline's optional candidate-
+      # generation helpers (name_cleaning_pipeline.py). python-Levenshtein is not
+      # imported directly anywhere, but fuzzywuzzy uses it as an optional C-accelerated
+      # backend for `fuzz.ratio()` (otherwise falls back to a slow pure-Python
+      # implementation with a runtime warning) -- installed alongside it for that
+      # reason.
+      - fuzzywuzzy
+      - python-Levenshtein
+      # Readability scoring (code/01_data_collection/fetch_eip_word_readability.py --
+      # NOT part of the default pipeline; see that script's own docstring).
+      - textstat
+      # Browser automation for scraping the Ethereum Magicians forum
+      # (code/01_data_collection/scrape_fem_forum.py -- NOT part of the default
+      # pipeline). Requires a matching Chrome + ChromeDriver install on the machine;
+      # see that script's own docstring. Not needed to run code/run_pipeline.py.
+      - selenium

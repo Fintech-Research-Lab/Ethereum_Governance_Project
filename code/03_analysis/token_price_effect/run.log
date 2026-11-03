@@ -1,0 +1,6 @@
+[fetch_spy_prices] SOURCE: cache -- reading C:\Users\cf8745\Box\Research\Decentralized Crypto Governance\data\interim\spy_prices_cache.parquet
+[main] Running EIP event study with event_type='meeting'.
+Wrote C:\Users\cf8745\Box\Research\Decentralized Crypto Governance\output\figures\figure_24a_car_spy.png
+Wrote C:\Users\cf8745\Box\Research\Decentralized Crypto Governance\output\figures\figure_24b_car_btc.png
+Wrote C:\Users\cf8745\Box\Research\Decentralized Crypto Governance\output\tables\car_event_study.tex
+exit: 0

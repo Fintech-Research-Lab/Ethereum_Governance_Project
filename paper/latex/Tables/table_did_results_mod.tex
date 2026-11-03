@@ -1,0 +1,103 @@
+% ===== Table: covariate balance + difference-in-differences results =====
+
+\begin{center}
+\begin{table}
+ \caption{The Effect of EIP Authorship on Seniority and Compensation} \label{tab:did_main}
+     \begin{small}
+    \begin{minipage}{\textwidth}
+      The table reports covariate balance and difference-in-differences estimates of the effect of authoring an Ethereum Improvement Proposal (EIP) on career outcomes over a
+$\pm2$-year event window. An author is treated if they propose an EIP at t=0. Each treated author is matched to at most three similar control
+authors drawn from the population of EIP authors who author no EIP anywhere in the $\pm2$-year window; Panel A shows the results of a balance test. Panel B and C report stacked diff-in-diff results for Seniority and Total Compensation (log) as outcome variable. Column~(1) reports the static model. Column~(2) replaces it with separate coefficients for each event year, $t-1$ omitted as the reference. Columns~(3) and~(4)
+re-run column~(1) on the two halves of the sample, split at the median of seniority in the year before authorship. Standard errors, reported in parentheses, are clustered at the author level;  $^{*}$, $^{**}$, and $^{***}$ denote statistical significance at the 10\%, 5\%, and 1\% levels, respectively.
+  \end{minipage}
+         \end{small}
+\begin{tabular}{lcccccc}
+\\
+
+\multicolumn{5}{l}{\textbf{Panel A. Covariate Balance (at $t-1$)}} \\[2pt]
+\toprule
+ & \multicolumn{2}{c}{Mean} & & & & \\
+\cmidrule(lr){2-3}
+Variable & Treated & Control & Difference  & $p$-value \\
+ & (1) & (2) & (3) & (4) \\
+\midrule
+\multicolumn{7}{l}{\textit{Variables used in matching}} \\
+\quad Seniority (1--7) & 3.876 & 3.835 & 0.041  & 0.735 \\
+\quad Total compensation (USD) & \$194,759 & \$189,813 & \$4,946 &  0.703 \\
+\addlinespace
+\multicolumn{7}{l}{\textit{Variables not used in matching}} \\
+\quad School prestige score & 0.530 & 0.521 & 0.009 &  0.704 \\
+\quad Education level (1--5) & 3.594 & 3.616 & -0.022 &0.703 \\
+\quad Log base salary & 11.409 & 11.416 & -0.007 & 0.880 \\
+\quad Engineering occupation & 64.0\% & 68.1\% & -4.0\% &  0.179 \\
+\quad Female & 7.0\% & 8.0\% & -1.0\% &  0.547 \\
+\quad Ethnicity: White & 70.8\% & 68.1\% & 2.7\%  & 0.348 \\
+\quad Based in United States & 31.5\% & 33.4\% & -1.9\% & 0.507 \\
+\quad Job located in North America & 43.3\% & 47.5\% & -4.2\% &  0.177 \\
+\quad Employer identified in data & 91.0\% & 90.2\% & 0.9\% & 0.641 \\
+\quad 500+ LinkedIn connections & 33.4\% & 36.3\% & -2.8\% &  0.341 \\
+\midrule
+Observations & 356 & 874 & &  \\
+\bottomrule
+\end{tabular}
+\vspace{10pt}
+\begin{tabular}{lcccc}
+\multicolumn{5}{l}{\textbf{Panel B. Seniority (1--7)}} \\[2pt]
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & \multicolumn{2}{c}{Full sample} & \multicolumn{2}{c}{By pre-event seniority} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & Static & Dynamic & Junior & Senior \\
+ & & & \small(1--3) & \small(4--7) \\
+\midrule
+\quad Treated $\times$ Post ($t\geq 0$) & 0.221$^{***}$ &  & 0.284$^{**}$ & 0.150 \\
+ & (0.083) &  & (0.112) & (0.124) \\
+\addlinespace
+\quad Treated $\times$ $t=-2$ &  & 0.000 &  &  \\
+\quad Treated $\times$ $t=-1$ & & --- & & \\
+\quad Treated $\times$ $t=+0$ &  & 0.190$^{**}$ &  &  \\
+ &  & (0.080) &  &  \\
+\quad Treated $\times$ $t=+1$ &  & 0.193$^{*}$ &  &  \\
+ &  & (0.099) &  &  \\
+\quad Treated $\times$ $t=+2$ &  & 0.282$^{***}$ &  &  \\
+ &  & (0.106) &  &  \\
+\midrule
+Author $\times$ cohort FE & Yes & Yes & Yes & Yes \\
+Cohort $\times$ event-time FE & Yes & Yes & Yes & Yes \\
+Observations & 6,073 & 6,073 & 3,263 & 2,810 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\nomarkersintext
+\begin{table}[t]
+\vspace{-9cm}
+\begin{tabular}{lcccc}
+\multicolumn{5}{l}{\textbf{Panel C. Log compensation}} \\[2pt]
+\toprule
+ & (1) & (2) & (3) & (4) \\
+ & \multicolumn{2}{c}{Full sample} & \multicolumn{2}{c}{By pre-event seniority} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+ & Static & Dynamic & Junior & Senior \\
+ & & & \small(1--3) & \small(4--7) \\
+\midrule
+\quad Treated $\times$ Post ($t\geq 0$) & 0.090$^{**}$ &  & 0.093$^{*}$ & 0.085 \\
+ & (0.039) &  & (0.050) & (0.060) \\
+\addlinespace
+\quad Treated $\times$ $t=-2$ &  & -0.024 &  &  \\
+ &  & (0.017) &  &  \\
+\quad Treated $\times$ $t=-1$ & & --- & & \\
+\quad Treated $\times$ $t=+0$ &  & 0.051 &  &  \\
+ &  & (0.035) &  &  \\
+\quad Treated $\times$ $t=+1$ &  & 0.077 &  &  \\
+ &  & (0.048) &  &  \\
+\quad Treated $\times$ $t=+2$ &  & 0.105$^{**}$ &  &  \\
+ &  & (0.052) &  &  \\
+\midrule
+Author $\times$ cohort FE & Yes & Yes & Yes & Yes \\
+Cohort $\times$ event-time FE & Yes & Yes & Yes & Yes \\
+Observations & 6,073 & 6,073 & 3,263 & 2,810 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\markersintext
+\end{center}

@@ -1,0 +1,39 @@
+# === Licensed / identity-linking data -- NOT redistributable, see README.md "Data availability" ===
+# Revelio Labs / LinkedIn-derived data, accessed via a WRDS institutional license. Redistribution
+# of the underlying vendor data is not permitted by that license. The scripts that read these files
+# are kept in the repo; the data itself is not. See README.md for how to regenerate them if you have
+# your own WRDS/Revelio access.
+data/raw/revelio/author_to_revelio_userid.parquet
+data/raw/revelio/revelio_positions_enriched.parquet
+data/raw/revelio/revelio_user.parquet
+data/raw/revelio/_revelio_input.csv
+
+# Separate scraped LinkedIn data (not via the Revelio/WRDS license) feeding the anonymity and
+# organization-affiliation figures. Excluded for the same reason: real names tied to employment
+# history scraped from LinkedIn profiles. See README.md.
+data/raw/social/linkedin_data.csv
+data/raw/social/client_employment.csv
+
+# Superseded, pre-pipeline exploratory work area. Duplicates code/03_analysis/labor_market_effects/
+# with extra Revelio fields, its own copy of the name-to-LinkedIn-URL crosswalk, and pre-publication
+# draft memos/reports. Not part of the clean reproduction package.
+/revelio_pull/
+
+# paper/latex_overleaf/ is its own separate git repo (synced to a private Overleaf remote) and is
+# not included here at all -- git refuses to recurse into an embedded repository anyway. A flattened,
+# non-git snapshot of its current content is checked in instead at paper/latex/ (see README.md).
+/paper/latex_overleaf/
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+
+# === OS / editor cruft ===
+.DS_Store
+Thumbs.db
+*.swp
+
+# === Local environment ===
+.env
+*.ipynb_checkpoints/
